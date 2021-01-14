@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>爬虫 on WhiteShores</title>
+    <link>/categories/%E7%88%AC%E8%99%AB/</link>
+    <description>Recent content in 爬虫 on WhiteShores</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 20 May 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/categories/%E7%88%AC%E8%99%AB/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Scrapy 入门笔记(4) 使用 Pipeline 保存数据</title>
+      <link>/post/scrapy-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B04-%E4%BD%BF%E7%94%A8-pipeline-%E4%BF%9D%E5%AD%98%E6%95%B0%E6%8D%AE/</link>
+      <pubDate>Sat, 20 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/post/scrapy-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B04-%E4%BD%BF%E7%94%A8-pipeline-%E4%BF%9D%E5%AD%98%E6%95%B0%E6%8D%AE/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Scrapy 入门笔记(3) Item 类数据转换与 ItemLoader 机制解析</title>
+      <link>/post/scrapy-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B03-item-%E7%B1%BB%E6%95%B0%E6%8D%AE%E8%BD%AC%E6%8D%A2%E4%B8%8E-itemloader-%E6%9C%BA%E5%88%B6%E8%A7%A3%E6%9E%90/</link>
+      <pubDate>Mon, 15 May 2017 20:26:47 +0000</pubDate>
+      
+      <guid>/post/scrapy-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B03-item-%E7%B1%BB%E6%95%B0%E6%8D%AE%E8%BD%AC%E6%8D%A2%E4%B8%8E-itemloader-%E6%9C%BA%E5%88%B6%E8%A7%A3%E6%9E%90/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Scrapy 入门笔记(2) xpath 与 css 解析以及解析网页示例</title>
+      <link>/post/scrapy-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B02-xpath-%E4%B8%8E-css-%E8%A7%A3%E6%9E%90%E4%BB%A5%E5%8F%8A%E8%A7%A3%E6%9E%90%E7%BD%91%E9%A1%B5%E7%A4%BA%E4%BE%8B/</link>
+      <pubDate>Wed, 10 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/post/scrapy-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B02-xpath-%E4%B8%8E-css-%E8%A7%A3%E6%9E%90%E4%BB%A5%E5%8F%8A%E8%A7%A3%E6%9E%90%E7%BD%91%E9%A1%B5%E7%A4%BA%E4%BE%8B/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Scrapy 入门笔记(1) Scrapy 项目搭建与架构介绍</title>
+      <link>/post/scrapy-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01-scrapy-%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA%E4%B8%8E%E6%9E%B6%E6%9E%84%E4%BB%8B%E7%BB%8D/</link>
+      <pubDate>Mon, 08 May 2017 10:57:14 +0000</pubDate>
+      
+      <guid>/post/scrapy-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01-scrapy-%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA%E4%B8%8E%E6%9E%B6%E6%9E%84%E4%BB%8B%E7%BB%8D/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

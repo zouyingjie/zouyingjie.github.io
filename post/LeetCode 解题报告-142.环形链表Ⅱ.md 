@@ -1,0 +1,115 @@
+---
+title: "LeetCode 解题报告-141.环形链表 Ⅱ"
+date: 2020-04-21T19:31:28+08:00
+tags: ['LeetCode', "算法"]
+categories: ['LeetCode', "算法"]
+---
+
+今天做 LeetCode  [142. 环形链表 Ⅱ](https://leetcode.com/problems/linked-list-cycle-ii/) ，难度为 **Medium**。
+
+### 一. 题目要求
+
+这是 [141.环形链表](https://leetcode.com/problems/linked-list-cycle/) 的进阶题目，要求给定一个链表，判断该链表是是否有环，如果有环，则找出尾节点指向的那个节点
+
+
+
+![](https://img-blog.csdnimg.cn/20200421144141673.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0FocmlfSg==,size_16,color_FFFFFF,t_70)
+
+### 二. 解题思路 & 代码
+
+#### 解法一：遍历 & 判重
+
+这道题目需要我们找出尾节点所指向的节点，尾节点指向的节点在遍历过程中会首先出现两次，因此首先想到的方式就是从头遍历，然后判断节点是否有重复，如果有则返回该节点即可。
+
+具体思路：
+
+- 遍历链表，并将 ListNode 作为 Key 存入 Map
+- 判断重复，如果某个节点作为 Key 已经存在，则该节点就是尾节点指向的节点
+
+**实现代码**
+```java
+public class Solution {
+    public ListNode detectCycle(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        
+        Map<ListNode, Integer> map = new HashMap<>();
+        map.put(head, head.val);
+        head = head.next;
+        while (head != null) {
+            if (map.containsKey(head)) {
+                return head;
+            }
+            map.put(head, head.val);
+            head = head.next;
+          
+        }
+        return null;
+    }
+}
+```
+
+实际执行结果为 ：**Runtime: 4 ms, faster than 14.65%，Memory Usage: 40.3 MB, less than 6.32%**。
+
+上面这种解法有两个问题：
+
+- 引入了 Map 进行存储，Map 占用的空间为 O(N)，导致了空间复杂度的提升。
+- Map 的存储需要额外的哈希计算，提升了计算量，提高了时间复杂度。
+
+因此需要更好的解决方案。
+
+#### 2. 快慢指针 & 遍历
+
+如果一个链表有环的话，利用快慢指针进行遍历时快慢指针一定会在某个 ListNode 相遇。快慢指针的特点是：
+
+- 慢指针走一步，快指针走两步
+- 快指针到达链表结尾时，慢指针走到链表的中点。
+
+这里我将尾节点指向的节点称为 **环节点**，快慢指针相遇的节点称为 **相遇节点**。
+
+
+如果所示，下面的链表中，快慢指针将会在值为 **4** 的节点相遇，此时，从 **head 节点** 到 **相遇节点**的距离，和 **相遇节点**点经过**环节点**回到自身的距离是一样的。路径分别是
+
+> - 3  --> 2 --> 0 --> -4
+> - -4 --> 2 --> 0 --> -4
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/2020042115173779.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0FocmlfSg==,size_16,color_FFFFFF,t_70)
+
+可以看到遍历的路径中，从 **环节点**到**相遇节点**的路径是重复的，由此我们可以得出
+
+-  从 **head 节点** 到 **环节点** 的距离和 **相遇节点**到 **环节点** 的距离相等
+
+因此我们可以先通过快慢指针的方式判断是否有环并找出快慢指针的相遇节点，然后利用相遇节点的特点，遍历 head 节点和相遇节点，两个节点在经过相同的 next 步数后最终会在 **环节点** 相遇，返回该节点即可。
+
+**实现代码**
+```java
+public class Solution {
+    public ListNode detectCycle(ListNode head) {
+        if (Objects.isNull(head)) {
+            return null;
+        }
+        ListNode fast = head;
+        ListNode slow = head;
+        while (Objects.nonNull(fast) && Objects.nonNull(fast.next)) {
+            slow = slow.next;
+            fast = fast.next.next;
+            if (fast == slow) {
+                ListNode tmpHead = head;
+                while (tmpHead != slow) {
+                    slow = slow.next;
+                    tmpHead = tmpHead.next;
+                }
+                return tmpHead;
+            }
+        }
+        return null;
+    }
+}
+```
+
+上述方式省去了额外的存储空间，在时间复杂度上，快慢指针遍历是复杂度为 O(N/2)，后续的遍历取决于环节点的位置，最大为 O(N/2)，因此时间复杂度为 O(N)。
+
+### 三. 解题后记
+
+解题的关键还是要理解快慢指针的遍历特点，在此基础之上想清楚快慢指针遍历后各个节点之间的路径，理解了为何 **head 节点到 环节点距离** 与 **环节点到 head 节点距离** 相等，整个题目就迎刃而解了。

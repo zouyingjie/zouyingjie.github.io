@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>随笔 on WhiteShores</title>
+    <link>/categories/%E9%9A%8F%E7%AC%94/</link>
+    <description>Recent content in 随笔 on WhiteShores</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 02 Sep 2019 22:22:47 +0800</lastBuildDate>
+    
+	<atom:link href="/categories/%E9%9A%8F%E7%AC%94/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>那些平淡的一天</title>
+      <link>/post/%E9%82%A3%E4%BA%9B%E5%B9%B3%E6%B7%A1%E7%9A%84%E4%B8%80%E5%A4%A9/</link>
+      <pubDate>Mon, 02 Sep 2019 22:22:47 +0800</pubDate>
+      
+      <guid>/post/%E9%82%A3%E4%BA%9B%E5%B9%B3%E6%B7%A1%E7%9A%84%E4%B8%80%E5%A4%A9/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

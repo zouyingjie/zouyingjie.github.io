@@ -1,0 +1,64 @@
+---
+title: "LeetCode 解题报告-328.奇偶链表"
+date: 2020-04-20T19:31:28+08:00
+tags: ['LeetCode', "算法"]
+categories: ['LeetCode', "算法"]
+---
+
+今天做 LeetCode [LeetCode 解题报告-328.奇偶链表](https://leetcode.com/problems/odd-even-linked-list/)，难度为 **Easy**。
+
+### 一. 题目要求
+
+反转一个单向链表
+
+**例子**
+
+> Input: 1->2->3->4->5->NULL
+> Output: 5->4->3->2->1->NULL
+
+
+### 二. 解题思路 & 代码
+
+
+解题的关键也是理清楚每次反转的节点指针变化，每次反转涉及到三个指针，如图
+
+
+
+- 当前节点：
+- Pre 节点：
+- next 节点：
+
+具体实现代码如下：
+
+```java
+ class Solution {
+  public ListNode reverseList(ListNode head) {
+        if (head == null) {
+            return head;
+        }
+
+        if (head.next == null) {
+            return head;
+        }
+
+        ListNode preNode = null;
+
+        while (head != null) {
+            ListNode next = head.next;
+
+            head.next = preNode;
+            preNode = head;
+
+            if (next == null) { 
+                break;
+            }
+            head = next;
+        }
+        return head;
+
+    }
+}
+```
+
+### 三. 解题后记
+

@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="en" itemscope itemtype="http://schema.org/WebPage">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Sed 入门教程 - WhiteShores</title>
+  
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes"/>
+
+<meta name="MobileOptimized" content="width"/>
+<meta name="HandheldFriendly" content="true"/>
+
+
+<meta name="applicable-device" content="pc,mobile">
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="author" content="邹英杰" /><meta name="description" content="关于 Sed 使用的全面总结" />
+
+  <meta name="keywords" content="Hugo, theme, jane" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.55.3" />
+
+
+<link rel="canonical" href="/post/sed-%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/" />
+
+
+
+
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/sass/jane.min.b3a8813c06e6d785beba22bf8264e174fa2cb3a396b22f9ba24e2c00c18aaf7f.css" integrity="sha256-s6iBPAbm14W&#43;uiK/gmThdPoss6OWsi&#43;bok4sAMGKr38=" media="screen" crossorigin="anonymous">
+
+
+
+
+
+<meta property="og:title" content="Sed 入门教程" />
+<meta property="og:description" content="关于 Sed 使用的全面总结" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/sed-%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/" />
+<meta property="article:published_time" content="2019-10-29T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2019-10-29T00:00:00&#43;00:00"/>
+
+<meta itemprop="name" content="Sed 入门教程">
+<meta itemprop="description" content="关于 Sed 使用的全面总结">
+
+
+<meta itemprop="datePublished" content="2019-10-29T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2019-10-29T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="3271">
+
+
+
+<meta itemprop="keywords" content="Shell," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Sed 入门教程"/>
+<meta name="twitter:description" content="关于 Sed 使用的全面总结"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">WhiteShores</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="/">Homepage</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="/post/">Archives</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="/tags/">Tags</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="/categories/">Categories</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="/about/">About</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://gohugo.io" rel="noopener" target="_blank">
+              external-link
+              
+              <i class="iconfont">
+                <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="18" height="18">
+  <path d="M623.36 272.96 473.216 423.04C467.2 429.056 467.072 438.656 472.896 444.416c0 0-6.72-6.656 1.6 1.6C496.064 467.648 528.64 500.224 528.64 500.224 534.464 506.048 544 505.856 550.016 499.904l150.08-150.144 67.328 66.432c9.024 8.96 27.456 4.544 30.4-8.96 19.968-92.608 46.656-227.52 46.656-227.52 6.848-34.496-16.192-56.704-49.92-49.92 0 0-134.656 26.816-227.328 46.784C560.32 178.048 556.352 182.272 554.752 187.136c-3.2 6.208-3.008 14.208 3.776 20.992L623.36 272.96z"></path>
+  <path d="M841.152 457.152c-30.528 0-54.784 24.512-54.784 54.656l0 274.752L237.696 786.56 237.696 237.696l206.016 0c6.656 0 10.752 0 13.248 0C487.68 237.696 512 213.184 512 182.848 512 152.32 487.36 128 456.96 128L183.04 128C153.216 128 128 152.576 128 182.848c0 3.136 0.256 6.272 0.768 9.28C128.256 195.136 128 198.272 128 201.408l0 639.488c0 0.064 0 0.192 0 0.256 0 0.128 0 0.192 0 0.32 0 30.528 24.512 54.784 54.784 54.784l646.976 0c6.592 0 9.728 0 11.712 0 28.736 0 52.928-22.976 54.464-51.968C896 843.264 896 842.304 896 841.344l0-20.352L896 561.408 896 512.128C896 481.792 871.424 457.152 841.152 457.152z"></path>
+</svg>
+
+              </i>
+            </a>
+          
+        
+      </li>
+    
+
+    
+  </ul>
+</nav>
+
+
+  
+    
+
+
+
+
+
+
+  <link rel="stylesheet" href="/lib/photoswipe/photoswipe.min.css" />
+  <link rel="stylesheet" href="/lib/photoswipe/default-skin/default-skin.min.css" />
+
+
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+  
+
+  
+
+  
+
+  <header id="header" class="header container">
+    <div class="logo-wrapper">
+  <a href="/" class="logo">
+    
+      WhiteShores
+    
+  </a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="/">Homepage</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="/post/">Archives</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="/tags/">Tags</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="/categories/">Categories</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="/about/">About</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://gohugo.io" rel="noopener" target="_blank">
+              external-link
+              
+              <i class="iconfont">
+                <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="18" height="18">
+  <path d="M623.36 272.96 473.216 423.04C467.2 429.056 467.072 438.656 472.896 444.416c0 0-6.72-6.656 1.6 1.6C496.064 467.648 528.64 500.224 528.64 500.224 534.464 506.048 544 505.856 550.016 499.904l150.08-150.144 67.328 66.432c9.024 8.96 27.456 4.544 30.4-8.96 19.968-92.608 46.656-227.52 46.656-227.52 6.848-34.496-16.192-56.704-49.92-49.92 0 0-134.656 26.816-227.328 46.784C560.32 178.048 556.352 182.272 554.752 187.136c-3.2 6.208-3.008 14.208 3.776 20.992L623.36 272.96z"></path>
+  <path d="M841.152 457.152c-30.528 0-54.784 24.512-54.784 54.656l0 274.752L237.696 786.56 237.696 237.696l206.016 0c6.656 0 10.752 0 13.248 0C487.68 237.696 512 213.184 512 182.848 512 152.32 487.36 128 456.96 128L183.04 128C153.216 128 128 152.576 128 182.848c0 3.136 0.256 6.272 0.768 9.28C128.256 195.136 128 198.272 128 201.408l0 639.488c0 0.064 0 0.192 0 0.256 0 0.128 0 0.192 0 0.32 0 30.528 24.512 54.784 54.784 54.784l646.976 0c6.592 0 9.728 0 11.712 0 28.736 0 52.928-22.976 54.464-51.968C896 843.264 896 842.304 896 841.344l0-20.352L896 561.408 896 512.128C896 481.792 871.424 457.152 841.152 457.152z"></path>
+</svg>
+
+              </i>
+            </a>
+          
+
+        
+
+      </li>
+    
+
+    
+    
+
+    
+  </ul>
+</nav>
+
+  </header>
+
+  <div id="mobile-panel">
+    <main id="main" class="main bg-llight">
+      <div class="content-wrapper">
+        <div id="content" class="content container">
+          <article class="post bg-white">
+    
+    <header class="post-header">
+      <h1 class="post-title">Sed 入门教程</h1>
+      
+      <div class="post-meta">
+        <time datetime="2019-10-29" class="post-time">
+          2019-10-29
+        </time>
+        <div class="post-category">
+            <a href="/categories/shell/"> Shell </a>
+            
+          </div>
+        
+
+        
+        
+
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Table of Contents</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#一-sed-简介">一. Sed 简介</a>
+<ul>
+<li><a href="#1-sed-的命令格式">1. Sed 的命令格式</a></li>
+</ul></li>
+<li><a href="#二-sed-的常用选项">二. Sed 的常用选项</a>
+<ul>
+<li><a href="#n-只显示-sed-处理后的内容"><code>-n</code>：只显示 Sed 处理后的内容</a></li>
+<li><a href="#e-以选项中指定的-script-处理文本-可以通过-e-选项指定多个命令"><code>-e</code>：以选项中指定的 script 处理文本，可以通过 <code>-e</code> 选项指定多个命令</a></li>
+<li><a href="#r-支持扩展正则表达式"><code>-r</code>：支持扩展正则表达式</a></li>
+<li><a href="#f-以选项中指定的-script-文件处理文本"><code>-f</code>：以选项中指定的 script 文件处理文本</a></li>
+<li><a href="#i-将编辑作用到源文件"><code>-i</code>：将编辑作用到源文件</a></li>
+<li><a href="#h-显示帮助"><code>-h</code>：显示帮助</a></li>
+</ul></li>
+<li><a href="#三-sed-常用的匹配格式">三. Sed 常用的匹配格式</a>
+<ul>
+<li><a href="#1-10command-行号匹配-匹配第-10-行">【1】<code>10command</code>: 行号匹配，匹配第 10 行</a></li>
+<li><a href="#2-10-15command-行区间匹配-匹配-10-15-行">【2】<code>10，15command</code>: 行区间匹配，匹配 10 ~ 15 行</a></li>
+<li><a href="#3-10-5command-行号-范围匹配">【3】<code>10，+5command</code>: 行号，范围匹配</a></li>
+<li><a href="#4-pattern-command-正则匹配">【4】 <code>/pattern/command</code>: 正则匹配</a></li>
+<li><a href="#5-pattern1-pattern2-command-正则区间匹配">【5】<code>/pattern1/,/pattern2/command</code>: 正则区间匹配</a></li>
+<li><a href="#6-pattern1-3command-正则-行号区间匹配">【6】<code>/pattern1/,3command</code>: 正则、行号区间匹配</a></li>
+</ul></li>
+<li><a href="#四-sed-的常用命令">四. Sed 的常用命令</a>
+<ul>
+<li><a href="#1-p-打印命令">【1】<code>p</code>：打印命令</a></li>
+<li><a href="#2-a-i-w-r-追加命令">【2】<code>a/i/w/r</code> 追加命令</a></li>
+<li><a href="#3-s-替换命令">【3】<code>s</code>: 替换命令</a></li>
+<li><a href="#4-d-删除命令">【4】<code>d</code>: 删除命令</a></li>
+</ul></li>
+<li><a href="#四-反向引用">四. 反向引用</a>
+<ul>
+<li>
+<ul>
+<li><a href="#1-使用-符号">1. 使用<code>&amp;</code>符号</a></li>
+<li><a href="#2-使用-n-模式匹配-n-表示数字">2. 使用 <code>\N</code> 模式匹配 （N 表示数字）</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<h3 id="一-sed-简介">一. Sed 简介</h3>
+
+<p>Sed（Stream Editor），翻译过来就是流编辑器，通过 Sed 可以对 <strong><em>标准输出或者文件逐行</em></strong> 进行处理。</p>
+
+<h4 id="1-sed-的命令格式">1. Sed 的命令格式</h4>
+
+<p>Sed 的命令格式主要有下面两种：</p>
+
+<ul>
+<li><p>基于标准输出的文本处理</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">stdout | sed [option]  &#34;pattern command&#34;</pre></td></tr></table>
+</div>
+</div></li>
+
+<li><p>基于文件的文本处理</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">sed [option] &#34;pattern command&#34; file</pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+
+<p>可以看到命令主要由三部分组成：</p>
+
+<ul>
+<li><code>option</code>：Sed 选项。用来控制处理流程，比如如何展示，是否将文本处理作用于源文件等。</li>
+<li><code>pattern</code>：匹配格式。用来进行文本匹配，结合正则表达式可以实现非常强大的文本匹配。</li>
+<li><code>command</code>：Sed 命令。用来指明进行什么操作，比如追加、替换、删除等操作。</li>
+</ul>
+
+<p>由此我们可以想到 Sed 的工作方式就是： <strong><em>遍历标准输出或者某个文件的每一行，然后对每一行的内容通过 <code>pattern</code> 进行匹配，将匹配到的内容基于 <code>command</code> 命令进行处理，然后根据 <code>option</code> 选项做对应的操作</em></strong>。接下来就看下 Sed 中常用的选项、命令的作用以及常用的 pattern 匹配模式。</p>
+
+<h3 id="二-sed-的常用选项">二. Sed 的常用选项</h3>
+
+<h4 id="n-只显示-sed-处理后的内容"><code>-n</code>：只显示 Sed 处理后的内容</h4>
+
+<p>首先我们创建一个测试文件，写入测试内容</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># 测试文件内容</span>
+<span class="err">$</span> <span class="n">cat</span> <span class="n">a</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">first</span> <span class="n">line</span>
+<span class="n">second</span> <span class="n">line</span>
+<span class="n">third</span> <span class="n">line</span>
+<span class="n">forth</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>不加选项，使用 <code>p</code> 命令将测试文件的内容打印一遍，<code>/line/</code> 表示匹配有 line 的行。按理说应该只有 3 行匹配，但最终所有的原文都会被打印了一遍。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">$ sed &#34;/line/p&#34; a.txt 
+first line
+first line
+second line
+second line
+third line
+third line
+forth</pre></td></tr></table>
+</div>
+</div>
+<p>现在加上 <code>-n</code> 选项重新执行命令，可以看到现在只打印匹配到的行了。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">$ sed -n &#34;/line/p&#34; a.txt
+first line
+second line
+third line</pre></td></tr></table>
+</div>
+</div>
+<h4 id="e-以选项中指定的-script-处理文本-可以通过-e-选项指定多个命令"><code>-e</code>：以选项中指定的 script 处理文本，可以通过 <code>-e</code> 选项指定多个命令</h4>
+
+<p>如果我们想匹配 <code>line</code> 和 <code>LINE</code>，那么可以通过两个 -e 进行指定两个匹配模式，示例如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">$ cat a.txt
+first LINE
+second line
+third line
+
+$ sed -n  -e &#34;/line/p&#34; -e &#34;/LINE/p&#34; a.txt
+first LINE
+second line
+third line</pre></td></tr></table>
+</div>
+</div>
+<h4 id="r-支持扩展正则表达式"><code>-r</code>：支持扩展正则表达式</h4>
+
+<p>上面我们通过两个 <code>-e</code> 指定了两个匹配模式，分别查找 <code>line</code> 和 <code>LINE</code> 所在的行，其实这可以通过正则表达式实现，</p>
+
+<p>在扩展正则表达式中有逻辑或 <code>|</code> 的操作，Sed 默认不支持该操作，需要通过 <code>-r</code> 选项使其支持扩展正则表达式，然后就可以使用逻辑或操作实现多个模式的匹配了，示例如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">$ sed -n -r &#34;/line|LINE/p&#34; a.txt
+first LINE
+second line
+third line</pre></td></tr></table>
+</div>
+</div>
+<h4 id="f-以选项中指定的-script-文件处理文本"><code>-f</code>：以选项中指定的 script 文件处理文本</h4>
+
+<p>当操作的选项过多时，使用 <code>-e</code> 在命令行中指定多个显得有些繁琐，我们可以将 Sed 命令写到一个脚本中，然后通过 <code>-f</code> 命令指定该脚本运行即可。例如上面的 <code>sed -n  -e &quot;/line/p&quot; -e &quot;/LINE/p&quot; a.txt</code> 命令可以通过执行 sed 脚本替换如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">$ cat find.sed
+/line/p
+/LINE/p
+
+
+$ sed -n -f find.sed a.txt
+first LINE
+second line
+third line</pre></td></tr></table>
+</div>
+</div>
+<p>下面是 <a href="https://book.douban.com/subject/26854226/">Linux命令行与shell脚本编程大全</a> 中的一个例子：</p>
+
+<p>给出几行文本，将每行中的 brown 替换为 green，将 fox 替换为 elephant，将 dog 替换为 cat。如果通过 <code>-e</code> 选项则需要如下编写</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">➜  sed -e &#39;
+s/brown/green/
+s/fox/elephant/
+s/dog/cat/&#39; data1.txt
+The quick green elephant jumps over the lazy cat.
+The quick green elephant jumps over the lazy cat.
+The quick green elephant jumps over the lazy cat.
+The quick green elephant jumps over the lazy cat.</pre></td></tr></table>
+</div>
+</div>
+<p>通过编写脚本并使用 <code>-f</code> 选项就可以简化为下面的操作</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma"># sed 脚本内容
+➜  cat script1.sed
+s/brown/green/
+s/fox/elephant/
+s/dog/cat/
+
+# 通过 -f 指定 sed 脚本文件
+➜  sed -f script1.sed data1.txt
+The quick green elephant jumps over the lazy cat.
+The quick green elephant jumps over the lazy cat.
+The quick green elephant jumps over the lazy cat.
+The quick green elephant jumps over the lazy cat.</pre></td></tr></table>
+</div>
+</div>
+<h4 id="i-将编辑作用到源文件"><code>-i</code>：将编辑作用到源文件</h4>
+
+<p>Sed 的编辑默认是不会修改源文件的，我们可以通过 <code>-i</code> 选项改变这一点。示例如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-Python" data-lang="Python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-Python" data-lang="Python"><span class="c1"># 将 line 替换为 LINE 并打印</span>
+<span class="err">$</span> <span class="n">sed</span> <span class="o">-</span><span class="n">n</span> <span class="s2">&#34;s/line/LINE/g;p&#34;</span> <span class="n">a</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">first</span> <span class="n">LINE</span>
+<span class="n">second</span> <span class="n">LINE</span>
+<span class="n">third</span> <span class="n">LINE</span>
+
+<span class="c1"># 源文件没有变化</span>
+<span class="err">$</span> <span class="n">cat</span> <span class="n">a</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">first</span> <span class="n">LINE</span>
+<span class="n">second</span> <span class="n">line</span>
+<span class="n">third</span> <span class="n">line</span>
+
+<span class="c1"># 添加 -i 选项重新操作</span>
+<span class="err">$</span> <span class="n">sed</span> <span class="o">-</span><span class="n">n</span> <span class="o">-</span><span class="n">i</span> <span class="s2">&#34;s/line/LINE/g;p&#34;</span> <span class="n">a</span><span class="o">.</span><span class="n">txt</span>
+
+<span class="c1"># 源文件也发生了改变</span>
+<span class="err">$</span> <span class="n">cat</span> <span class="n">a</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">first</span> <span class="n">LINE</span>
+<span class="n">second</span> <span class="n">LINE</span>
+<span class="n">third</span> <span class="n">LINE</span></code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="h-显示帮助"><code>-h</code>：显示帮助</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">$ sed -h
+sed: invalid option -- &#39;h&#39;
+Usage: sed [OPTION]... {script-only-if-no-other-script} [input-file]...
+
+  -n, --quiet, --silent
+                 suppress automatic printing of pattern space
+  -e script, --expression=script
+                 add the script to the commands to be executed
+  -f script-file, --file=script-file
+                 add the contents of script-file to the commands to be executed
+
+ . . . </pre></td></tr></table>
+</div>
+</div>
+<h3 id="三-sed-常用的匹配格式">三. Sed 常用的匹配格式</h3>
+
+<p>Sed 可以通过行号、行区间、正则匹配、正则区间匹配进行文本的匹配。简要总结如下：</p>
+
+<h4 id="1-10command-行号匹配-匹配第-10-行">【1】<code>10command</code>: 行号匹配，匹配第 10 行</h4>
+
+<p><strong><em>示例</em></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma"># 删除第 10 行
+sed -i &#34;10d&#34; data.tx</pre></td></tr></table>
+</div>
+</div>
+<h4 id="2-10-15command-行区间匹配-匹配-10-15-行">【2】<code>10，15command</code>: 行区间匹配，匹配 10 ~ 15 行</h4>
+
+<p><strong><em>示例</em></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma"># 删除 10 ~ 15 行
+sed -i &#34;10,15d&#34; data.txt</pre></td></tr></table>
+</div>
+</div>
+<h4 id="3-10-5command-行号-范围匹配">【3】<code>10，+5command</code>: 行号，范围匹配</h4>
+
+<p><strong><em>示例</em></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma"># 从第 10 行开始，删除后面 5 行，即删除 10 ~ 16 行
+sed -i &#34;10,+5d&#34; data.txt</pre></td></tr></table>
+</div>
+</div>
+<h4 id="4-pattern-command-正则匹配">【4】 <code>/pattern/command</code>: 正则匹配</h4>
+
+<p><strong><em>示例</em></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma"># 删除以 Add 开头的行
+sed -i &#34;/^Add/d&#34; data.txt</pre></td></tr></table>
+</div>
+</div>
+<h4 id="5-pattern1-pattern2-command-正则区间匹配">【5】<code>/pattern1/,/pattern2/command</code>: 正则区间匹配</h4>
+
+<p>从匹配到 pattern1 的行开始，到匹配到 pattern2 的行结束，如果一直没有匹配到 <code>pattern2</code>，那么 Sed 会一直匹配到文本最有一行。</p>
+
+<p><strong><em>示例</em></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">$ cat -n data1.txt
+     1	First Line
+     2	Add two
+     3	Third Line
+     4	Subtract three
+     5	SecondLine
+
+
+# 从以 Add 开头的行开始，删除到以 Substract 的行结束，预期删除 2 ~ 4 行的数据
+$ sed -i &#34;/^Add/, /^Subtract/d&#34; data1.txt
+
+$ cat -n data1.txt
+     1	First Line
+     2	SecondLine</pre></td></tr></table>
+</div>
+</div>
+<h4 id="6-pattern1-3command-正则-行号区间匹配">【6】<code>/pattern1/,3command</code>: 正则、行号区间匹配</h4>
+
+<p>可以将行号和正则匹配进行过混合使用，两者位置没有限制。</p>
+
+<p><strong><em>示例</em></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">$ cat data3.txt
+First 1
+Second 2
+Third 3
+Forth 4
+Fifth 5
+
+# 打印 从匹配到 First 的行到 第 3 行
+$ sed -n &#34;/First/, 3p&#34; data3.txt
+First 1
+Second 2
+Third 3
+
+# 从第 3 行开始打印，一直到匹配诶到 Forth 的行
+# root @ node1 in ~/Shell/mooc-shell/cp06 [9:15:13]
+$ sed -n &#34;3,/Forth/p&#34; data3.txt
+Third 3
+Forth 4</pre></td></tr></table>
+</div>
+</div>
+<h3 id="四-sed-的常用命令">四. Sed 的常用命令</h3>
+
+<p>了解了常见的选项和匹配模式，接下来就是了解常用的命令了。命令的使用，就是结合上面提到的匹配模式，对匹配到的文本进行一系列的增删改查操作。</p>
+
+<h4 id="1-p-打印命令">【1】<code>p</code>：打印命令</h4>
+
+<p><strong><em>示例 1：打印第 3 行的内容</em></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">$ cat -n line.txt
+     1	First line
+     2	Second line
+     3	Third line
+$ sed -n &#34;3p&#34; line.txt
+Third line</pre></td></tr></table>
+</div>
+</div>
+<p><strong><em>示例 2：打印 3 到 5 行的内容</em></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">$ sed -n &#34;3,5p&#34; line.txt
+Third line
+4 line
+5 line</pre></td></tr></table>
+</div>
+</div>
+<p><strong><em>示例 3：打印以 root 开头的行</em></strong></p>
+
+<p>我们查询 <code>/etc/passwd</code> 文件中 root 用户的内容，命令如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">$ sed -n &#34;/^root/p&#34; /etc/passwd
+root❌0:0:root:/root:/bin/zsh</pre></td></tr></table>
+</div>
+</div>
+<h4 id="2-a-i-w-r-追加命令">【2】<code>a/i/w/r</code> 追加命令</h4>
+
+<p>追加相关的命令有 <code>a</code>、<code>i</code>、<code>r</code>、<code>w</code> 四个，分别示例如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma"># 演示文本内容
+$ cat data.txt
+Dog
+Cat
+Orange
+Apple</pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li><code>a</code> 行后追加</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma"># 在第 1 ~ 2 行后面添加 This is animal 的文本
+$ sed  &#34;1,2a This is animal&#34; data.txt
+Dog
+This is animal
+Cat
+This is animal
+Orange
+Apple</pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li><code>i</code> 行前追加</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma"># 在第 3 ~ 4 前面添加 This is fruit 的文本
+$ sed &#34;3,4i This is fruit&#34; data.txt
+Dog
+Cat
+This is fruit
+Orange
+This is fruit
+Apple</pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li><code>r</code> 从外部文件读取，追加到匹配行后面</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma"># 读取 test.txt 文件的内容，追加到 1 ~ 2 行后面
+$ sed &#34;1,2r test.txt&#34; data.txt
+Dog
+I come from a file.
+Cat
+I come from a file.
+Orange
+Apple</pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li><code>w</code> 将匹配的行写入外部文件</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma"># 从 Dog 所在的行开始匹配，直到 Orange 所在行，将所有匹配到的行写入 test.txt 文件
+$ sed -n &#34;/Dog/, /Orange/w test.txt&#34; data.txt
+
+$ cat test.txt
+Dog
+Cat
+Orange</pre></td></tr></table>
+</div>
+</div>
+<h4 id="3-s-替换命令">【3】<code>s</code>: 替换命令</h4>
+
+<p>替换命令的格式如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma"># 将匹配到 old 文本替换为 new 文本，如果一行中有多处匹配，默认只替换第一个
+s/old/new/flags：</pre></td></tr></table>
+</div>
+</div>
+<p>flag 表示替换标记，有下面四个选项：</p>
+
+<ul>
+<li><code>数字</code>：将匹配到的到的第 N 处进行替换</li>
+<li><code>g</code>：将匹配到的所有文本进行替换</li>
+<li><code>p</code>：将原先行打印出来</li>
+<li><code>w</code>：将替换的结果写到文件中</li>
+</ul>
+
+<p>一般来说 <code>数字</code> 和 <code>g</code> 用的较多，下面看几个相关示例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma"># 测试文件内容
+$ cat test.txt
+line line line
+cat  line  cat line
+dog  line  dog line</pre></td></tr></table>
+</div>
+</div>
+<p><strong><em>示例 1：默认替换第 1 处</em></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma"># 将每行中的 line 替换为 大写的 LINE
+$ sed &#34;s/line/LINE/&#34; test.txt
+LINE line line
+cat  LINE  cat line
+dog  LINE  dog line</pre></td></tr></table>
+</div>
+</div>
+<p><strong><em>示例 2：替换第 2 处</em></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">$ sed &#34;s/line/LINE/2&#34; test.txt
+line LINE line
+cat  line  cat LINE
+dog  line  dog LINE</pre></td></tr></table>
+</div>
+</div>
+<p><strong><em>示例 3：全部替换</em></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">$ sed &#34;s/line/LINE/g&#34; test.txt
+LINE LINE LINE
+cat  LINE  cat LINE
+dog  LINE  dog LINE</pre></td></tr></table>
+</div>
+</div>
+<p><strong><em>示例 4：从第 2 处开始替换</em></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">$ sed &#34;s/line/LINE/2g&#34; test.txt
+line LINE LINE
+cat  line  cat LINE
+dog  line  dog LINE</pre></td></tr></table>
+</div>
+</div>
+<h4 id="4-d-删除命令">【4】<code>d</code>: 删除命令</h4>
+
+<p>在上面介绍匹配模式的部分 <code>-d</code> 命令已经使用过了，所以这里就不做赘述了。</p>
+
+<h3 id="四-反向引用">四. 反向引用</h3>
+
+<p>有时候我们希望在匹配到的文本基础之上进行改进，而不是完全替换掉。比如希望将文本中的 <code>apple</code> 全部变为复数形式 <code>apples</code>，这时候直接引用原文本，在原文本基础之上加一个 s 是很方便的操作，Sed 有两种方式可以实现对匹配文本的引用：</p>
+
+<h5 id="1-使用-符号">1. 使用<code>&amp;</code>符号</h5>
+
+<p><strong><em>示例</em></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-Shell" data-lang="Shell"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-Shell" data-lang="Shell">$ cat apple.txt
+I have some apple
+
+$ sed  <span class="s2">&#34;s/apple/&amp;s/&#34;</span> apple.txt
+I have some apples</code></pre></td></tr></table>
+</div>
+</div>
+<p>可以看到原文本中的 <code>apple</code> 变为了 <code>apples</code>，<code>&amp;</code> 符号代表的就是匹配到的文本。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma"># root @ server001 in ~/Shell/mooc-shell/cp06 [9:16:07]
+$ sed -i &#34;s/Java../&amp;s/g&#34; test.txt
+
+# root @ server001 in ~/Shell/mooc-shell/cp06 [9:16:28]
+$ cat test.txt
+I learn Javaees
+I learn Javadds</pre></td></tr></table>
+</div>
+</div>
+<h5 id="2-使用-n-模式匹配-n-表示数字">2. 使用 <code>\N</code> 模式匹配 （N 表示数字）</h5>
+
+<p><code>\N</code> 也可以引用匹配到文本，和 <code>&amp;</code> 的不同在于:</p>
+
+<blockquote>
+<p>&amp; 只能引用全部，而 <code>\N</code> 的格式可以引用部分文本。可以将需要引用的部分用括号括起来，然后 <code>\N</code> 只会引用被括起来的部分，<code>\1</code> 表示被括起来的第 1 处，<code>\2</code> 表示第二处，依次类推。</p>
+</blockquote>
+
+<p>Sed 中命令中的括号需要进行转义，示例如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">$ cat test.txt
+Cats and Dogs
+
+# root @ node1 in ~/Shell/mooc-shell/cp06 [21:04:20]
+# 匹配模式为 Cats + 字符串 + dogs 的文本
+# 通过加括号，\1 表示 Cats，\2 表示 Dogs，将匹配到的两个单词中间加 `` love ``
+$ sed &#34;s/\(Cats\).*\(Dogs\)/\1 love \2/&#34; test.txt
+Cats love Dogs</pre></td></tr></table>
+</div>
+</div>
+<p>以上即为 Sed 的简记，重点要理解 Sed 的工作方式，然后要熟练掌握还需要多加练习才行。</p>
+
+    </div>
+
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">邹英杰</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+      2019-10-29
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/shell/">Shell</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/devops%E7%AC%94%E8%AE%B0-%E4%BB%8E0%E5%BC%80%E5%A7%8B%E6%90%AD%E5%BB%BAjenkins%E6%B5%81%E6%B0%B4%E7%BA%BF/">
+            
+            <i class="iconfont">
+              <svg  class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="18" height="18">
+  <path d="M691.908486 949.511495l75.369571-89.491197c10.963703-12.998035 10.285251-32.864502-1.499144-44.378743L479.499795 515.267417 757.434875 204.940602c11.338233-12.190647 11.035334-32.285311-0.638543-44.850487l-80.46666-86.564541c-11.680017-12.583596-30.356378-12.893658-41.662889-0.716314L257.233596 494.235404c-11.332093 12.183484-11.041474 32.266891 0.657986 44.844348l80.46666 86.564541c1.772366 1.910513 3.706415 3.533476 5.750981 4.877077l306.620399 321.703933C662.505829 963.726242 680.945807 962.528973 691.908486 949.511495z"></path>
+</svg>
+
+            </i>
+            <span class="prev-text nav-default">DevOps笔记-从0开始搭建Jenkins流水线</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/%E9%82%A3%E4%BA%9B%E5%B9%B3%E6%B7%A1%E7%9A%84%E4%B8%80%E5%A4%A9/">
+            <span class="next-text nav-default">那些平淡的一天</span>
+            <span class="prev-text nav-mobile">Next</span>
+            
+            <i class="iconfont">
+              <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="18" height="18">
+  <path d="M332.091514 74.487481l-75.369571 89.491197c-10.963703 12.998035-10.285251 32.864502 1.499144 44.378743l286.278095 300.375162L266.565125 819.058374c-11.338233 12.190647-11.035334 32.285311 0.638543 44.850487l80.46666 86.564541c11.680017 12.583596 30.356378 12.893658 41.662889 0.716314l377.434212-421.426145c11.332093-12.183484 11.041474-32.266891-0.657986-44.844348l-80.46666-86.564541c-1.772366-1.910513-3.706415-3.533476-5.750981-4.877077L373.270379 71.774697C361.493148 60.273758 343.054193 61.470003 332.091514 74.487481z"></path>
+</svg>
+
+            </i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+
+  
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+    
+
+  
+
+        </div>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="icon-links">
+  
+  
+    <a href="yingjiezou1@gmail.com" rel="me noopener" class="iconfont"
+      title="email"  target="_blank"
+      >
+      <svg class="icon" viewBox="0 0 1451 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="36" height="36">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+    </a>
+  
+    <a href="https://twitter.com/BoyYingjiezou1" rel="me noopener" class="iconfont"
+      title="twitter"  target="_blank"
+      >
+      <svg class="icon" viewBox="0 0 1264 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="36" height="36">
+  <path d="M1229.8616 18.043658c0 0-117.852626 63.135335-164.151872 67.344358-105.225559-164.151872-505.082682-92.598492-437.738325 223.078185C278.622548 312.675223 89.216542 47.506814 89.216542 47.506814s-117.852626 189.406006 75.762402 345.139833C127.097743 396.85567 55.544363 371.601535 55.544363 371.601535S26.081207 535.753407 253.368414 615.724832c-21.045112 29.463156-113.643603 8.418045-113.643603 8.418045s25.254134 143.10676 231.496229 180.987961c-143.10676 130.479693-387.230056 92.598492-370.393967 105.225559 206.242095 189.406006 1119.599946 231.496229 1128.01799-643.98042C1179.353331 249.539887 1263.533778 123.269217 1263.533778 123.269217s-130.479693 37.881201-138.897738 33.672179C1225.652577 98.015083 1229.8616 18.043658 1229.8616 18.043658"></path>
+</svg>
+
+    </a>
+  
+    <a href="https://github.com/zouyingjie" rel="me noopener" class="iconfont"
+      title="github"  target="_blank"
+      >
+      <svg class="icon" style="" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="36" height="36">
+  <path d="M512 12.672c-282.88 0-512 229.248-512 512 0 226.261333 146.688 418.133333 350.08 485.76 25.6 4.821333 34.986667-11.008 34.986667-24.618667 0-12.16-0.426667-44.373333-0.64-87.04-142.421333 30.890667-172.458667-68.693333-172.458667-68.693333C188.672 770.986667 155.008 755.2 155.008 755.2c-46.378667-31.744 3.584-31.104 3.584-31.104 51.413333 3.584 78.421333 52.736 78.421333 52.736 45.653333 78.293333 119.850667 55.68 149.12 42.581333 4.608-33.109333 17.792-55.68 32.426667-68.48-113.706667-12.8-233.216-56.832-233.216-253.013333 0-55.893333 19.84-101.546667 52.693333-137.386667-5.76-12.928-23.04-64.981333 4.48-135.509333 0 0 42.88-13.738667 140.8 52.48 40.96-11.392 84.48-17.024 128-17.28 43.52 0.256 87.04 5.888 128 17.28 97.28-66.218667 140.16-52.48 140.16-52.48 27.52 70.528 10.24 122.581333 5.12 135.509333 32.64 35.84 52.48 81.493333 52.48 137.386667 0 196.693333-119.68 240-233.6 252.586667 17.92 15.36 34.56 46.762667 34.56 94.72 0 68.522667-0.64 123.562667-0.64 140.202666 0 13.44 8.96 29.44 35.2 24.32C877.44 942.592 1024 750.592 1024 524.672c0-282.752-229.248-512-512-512"></path>
+</svg>
+
+    </a>
+
+
+<a href="/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+    class="iconfont" title="rss" target="_blank">
+    <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="30" height="30">
+  <path d="M819.157333 1024C819.157333 574.592 449.408 204.8 0 204.8V0c561.706667 0 1024 462.293333 1024 1024h-204.842667zM140.416 743.04a140.8 140.8 0 0 1 140.501333 140.586667A140.928 140.928 0 0 1 140.074667 1024C62.72 1024 0 961.109333 0 883.626667s62.933333-140.544 140.416-140.586667zM678.784 1024h-199.04c0-263.210667-216.533333-479.786667-479.744-479.786667V345.173333c372.352 0 678.784 306.517333 678.784 678.826667z"></path>
+</svg>
+
+  </a>
+   
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+      2017 -
+    2021
+    <span class="heart">
+      
+      <i class="iconfont">
+        <svg class="icon" viewBox="0 0 1025 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="14" height="14">
+  <path d="M1000.1 247.9c-15.5-37.3-37.6-70.6-65.7-98.9-54.4-54.8-125.8-85-201-85-85.7 0-166 39-221.4 107.4C456.6 103 376.3 64 290.6 64c-75.1 0-146.5 30.4-201.1 85.6-28.2 28.5-50.4 61.9-65.8 99.3-16 38.8-24 79.9-23.6 122.2 0.7 91.7 40.1 177.2 108.1 234.8 3.1 2.6 6 5.1 8.9 7.8 14.9 13.4 58 52.8 112.6 102.7 93.5 85.5 209.9 191.9 257.5 234.2 7 6.1 15.8 9.5 24.9 9.5 9.2 0 18.1-3.4 24.9-9.5 34.5-30.7 105.8-95.9 181.4-165 74.2-67.8 150.9-138 195.8-178.2 69.5-57.9 109.6-144.4 109.9-237.3 0.1-42.5-8-83.6-24-122.2z"
+   fill="#8a8a8a"></path>
+</svg>
+
+      </i>
+    </span><span class="author">
+        邹英杰
+        
+      </span></span>
+
+  
+  
+
+  
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont">
+        
+        <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="35" height="35">
+  <path d="M510.866688 227.694839 95.449397 629.218702l235.761562 0-2.057869 328.796468 362.40389 0L691.55698 628.188232l241.942331-3.089361L510.866688 227.694839zM63.840492 63.962777l894.052392 0 0 131.813095L63.840492 195.775872 63.840492 63.962777 63.840492 63.962777zM63.840492 63.962777"></path>
+</svg>
+
+      </i>
+    </div>
+  </div>
+  
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+
+
+
+
+<script type="text/javascript" src="/js/main.638251f4230630f0335d8c6748e53a96f94b72670920b60c09a56fdc8bece214.js" integrity="sha256-Y4JR9CMGMPAzXYxnSOU6lvlLcmcJILYMCaVv3Ivs4hQ=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script type="text/javascript" src="/lib/photoswipe/photoswipe.min.js"></script>
+    <script type="text/javascript" src="/lib/photoswipe/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

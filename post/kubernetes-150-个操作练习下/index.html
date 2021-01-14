@@ -1,0 +1,3225 @@
+<!DOCTYPE html>
+<html lang="en" itemscope itemtype="http://schema.org/WebPage">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Kubernetes 150 个操作练习（下） - WhiteShores</title>
+  
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes"/>
+
+<meta name="MobileOptimized" content="width"/>
+<meta name="HandheldFriendly" content="true"/>
+
+
+<meta name="applicable-device" content="pc,mobile">
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="author" content="邹英杰" />
+  <meta name="description" content="150 个练习的最后一部分，这部分主要包含三个模块： 状态存储 配置 监控 服务与网络 四. 状态存储篇 这部分的练习主要是熟悉持久卷和持久卷声明的相关使用。 96." />
+
+  <meta name="keywords" content="Hugo, theme, jane" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.55.3" />
+
+
+<link rel="canonical" href="/post/kubernetes-150-%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%BB%83%E4%B9%A0%E4%B8%8B/" />
+
+
+
+
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/sass/jane.min.b3a8813c06e6d785beba22bf8264e174fa2cb3a396b22f9ba24e2c00c18aaf7f.css" integrity="sha256-s6iBPAbm14W&#43;uiK/gmThdPoss6OWsi&#43;bok4sAMGKr38=" media="screen" crossorigin="anonymous">
+
+
+
+
+
+<meta property="og:title" content="Kubernetes 150 个操作练习（下）" />
+<meta property="og:description" content="150 个练习的最后一部分，这部分主要包含三个模块： 状态存储 配置 监控 服务与网络 四. 状态存储篇 这部分的练习主要是熟悉持久卷和持久卷声明的相关使用。 96." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/kubernetes-150-%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%BB%83%E4%B9%A0%E4%B8%8B/" />
+<meta property="article:published_time" content="2020-04-27T15:50:53&#43;08:00"/>
+<meta property="article:modified_time" content="2020-04-27T15:50:53&#43;08:00"/>
+
+<meta itemprop="name" content="Kubernetes 150 个操作练习（下）">
+<meta itemprop="description" content="150 个练习的最后一部分，这部分主要包含三个模块： 状态存储 配置 监控 服务与网络 四. 状态存储篇 这部分的练习主要是熟悉持久卷和持久卷声明的相关使用。 96.">
+
+
+<meta itemprop="datePublished" content="2020-04-27T15:50:53&#43;08:00" />
+<meta itemprop="dateModified" content="2020-04-27T15:50:53&#43;08:00" />
+<meta itemprop="wordCount" content="5058">
+
+
+
+<meta itemprop="keywords" content="Kubernetes," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Kubernetes 150 个操作练习（下）"/>
+<meta name="twitter:description" content="150 个练习的最后一部分，这部分主要包含三个模块： 状态存储 配置 监控 服务与网络 四. 状态存储篇 这部分的练习主要是熟悉持久卷和持久卷声明的相关使用。 96."/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">WhiteShores</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="/">Homepage</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="/post/">Archives</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="/tags/">Tags</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="/categories/">Categories</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="/about/">About</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://gohugo.io" rel="noopener" target="_blank">
+              external-link
+              
+              <i class="iconfont">
+                <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="18" height="18">
+  <path d="M623.36 272.96 473.216 423.04C467.2 429.056 467.072 438.656 472.896 444.416c0 0-6.72-6.656 1.6 1.6C496.064 467.648 528.64 500.224 528.64 500.224 534.464 506.048 544 505.856 550.016 499.904l150.08-150.144 67.328 66.432c9.024 8.96 27.456 4.544 30.4-8.96 19.968-92.608 46.656-227.52 46.656-227.52 6.848-34.496-16.192-56.704-49.92-49.92 0 0-134.656 26.816-227.328 46.784C560.32 178.048 556.352 182.272 554.752 187.136c-3.2 6.208-3.008 14.208 3.776 20.992L623.36 272.96z"></path>
+  <path d="M841.152 457.152c-30.528 0-54.784 24.512-54.784 54.656l0 274.752L237.696 786.56 237.696 237.696l206.016 0c6.656 0 10.752 0 13.248 0C487.68 237.696 512 213.184 512 182.848 512 152.32 487.36 128 456.96 128L183.04 128C153.216 128 128 152.576 128 182.848c0 3.136 0.256 6.272 0.768 9.28C128.256 195.136 128 198.272 128 201.408l0 639.488c0 0.064 0 0.192 0 0.256 0 0.128 0 0.192 0 0.32 0 30.528 24.512 54.784 54.784 54.784l646.976 0c6.592 0 9.728 0 11.712 0 28.736 0 52.928-22.976 54.464-51.968C896 843.264 896 842.304 896 841.344l0-20.352L896 561.408 896 512.128C896 481.792 871.424 457.152 841.152 457.152z"></path>
+</svg>
+
+              </i>
+            </a>
+          
+        
+      </li>
+    
+
+    
+  </ul>
+</nav>
+
+
+  
+    
+
+
+
+
+
+
+  <link rel="stylesheet" href="/lib/photoswipe/photoswipe.min.css" />
+  <link rel="stylesheet" href="/lib/photoswipe/default-skin/default-skin.min.css" />
+
+
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+  
+
+  
+
+  
+
+  <header id="header" class="header container">
+    <div class="logo-wrapper">
+  <a href="/" class="logo">
+    
+      WhiteShores
+    
+  </a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="/">Homepage</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="/post/">Archives</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="/tags/">Tags</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="/categories/">Categories</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="/about/">About</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://gohugo.io" rel="noopener" target="_blank">
+              external-link
+              
+              <i class="iconfont">
+                <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="18" height="18">
+  <path d="M623.36 272.96 473.216 423.04C467.2 429.056 467.072 438.656 472.896 444.416c0 0-6.72-6.656 1.6 1.6C496.064 467.648 528.64 500.224 528.64 500.224 534.464 506.048 544 505.856 550.016 499.904l150.08-150.144 67.328 66.432c9.024 8.96 27.456 4.544 30.4-8.96 19.968-92.608 46.656-227.52 46.656-227.52 6.848-34.496-16.192-56.704-49.92-49.92 0 0-134.656 26.816-227.328 46.784C560.32 178.048 556.352 182.272 554.752 187.136c-3.2 6.208-3.008 14.208 3.776 20.992L623.36 272.96z"></path>
+  <path d="M841.152 457.152c-30.528 0-54.784 24.512-54.784 54.656l0 274.752L237.696 786.56 237.696 237.696l206.016 0c6.656 0 10.752 0 13.248 0C487.68 237.696 512 213.184 512 182.848 512 152.32 487.36 128 456.96 128L183.04 128C153.216 128 128 152.576 128 182.848c0 3.136 0.256 6.272 0.768 9.28C128.256 195.136 128 198.272 128 201.408l0 639.488c0 0.064 0 0.192 0 0.256 0 0.128 0 0.192 0 0.32 0 30.528 24.512 54.784 54.784 54.784l646.976 0c6.592 0 9.728 0 11.712 0 28.736 0 52.928-22.976 54.464-51.968C896 843.264 896 842.304 896 841.344l0-20.352L896 561.408 896 512.128C896 481.792 871.424 457.152 841.152 457.152z"></path>
+</svg>
+
+              </i>
+            </a>
+          
+
+        
+
+      </li>
+    
+
+    
+    
+
+    
+  </ul>
+</nav>
+
+  </header>
+
+  <div id="mobile-panel">
+    <main id="main" class="main bg-llight">
+      <div class="content-wrapper">
+        <div id="content" class="content container">
+          <article class="post bg-white">
+    
+    <header class="post-header">
+      <h1 class="post-title">Kubernetes 150 个操作练习（下）</h1>
+      
+      <div class="post-meta">
+        <time datetime="2020-04-27" class="post-time">
+          2020-04-27
+        </time>
+        
+        
+
+        
+        
+
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Table of Contents</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#四-状态存储篇">四. 状态存储篇</a>
+<ul>
+<li><a href="#96-查看集群中的所有持久卷">96. 查看集群中的所有持久卷</a></li>
+<li><a href="#97-创建一个-hostpath-类型的持久卷-设置存储容量为-10g-读写权限是-readwriteonce-挂载到-mnt-data-目录">97. 创建一个 hostpath 类型的持久卷，设置存储容量为 10G，读写权限是 ReadWriteOnce, 挂载到 /mnt/data 目录</a></li>
+<li><a href="#98-创建持久卷声明-设置-storage-要求为-3gi-访问权限是-readwriteonce">98. 创建持久卷声明，设置 storage 要求为 3Gi，访问权限是 ReadWriteOnce</a></li>
+<li><a href="#99-删除上面创建的-pv-和-pvc">99. 删除上面创建的 PV  和 PVC</a></li>
+<li><a href="#100-创建-pod-运行一个-redis-容器并配置一个卷">100. 创建 Pod，运行一个 Redis 容器并配置一个卷</a></li>
+<li><a href="#101-进入-pod-创建-file-txt-文件-然后打开另一个命令窗口进入-pod-查看新创建的文件">101. 进入 Pod 创建 file.txt 文件，然后打开另一个命令窗口进入 Pod 查看新创建的文件</a></li>
+<li><a href="#102-删除-redis-pod-重新创建-然后查看文件是否会保留">102. 删除 Redis Pod 重新创建，然后查看文件是否会保留</a></li>
+<li><a href="#103-重新创建-pv-和-pvc">103. 重新创建 PV 和 PVC</a></li>
+<li><a href="#104-创建运行-nginx-的-pod-并配置持久卷-挂载到-usr-share-nginx-html-路径">104. 创建运行 Nginx 的 Pod，并配置持久卷，挂载到 &ldquo;/usr/share/nginx/html&rdquo; 路径</a></li>
+<li><a href="#补充">补充</a></li>
+</ul></li>
+<li><a href="#五-配置篇">五. 配置篇</a>
+<ul>
+<li><a href="#105-查看所有的-configmap">105. 查看所有的 ConfigMap</a></li>
+<li><a href="#106-基于字面量创建-configmap">106. 基于字面量创建 configmap</a></li>
+<li><a href="#107-查看刚创建的-configmap-的数据">107. 查看刚创建的 configmap 的数据</a></li>
+<li><a href="#108-删除刚创建的-configmap">108. 删除刚创建的 configmap</a></li>
+<li><a href="#109-创建一个待用文件-包含-key1-value1-和-key2-value2-两个键值对">109. 创建一个待用文件，包含 key1=value1 和 key2=value2 两个键值对</a></li>
+<li><a href="#110-基于上面创建的文件创建-configmap-并查看其数据">110. 基于上面创建的文件创建 configmap 并查看其数据</a></li>
+<li><a href="#111-创建运行-nginx-容器的-pod-从上面创建的-configmap-中加载配置">111. 创建运行 Nginx 容器的 Pod，从上面创建的 configmap 中加载配置</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><a href="#从指定的-configmap-中加载环境变量">从指定的 configmap 中加载环境变量</a>
+<ul>
+<li>
+<ul>
+<li><a href="#112-创建-file-env-并基于此文件创建-configmap">112. 创建 file.env 并基于此文件创建 configmap</a>
+<ul>
+<li><a href="#113-基于上面创建的-envcfmap-创建-nginx-容器的-pod">113. 基于上面创建的 envcfmap 创建 Nginx 容器的 Pod</a></li>
+<li><a href="#114-创建-pod-并设置存储卷从-configmap-读取数据">114. 创建 Pod，并设置存储卷从 configmap 读取数据</a></li>
+<li><a href="#115-创建-busybox-的-pod-并设置-securitycontext-所有进程都运行在-user-id-1000-和-组-id-为-2000-的context-下">115. 创建 busybox 的 Pod，并设置 securityContext，所有进程都运行在 user ID 1000 和 组 ID 为 2000 的context 下。</a></li>
+<li><a href="#117-创建-nginx-pod-并配置-net-admin-和-sys-time">117. 创建 Nginx Pod，并配置 NET_ADMIN 和 SYS_TIME</a></li>
+<li><a href="#118-创建-nginx-的-pod-并设置内存使用限制">118. 创建 Nginx 的 Pod 并设置内存使用限制</a></li>
+<li><a href="#119-创建-nginx-的-pod-并设置-cpu-使用限制">119. 创建 Nginx 的 Pod 并设置 CPU 使用限制</a></li>
+<li><a href="#120-创建-pod-同时设置-cpu-和-内存使用限制">120. 创建 Pod, 同时设置 CPU 和 内存使用限制</a></li>
+<li><a href="#121-创建运行-nginx-的-pod-并设置内存上下限为-100gi-和-200gi-查看-pod-信息">121.创建运行 Nginx 的 Pod 并设置内存上下限为 100Gi 和 200Gi，查看 Pod 信息</a></li>
+<li><a href="#122-创建一个-secret-设置字面量值为-user-myuser-和-password-mypassword">122. 创建一个 Secret，设置字面量值为 user=myuser 和 password=mypassword</a></li>
+<li><a href="#123-查看所有的-secret">123. 查看所有的  secret</a></li>
+<li><a href="#124-查看-secret-的-yaml-信息">124. 查看 secret 的 yaml 信息</a></li>
+<li><a href="#125-创建运行-nginx-的-pod-并从-secret-中读取指定信息">125. 创建运行 Nginx 的 Pod，并从 secret 中读取指定信息</a></li>
+<li><a href="#126-创建运行-nginx-pod-并加载-secret-中的所有字段为环境变量">126. 创建运行 nginx Pod 并加载 secret 中的所有字段为环境变量</a></li>
+<li><a href="#127-获取-default-命名空间下的-service-accounts">127. 获取 default 命名空间下的 service accounts</a></li>
+<li><a href="#128-获取所有的-service-accounts">128.  获取所有的 service accounts</a></li>
+<li><a href="#129-创建名为-admin-的-service-account">129. 创建名为 admin 的 service account</a></li>
+<li><a href="#130-查看上面创建的-service-account-的-yaml-信息">130. 查看上面创建的 service account 的  yaml 信息</a></li>
+<li><a href="#131-创建运行-busybox-的-pod-并设置-serviceaccount">131. 创建运行 busybox 的 Pod 并设置 serviceAccount</a></li>
+</ul></li>
+<li><a href="#六-集群监控篇">六. 集群监控篇</a>
+<ul>
+<li><a href="#132-创建带有-readiness-的-nginx-pod">132. 创建带有 Readiness 的 Nginx Pod</a></li>
+<li><a href="#133-创建带有-livenessprobe-的-nginx-pod">133. 创建带有 livenessProbe 的 Nginx Pod</a></li>
+<li><a href="#134-创建-nginx-pod-添加-liveness-和-readiness">134. 创建 Nginx Pod，添加 liveness 和 readiness</a></li>
+<li><a href="#135-查看-liveness-和-reeadiness-的命令选项">135. 查看 liveness 和 reeadiness 的命令选项</a></li>
+<li><a href="#136-创建带有-readiness-和-liveness-的-pod-并设置初次检测时间与检测间隔">136. 创建带有 readiness 和 liveness 的 Pod，并设置初次检测时间与检测间隔</a></li>
+<li><a href="#137-创建-busybox-并打印信息">137.  创建 busybox 并打印信息</a></li>
+<li><a href="#138-将上面-pod-的日志存入文件-busybox-logs-txt">138. 将上面 Pod 的日志存入文件 busybox-logs.txt</a></li>
+<li><a href="#139-查看所有-events-基于-timestamp-排序-并将-events-信息存入到-file-log-文件中">139. 查看所有 events，基于 timestamp 排序，并将 events 信息存入到 file.log 文件中</a></li>
+<li><a href="#140-创建-imgee-为-alpine-的-pod-并执行命令每-5s-打印一次日志">140. 创建 imgee 为 alpine 的 Pod 并执行命令每 5s 打印一次日志</a></li>
+<li><a href="#141-基于下面命令创建-pod-启动失败时查看错误原因并修正">141. 基于下面命令创建 Pod ，启动失败时查看错误原因并修正</a></li>
+<li><a href="#142-利用下面命令创建-4-个-namespace-和-4-个-pods-查看错误的-pod-并修正">142. 利用下面命令创建 4 个 namespace 和 4 个 pods，查看错误的 pod 并修正</a></li>
+<li><a href="#143-查看所有-pod-的-cpu-与内存使用并查找出-cpu-使用率最高的三个">143. 查看所有 Pod 的 CPU 与内存使用并查找出 CPU 使用率最高的三个</a></li>
+</ul></li>
+<li><a href="#七-服务与网络篇">七. 服务与网络篇</a>
+<ul>
+<li><a href="#144-创建-nginx-pod-打上-app-my-nginx-标签并开放-80-端口">144. 创建 Nginx Pod，打上 app=my-nginx 标签并开放 80 端口</a></li>
+<li><a href="#145-为-pod-创建-service">145. 为 Pod 创建 Service</a></li>
+<li><a href="#146-查看-pod-与-service">146. 查看 Pod 与 Service</a></li>
+<li><a href="#147-删除-my-service-并使用-kubectl-expose-命令重建">147. 删除 my-service，并使用 kubectl expose 命令重建</a></li>
+<li><a href="#148-删除上面创建的-service-并重建-指定-type-为-nodeport">148. 删除上面创建的 Service 并重建，指定 type 为 NodePort</a></li>
+<li><a href="#149-创建临时-busybox-pod-并通过-nginx-service-访问-nginx-pod">149. 创建临时 busybox Pod 并通过 nginx Service 访问 Nginx Pod</a></li>
+<li><a href="#150-创建-networkpolicy-拒绝所有入口流量">150. 创建 NetworkPolicy，拒绝所有入口流量</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<p>150 个练习的最后一部分，这部分主要包含三个模块：</p>
+
+<ul>
+<li>状态存储</li>
+<li>配置</li>
+<li>监控</li>
+<li>服务与网络</li>
+</ul>
+
+<h3 id="四-状态存储篇">四. 状态存储篇</h3>
+
+<p>这部分的练习主要是熟悉持久卷和持久卷声明的相关使用。</p>
+
+<h4 id="96-查看集群中的所有持久卷">96. 查看集群中的所有持久卷</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">$ kubectl get pv
+NAME         CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                         STORAGECLASS    REASON   AGE
+example-pv   1Gi        RWO            Delete           Bound    default/example-local-claim   local-storage            2d22h</pre></td></tr></table>
+</div>
+</div>
+<h4 id="97-创建一个-hostpath-类型的持久卷-设置存储容量为-10g-读写权限是-readwriteonce-挂载到-mnt-data-目录">97. 创建一个 hostpath 类型的持久卷，设置存储容量为 10G，读写权限是 ReadWriteOnce, 挂载到 /mnt/data 目录</h4>
+
+<ul>
+<li>yaml 文件</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>PersistentVolume<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>task-pv-volume<span class="w">
+</span><span class="w">  </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">    </span>type<span class="p">:</span><span class="w"> </span>local<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>storageClassName<span class="p">:</span><span class="w"> </span>manual<span class="w">
+</span><span class="w">  </span>capacity<span class="p">:</span><span class="w">
+</span><span class="w">    </span>storage<span class="p">:</span><span class="w"> </span>10Gi<span class="w">
+</span><span class="w">  </span>accessModes<span class="p">:</span><span class="w">
+</span><span class="w">    </span>-<span class="w"> </span>ReadWriteOnce<span class="w">
+</span><span class="w">  </span>hostPath<span class="p">:</span><span class="w">
+</span><span class="w">    </span>path<span class="p">:</span><span class="w"> </span><span class="s2">&#34;/mnt/data&#34;</span></code></pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li>创建并查看</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ kubectl get pv
+NAME             CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM                         STORAGECLASS    REASON   AGE
+task-pv-volume   10Gi       RWO            Retain           Available                                 manual                   3s</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="98-创建持久卷声明-设置-storage-要求为-3gi-访问权限是-readwriteonce">98. 创建持久卷声明，设置 storage 要求为 3Gi，访问权限是 ReadWriteOnce</h4>
+
+<ul>
+<li>yaml 文件</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: task-pv-claim
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi</pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li>创建并查看 PVC</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ kubectl create -f task-pv-claim.yaml
+persistentvolumeclaim/task-pv-claim created
+
+$ kubectl get pvc
+NAME                  STATUS   VOLUME           CAPACITY   ACCESS MODES   STORAGECLASS    AGE
+task-pv-claim         Bound    task-pv-volume   10Gi       RWO            manual          12s</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="99-删除上面创建的-pv-和-pvc">99. 删除上面创建的 PV  和 PVC</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ kubectl delete pvc task-pv-claim
+persistentvolumeclaim <span class="s2">&#34;task-pv-claim&#34;</span> deleted
+
+$ kubectl delete pv task-pv-volume
+persistentvolume <span class="s2">&#34;task-pv-volume&#34;</span> deleted</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="100-创建-pod-运行一个-redis-容器并配置一个卷">100. 创建 Pod，运行一个 Redis 容器并配置一个卷</h4>
+
+<ul>
+<li>yaml 文件</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>Pod<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>redis<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>containers<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>redis<span class="w">
+</span><span class="w">    </span>image<span class="p">:</span><span class="w"> </span>redis<span class="w">
+</span><span class="w">    </span>volumeMounts<span class="p">:</span><span class="w">
+</span><span class="w">    </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>redis-storage<span class="w">
+</span><span class="w">      </span>mountPath<span class="p">:</span><span class="w"> </span>/data/redis<span class="w">
+</span><span class="w">  </span>volumes<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>redis-storage<span class="w">
+</span><span class="w">    </span>emptyDir<span class="p">:</span><span class="w"> </span>{}</code></pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li>创建 Pod</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ kubectl create -f redis-storage.yaml
+pod/redis created</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="101-进入-pod-创建-file-txt-文件-然后打开另一个命令窗口进入-pod-查看新创建的文件">101. 进入 Pod 创建 file.txt 文件，然后打开另一个命令窗口进入 Pod 查看新创建的文件</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 第一个命令行窗口，创建文件</span>
+<span class="c1"># 进入 Pod</span>
+$ kubectl <span class="nb">exec</span> -it redis -- /bin/sh
+<span class="c1"># 进入 yaml 中卷的挂载目录</span>
+<span class="nb">cd</span> /data/redis
+<span class="c1"># 创建文件</span>
+<span class="nb">echo</span> <span class="s1">&#39;This is called the file&#39;</span> &gt; file.txt
+
+<span class="c1"># 第二个命令行窗口</span>
+$ kubectl <span class="nb">exec</span> -it redis -- /bin/sh
+<span class="c1"># cat /data/redis/file.txt</span>
+This is called the file
+#</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="102-删除-redis-pod-重新创建-然后查看文件是否会保留">102. 删除 Redis Pod 重新创建，然后查看文件是否会保留</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl delete pod redis
+kubectl create -f redis-storage.yaml
+kubectl <span class="nb">exec</span> -it redis /bin/sh
+<span class="c1"># 新的 Pod 并没有旧的文件</span>
+cat /data/redis/file.txt // file doesn<span class="err">&#39;</span>t exist</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="103-重新创建-pv-和-pvc">103. 重新创建 PV 和 PVC</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ kubectl create -f task-pv-volume.yaml
+persistentvolume/task-pv-volume created
+
+$ kubectl create -f task-pv-claim.yaml
+persistentvolumeclaim/task-pv-claim created</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="104-创建运行-nginx-的-pod-并配置持久卷-挂载到-usr-share-nginx-html-路径">104. 创建运行 Nginx 的 Pod，并配置持久卷，挂载到 &ldquo;/usr/share/nginx/html&rdquo; 路径</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">apiVersion: v1
+kind: Pod
+metadata:
+  name: task-pv-pod
+spec:
+  volumes:
+    - name: task-pv-storage
+      persistentVolumeClaim:
+        claimName: task-pv-claim
+  containers:
+    - name: task-pv-container
+      image: nginx
+      ports:
+        - containerPort: <span class="m">80</span>
+          name: <span class="s2">&#34;http-server&#34;</span>
+      volumeMounts:
+        - mountPath: <span class="s2">&#34;/usr/share/nginx/html&#34;</span>
+          name: task-pv-storage</code></pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li>创建 Pod</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">kubectl create -f task-pv-pod.yaml</pre></td></tr></table>
+</div>
+</div>
+<h4 id="补充">补充</h4>
+
+<p>上面的例子是给 Pod 配置了一个卷，我觉得</p>
+
+<h3 id="五-配置篇">五. 配置篇</h3>
+
+<p>这部分的练习的主要目标是：</p>
+
+<ul>
+<li>了解 ConfigMap</li>
+<li>了解 SecurityContexts</li>
+<li>定义一个应用的资源要求</li>
+<li>创建与使用 Secret</li>
+<li>了解 ServiceAccounts</li>
+</ul>
+
+<h4 id="105-查看所有的-configmap">105. 查看所有的 ConfigMap</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ kubectl get configmaps
+
+$ kubectl get cm
+No resources found in default namespace.</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="106-基于字面量创建-configmap">106. 基于字面量创建 configmap</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ kubectl create cm myconfigmap --from-literal<span class="o">=</span><span class="nv">appname</span><span class="o">=</span>myapp
+configmap/myconfigmap created</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="107-查看刚创建的-configmap-的数据">107. 查看刚创建的 configmap 的数据</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">$ kubectl get cm
+NAME          DATA   AGE
+myconfigmap   1      91s
+
+$ kubectl describe cm
+Name:         myconfigmap
+Namespace:    default
+Labels:       &lt;none&gt;
+Annotations:  &lt;none&gt;
+
+Data
+====
+appname:
+----
+myapp
+Events:  &lt;none&gt;
+
+$ kubectl get cm -o yaml</pre></td></tr></table>
+</div>
+</div>
+<h4 id="108-删除刚创建的-configmap">108. 删除刚创建的 configmap</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl delete cm myconfigmap</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="109-创建一个待用文件-包含-key1-value1-和-key2-value2-两个键值对">109. 创建一个待用文件，包含 key1=value1 和 key2=value2 两个键值对</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ cat &gt;&gt; config.txt <span class="s">&lt;&lt; EOF
+</span><span class="s">key1=value1
+</span><span class="s">key2=value2
+</span><span class="s">EOF</span>
+
+<span class="c1"># 查看文件</span>
+$ cat config.txt
+<span class="nv">key1</span><span class="o">=</span>value1
+<span class="nv">key2</span><span class="o">=</span>value2</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="110-基于上面创建的文件创建-configmap-并查看其数据">110. 基于上面创建的文件创建 configmap 并查看其数据</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 基于文件创建 configmap</span>
+$ kubectl create cm keyvalcfgmap --from-file<span class="o">=</span>config.txt
+configmap/keyvalcfgmap created
+
+$ kubectl get cm
+NAME           DATA   AGE
+keyvalcfgmap   <span class="m">1</span>      15s
+
+<span class="c1"># ubuntu @ VM-0-4-ubuntu in ~ [9:09:32]</span>
+$ kubectl describe cm keyvalcfgmap
+Name:         keyvalcfgmap
+Namespace:    default
+Labels:       &lt;none&gt;
+Annotations:  &lt;none&gt;
+
+<span class="nv">Data</span>
+<span class="o">====</span>
+config.txt:
+----
+<span class="nv">key1</span><span class="o">=</span>value1
+<span class="nv">key2</span><span class="o">=</span>value2
+
+$ kubectl get cm keyvalcfgmap -o yaml
+apiVersion: v1
+data:
+  config.txt: <span class="p">|</span>
+    <span class="nv">key1</span><span class="o">=</span>value1
+    <span class="nv">key2</span><span class="o">=</span>value2
+kind: ConfigMap
+metadata:
+  creationTimestamp: <span class="s2">&#34;2020-04-27T01:09:17Z&#34;</span>
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:data:
+        .: <span class="o">{}</span>
+        f:config.txt: <span class="o">{}</span>
+    manager: kubectl
+    operation: Update
+    time: <span class="s2">&#34;2020-04-27T01:09:17Z&#34;</span>
+  name: keyvalcfgmap
+  namespace: default
+  resourceVersion: <span class="s2">&#34;4394095&#34;</span>
+  selfLink: /api/v1/namespaces/default/configmaps/keyvalcfgmap
+  uid: 4d750f64-9abd-44cd-a400-66884b3b5f29</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="111-创建运行-nginx-容器的-pod-从上面创建的-configmap-中加载配置">111. 创建运行 Nginx 容器的 Pod，从上面创建的 configmap 中加载配置</h4>
+
+<ul>
+<li><p>配置 yaml 文件
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+creationTimestamp: null
+labels:
+run: nginx
+name: nginx
+spec:
+containers:</p>
+
+<ul>
+<li><p>image: nginx
+name: nginx
+resources: {}</p>
+
+<h1 id="从指定的-configmap-中加载环境变量">从指定的 configmap 中加载环境变量</h1>
+
+<p>envFrom:</p></li>
+
+<li><p>configMapRef:
+name: keyvalcfgmap
+dnsPolicy: ClusterFirst
+restartPolicy: Never
+status: {}
+```</p></li>
+</ul></li>
+
+<li><p>查看环境变量后删除</p></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ kubectl <span class="nb">exec</span> -it nginx -- env
+<span class="nv">PATH</span><span class="o">=</span>/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+<span class="nv">HOSTNAME</span><span class="o">=</span>nginx
+<span class="nv">TERM</span><span class="o">=</span>xterm
+config.txt<span class="o">=</span><span class="nv">key1</span><span class="o">=</span>value1
+<span class="nv">key2</span><span class="o">=</span>value2
+
+$ kubectl delete po nginx</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="112-创建-file-env-并基于此文件创建-configmap">112. 创建 file.env 并基于此文件创建 configmap</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ <span class="nb">echo</span> <span class="nv">var1</span><span class="o">=</span>val1 &gt; file.env
+cat file.env
+<span class="nv">var1</span><span class="o">=</span>val1
+
+$ kubectl create cm envcfgmap --from-env-file<span class="o">=</span>file.env
+configmap/envcfgmap created
+
+$ kubectl describe cm envcfgmap
+Name:         envcfgmap
+Namespace:    default
+Labels:       &lt;none&gt;
+Annotations:  &lt;none&gt;
+
+<span class="nv">Data</span>
+<span class="o">====</span>
+var1:
+----
+val1
+Events:  &lt;none&gt;
+
+$ kubectl get cm envcfgmap -o yaml
+apiVersion: v1
+data:
+  var1: val1
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:data:
+        .: <span class="o">{}</span>
+        f:var1: <span class="o">{}</span>
+    manager: kubectl
+    operation: Update
+    time: <span class="s2">&#34;2020-04-27T01:16:15Z&#34;</span>
+  name: envcfgmap
+  selfLink: /api/v1/namespaces/default/configmaps/envcfgmap</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="113-基于上面创建的-envcfmap-创建-nginx-容器的-pod">113. 基于上面创建的 envcfmap 创建 Nginx 容器的 Pod</h4>
+
+<ul>
+<li>yaml 文件</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>Pod<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>creationTimestamp<span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="w">  </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">    </span>run<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>containers<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>image<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">    </span>name<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">    </span>resources<span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span><span class="w">    </span>envFrom<span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="c"># 配置 configmap</span><span class="w">
+</span><span class="w">    </span>-<span class="w"> </span>configMapRef<span class="p">:</span><span class="w">
+</span><span class="w">        </span>name<span class="p">:</span><span class="w"> </span>envcfgmap<span class="w">
+</span><span class="w">  </span>dnsPolicy<span class="p">:</span><span class="w"> </span>ClusterFirst<span class="w">
+</span><span class="w">  </span>restartPolicy<span class="p">:</span><span class="w"> </span>Never<span class="w">
+</span><span class="w"></span>status<span class="p">:</span><span class="w"> </span>{}</code></pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li>查看配置后删除</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ kubectl <span class="nb">exec</span> -it nginx -- env
+<span class="nv">PATH</span><span class="o">=</span>/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+<span class="nv">HOSTNAME</span><span class="o">=</span>nginx
+<span class="nv">TERM</span><span class="o">=</span>xterm
+<span class="nv">var1</span><span class="o">=</span>val1
+
+$ kubectl delete po nginx
+pod <span class="s2">&#34;nginx&#34;</span> deleted</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="114-创建-pod-并设置存储卷从-configmap-读取数据">114. 创建 Pod，并设置存储卷从 configmap 读取数据</h4>
+
+<ul>
+<li>yaml 文件</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>Pod<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>creationTimestamp<span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="w">  </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">    </span>run<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="c"># 创建 configmap 卷</span><span class="w">
+</span><span class="w">  </span>volumes<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>nginx-volume<span class="w">
+</span><span class="w">    </span>configMap<span class="p">:</span><span class="w">
+</span><span class="w">      </span>name<span class="p">:</span><span class="w"> </span>cfgvolume<span class="w">
+</span><span class="w">  </span>containers<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>image<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">    </span>name<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">    </span>resources<span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span><span class="w">    </span>volumeMounts<span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="c"># 挂载卷到 /etc/cfg</span><span class="w">
+</span><span class="w">    </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>nginx-volume<span class="w">
+</span><span class="w">      </span>mountPath<span class="p">:</span><span class="w"> </span>/etc/cfg<span class="w">
+</span><span class="w">  </span>dnsPolicy<span class="p">:</span><span class="w"> </span>ClusterFirst<span class="w">
+</span><span class="w">  </span>restartPolicy<span class="p">:</span><span class="w"> </span>Never<span class="w">
+</span><span class="w"></span>status<span class="p">:</span><span class="w"> </span>{}</code></pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li>创建 yaml 文件并查看对应目录的数据</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ kubectl create -f nginx-volume.yaml
+pod/nginx created
+
+$ kubectl <span class="nb">exec</span> -it nginx -- /bin/sh
+<span class="c1"># cd  /etc/cfg</span>
+<span class="c1"># ls</span>
+var1  var2</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="115-创建-busybox-的-pod-并设置-securitycontext-所有进程都运行在-user-id-1000-和-组-id-为-2000-的context-下">115. 创建 busybox 的 Pod，并设置 securityContext，所有进程都运行在 user ID 1000 和 组 ID 为 2000 的context 下。</h4>
+
+<ul>
+<li>yaml 文件</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: secbusybox
+  name: secbusybox
+spec:
+  <span class="c1"># 创建 securityContext</span>
+  securityContext: <span class="c1"># add security context</span>
+    runAsUser: <span class="m">1000</span>
+    runAsGroup: <span class="m">2000</span>
+  containers:
+  - args:
+    - /bin/sh
+    - -c
+    - sleep <span class="m">3600</span><span class="p">;</span>
+    image: busybox
+    name: secbusybox
+    resources: <span class="o">{}</span>
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never
+status: <span class="o">{}</span></code></pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li>创建 Pod 并查看容器的 id 信息
+```shell
+$ kubectl create -f busybox.yaml
+pod/secbusybox created</li>
+</ul>
+
+<p>$ kubectl exec -it secbusybox &ndash; sh
+/ $ id
+uid=1000 gid=2000</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">#### 116. 创建和上面一样的 Pod，分别在 Pod 和容器层面设置 securityContext，容器层面的 securityContext 会覆盖掉 Pod 层面的设置
+
+- yaml 文件
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: secbusybox
+  name: secbusybox
+spec:
+  # Pod 设置
+  securityContext:
+    runAsUser: 1000
+  containers:
+  - args:
+    - /bin/sh
+    - -c
+    - sleep 3600;
+    image: busybox
+    # 容器层面的设置
+    securityContext:
+      runAsUser: 2000
+    name: secbusybox
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never
+status: {}</pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li>创建并查看 Pod 中的 id 信息</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ kubectl delete pod secbusybox
+pod <span class="s2">&#34;secbusybox&#34;</span> deleted
+
+$ kubectl create -f busybox.yaml
+pod/secbusybox created
+
+$ kubectl <span class="nb">exec</span> -it secbusybox -- sh
+/ $ id
+<span class="c1"># 和容器层面的设置一样，覆盖掉了 Pod 层面的设置</span>
+<span class="nv">uid</span><span class="o">=</span><span class="m">2000</span> <span class="nv">gid</span><span class="o">=</span><span class="m">0</span><span class="o">(</span>root<span class="o">)</span>
+/ $</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="117-创建-nginx-pod-并配置-net-admin-和-sys-time">117. 创建 Nginx Pod，并配置 NET_ADMIN 和 SYS_TIME</h4>
+
+<ul>
+<li>yaml 文件</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>Pod<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>creationTimestamp<span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="w">  </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">    </span>run<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>containers<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>image<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">    </span>securityContext<span class="p">:</span><span class="w">
+</span><span class="w">      </span>capabilities<span class="p">:</span><span class="w">
+</span><span class="w">        </span>add<span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&#34;SYS_TIME&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;NET_ADMIN&#34;</span><span class="p">]</span><span class="w">
+</span><span class="w">    </span>name<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">    </span>resources<span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span><span class="w">  </span>dnsPolicy<span class="p">:</span><span class="w"> </span>ClusterFirst<span class="w">
+</span><span class="w">  </span>restartPolicy<span class="p">:</span><span class="w"> </span>Never<span class="w">
+</span><span class="w"></span>status<span class="p">:</span><span class="w"> </span>{}</code></pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li>创建并查看信息
+<br /></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ kubectl create -f nginx.yaml
+pod/nginx created
+
+<span class="c1"># ubuntu @ VM-0-4-ubuntu in ~ [9:41:15]</span>
+$ kubectl <span class="nb">exec</span> -it nginx -- sh
+<span class="c1"># cd /proc/1</span>
+<span class="c1"># cat status</span>
+
+CapPrm:	00000000aa0435fb
+CapEff:	00000000aa0435fb</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="118-创建-nginx-的-pod-并设置内存使用限制">118. 创建 Nginx 的 Pod 并设置内存使用限制</h4>
+
+<ul>
+<li>yaml</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>Pod<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>creationTimestamp<span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="w">  </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">    </span>run<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>containers<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>image<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">    </span>name<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">    </span>resources<span class="p">:</span><span class="w"> 
+</span><span class="w">      </span><span class="c"># 设置内存使用</span><span class="w">
+</span><span class="w">      </span>requests<span class="p">:</span><span class="w">
+</span><span class="w">        </span>memory<span class="p">:</span><span class="w"> </span><span class="s2">&#34;100Mi&#34;</span><span class="w">
+</span><span class="w">      </span>limits<span class="p">:</span><span class="w">
+</span><span class="w">        </span>memory<span class="p">:</span><span class="w"> </span><span class="s2">&#34;200Mi&#34;</span><span class="w">
+</span><span class="w">  </span>dnsPolicy<span class="p">:</span><span class="w"> </span>ClusterFirst<span class="w">
+</span><span class="w">  </span>restartPolicy<span class="p">:</span><span class="w"> </span>Never<span class="w">
+</span><span class="w"></span>status<span class="p">:</span><span class="w"> </span>{}</code></pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li>创建并查看 Pod 的内存使用</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ kubectl create -f nginx.yaml
+pod/nginx created
+
+
+$ kubectl top pod
+NAME                         CPU<span class="o">(</span>cores<span class="o">)</span>   MEMORY<span class="o">(</span>bytes<span class="o">)</span>
+nginx                        0m           2Mi</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="119-创建-nginx-的-pod-并设置-cpu-使用限制">119. 创建 Nginx 的 Pod 并设置 CPU 使用限制</h4>
+
+<ul>
+<li>yaml</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>Pod<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>creationTimestamp<span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="w">  </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">    </span>run<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>containers<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>image<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">    </span>name<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">    </span>resources<span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="c"># 设置 CPU 的使用限制</span><span class="w">
+</span><span class="w">      </span>requests<span class="p">:</span><span class="w">
+</span><span class="w">        </span>cpu<span class="p">:</span><span class="w"> </span><span class="s2">&#34;0.5&#34;</span><span class="w">
+</span><span class="w">      </span>limits<span class="p">:</span><span class="w">
+</span><span class="w">        </span>cpu<span class="p">:</span><span class="w"> </span><span class="s2">&#34;1&#34;</span><span class="w">
+</span><span class="w">  </span>dnsPolicy<span class="p">:</span><span class="w"> </span>ClusterFirst<span class="w">
+</span><span class="w">  </span>restartPolicy<span class="p">:</span><span class="w"> </span>Never<span class="w">
+</span><span class="w"></span>status<span class="p">:</span><span class="w"> </span>{}</code></pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li>创建并查看 CPU 使用</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ kubectl create -f nginx.yaml
+pod/nginx created
+
+
+$ kubectl top pod
+NAME                         CPU<span class="o">(</span>cores<span class="o">)</span>   MEMORY<span class="o">(</span>bytes<span class="o">)</span>
+nginx                        0m           0Mi</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="120-创建-pod-同时设置-cpu-和-内存使用限制">120. 创建 Pod, 同时设置 CPU 和 内存使用限制</h4>
+
+<ul>
+<li>yaml 文件</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>Pod<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>creationTimestamp<span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="w">  </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">    </span>run<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>containers<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>image<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">    </span>name<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">    </span>resources<span class="p">:</span><span class="w">
+</span><span class="w">      </span>requests<span class="p">:</span><span class="w">
+</span><span class="w">        </span>memory<span class="p">:</span><span class="w"> </span><span class="s2">&#34;100Mi&#34;</span><span class="w">
+</span><span class="w">        </span>cpu<span class="p">:</span><span class="w"> </span><span class="s2">&#34;0.5&#34;</span><span class="w">
+</span><span class="w">      </span>limits<span class="p">:</span><span class="w">
+</span><span class="w">        </span>memory<span class="p">:</span><span class="w"> </span><span class="s2">&#34;200Mi&#34;</span><span class="w">
+</span><span class="w">        </span>cpu<span class="p">:</span><span class="w"> </span><span class="s2">&#34;1&#34;</span><span class="w">
+</span><span class="w">  </span>dnsPolicy<span class="p">:</span><span class="w"> </span>ClusterFirst<span class="w">
+</span><span class="w">  </span>restartPolicy<span class="p">:</span><span class="w"> </span>Never<span class="w">
+</span><span class="w"></span>status<span class="p">:</span><span class="w"> </span>{}</code></pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li>创建并查看租用使用</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ kubectl create -f nginx.yaml
+pod/nginx created
+
+
+$ kubectl top pod
+NAME                         CPU<span class="o">(</span>cores<span class="o">)</span>   MEMORY<span class="o">(</span>bytes<span class="o">)</span>
+nginx                        0m           0Mi</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="121-创建运行-nginx-的-pod-并设置内存上下限为-100gi-和-200gi-查看-pod-信息">121.创建运行 Nginx 的 Pod 并设置内存上下限为 100Gi 和 200Gi，查看 Pod 信息</h4>
+
+<ul>
+<li>yaml 文件</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>Pod<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>creationTimestamp<span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="w">  </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">    </span>run<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>containers<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>image<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">    </span>name<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">    </span>resources<span class="p">:</span><span class="w">
+</span><span class="w">      </span>requests<span class="p">:</span><span class="w">
+</span><span class="w">        </span>memory<span class="p">:</span><span class="w"> </span><span class="s2">&#34;100Gi&#34;</span><span class="w">
+</span><span class="w">        </span>cpu<span class="p">:</span><span class="w"> </span><span class="s2">&#34;0.5&#34;</span><span class="w">
+</span><span class="w">      </span>limits<span class="p">:</span><span class="w">
+</span><span class="w">        </span>memory<span class="p">:</span><span class="w"> </span><span class="s2">&#34;200Gi&#34;</span><span class="w">
+</span><span class="w">        </span>cpu<span class="p">:</span><span class="w"> </span><span class="s2">&#34;1&#34;</span><span class="w">
+</span><span class="w">  </span>dnsPolicy<span class="p">:</span><span class="w"> </span>ClusterFirst<span class="w">
+</span><span class="w">  </span>restartPolicy<span class="p">:</span><span class="w"> </span>Never<span class="w">
+</span><span class="w"></span>status<span class="p">:</span><span class="w"> </span>{}</code></pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li>查看 Pod 信息</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">$ kubectl create -f nginx.yaml
+pod/nginx created
+
+$ kubectl describe pod nginx
+...
+Events:
+  Type     Reason            Age              From               Message
+  ----     ------            ----             ----               -------
+  Warning  FailedScheduling  5s (x2 over 5s)  default-scheduler  0/2 nodes are available: 2 Insufficient memory.</pre></td></tr></table>
+</div>
+</div>
+<h4 id="122-创建一个-secret-设置字面量值为-user-myuser-和-password-mypassword">122. 创建一个 Secret，设置字面量值为 user=myuser 和 password=mypassword</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ kubectl create secret generic my-secret --from-literal<span class="o">=</span><span class="nv">username</span><span class="o">=</span>user --from-literal<span class="o">=</span><span class="nv">password</span><span class="o">=</span>mypassword
+secret/my-secret created</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="123-查看所有的-secret">123. 查看所有的  secret</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ kubectl get secret --all-namespaces
+NAMESPACE         NAME                                             TYPE                                  DATA   AGE
+default           default-token-wqvj8                              kubernetes.io/service-account-token   <span class="m">3</span>      21d
+default           my-secret                                        Opaque                                <span class="m">2</span>      27s
+ingress-nginx     default-token-xrdhk                              kubernetes.io/service-account-token   <span class="m">3</span>      21d
+ingress-nginx     nginx-ingress-serviceaccount-token-dxt72         kubernetes.io/service-account-token   <span class="m">3</span>      21d
+kube-node-lease   default-token-d79ll                              kubernetes.io/service-account-token   <span class="m">3</span>      21d
+kube-public       default-token-k2lm9                              kubernetes.io/service-account-token   <span class="m">3</span>      21d
+kube-system       attachdetach-controller-token-4qt2z              kubernetes.io/service-account-token   <span class="m">3</span>      21d
+kube-system       bootstrap-signer-token-x2z8q                     kubernetes.io/service-account-token   <span class="m">3</span>      21d
+kube-system       calico-kube-controllers-token-dhxsb              kubernetes.io/service-account-token   <span class="m">3</span>      21d
+kube-system       calico-node-token-w44hg                          kubernetes.io/service-account-token   <span class="m">3</span>      21d
+kube-system       certificate-controller-token-rjjgp               kubernetes.io/service-account-token   <span class="m">3</span>      21d</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="124-查看-secret-的-yaml-信息">124. 查看 secret 的 yaml 信息</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl get secret my-secret -o yaml</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="125-创建运行-nginx-的-pod-并从-secret-中读取指定信息">125. 创建运行 Nginx 的 Pod，并从 secret 中读取指定信息</h4>
+
+<ul>
+<li>yaml 文件</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>Pod<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>creationTimestamp<span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="w">  </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">    </span>run<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>containers<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>image<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">    </span>name<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">    </span>env<span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="c"># 从 secret 中读取数据</span><span class="w">
+</span><span class="w">    </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>USER_NAME<span class="w">
+</span><span class="w">      </span>valueFrom<span class="p">:</span><span class="w">
+</span><span class="w">        </span>secretKeyRef<span class="p">:</span><span class="w">
+</span><span class="w">          </span>name<span class="p">:</span><span class="w"> </span>my-secret<span class="w">
+</span><span class="w">          </span>key<span class="p">:</span><span class="w"> </span>username<span class="w">
+</span><span class="w">    </span>resources<span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span><span class="w">  </span>dnsPolicy<span class="p">:</span><span class="w"> </span>ClusterFirst<span class="w">
+</span><span class="w">  </span>restartPolicy<span class="p">:</span><span class="w"> </span>Never<span class="w">
+</span><span class="w"></span>status<span class="p">:</span><span class="w"> </span>{}</code></pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li>创建并查看 nginx Pod 的环境变量</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">$ kubectl create -f nginx.yaml
+pod/nginx created
+
+
+$ kubectl exec -it nginx -- env
+HOSTNAME=nginx
+USER_NAME=user</pre></td></tr></table>
+</div>
+</div>
+<h4 id="126-创建运行-nginx-pod-并加载-secret-中的所有字段为环境变量">126. 创建运行 nginx Pod 并加载 secret 中的所有字段为环境变量</h4>
+
+<ul>
+<li>yaml 文件</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>Pod<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>creationTimestamp<span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="w">  </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">    </span>run<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>containers<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>image<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">    </span>name<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">    </span>envFrom<span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="c"># 加载整个 secret</span><span class="w">
+</span><span class="w">    </span>-<span class="w"> </span>secretRef<span class="p">:</span><span class="w">
+</span><span class="w">        </span>name<span class="p">:</span><span class="w"> </span>my-secret<span class="w">
+</span><span class="w">    </span>resources<span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span><span class="w">  </span>dnsPolicy<span class="p">:</span><span class="w"> </span>ClusterFirst<span class="w">
+</span><span class="w">  </span>restartPolicy<span class="p">:</span><span class="w"> </span>Never<span class="w">
+</span><span class="w"></span>status<span class="p">:</span><span class="w"> </span>{}</code></pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li>创建 Pod 查看环境变量</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">$ kubectl create -f nginx.yaml
+pod/nginx created
+
+$ kubectl exec -it nginx -- env
+...
+password=mypassword
+username=user</pre></td></tr></table>
+</div>
+</div>
+<h4 id="127-获取-default-命名空间下的-service-accounts">127. 获取 default 命名空间下的 service accounts</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">$ kubectl get sa
+NAME      SECRETS   AGE
+default   1         21d</pre></td></tr></table>
+</div>
+</div>
+<h4 id="128-获取所有的-service-accounts">128.  获取所有的 service accounts</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">kubectl get sa --all-namespaces</pre></td></tr></table>
+</div>
+</div>
+<h4 id="129-创建名为-admin-的-service-account">129. 创建名为 admin 的 service account</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">$ kubectl create sa admin
+serviceaccount/admin created</pre></td></tr></table>
+</div>
+</div>
+<h4 id="130-查看上面创建的-service-account-的-yaml-信息">130. 查看上面创建的 service account 的  yaml 信息</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ kubectl get sa admin -o yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  creationTimestamp: <span class="s2">&#34;2020-04-27T13:31:22Z&#34;</span>
+  name: admin
+  namespace: default
+  resourceVersion: <span class="s2">&#34;4502353&#34;</span>
+  selfLink: /api/v1/namespaces/default/serviceaccounts/admin
+  uid: 3995f3da-6850-4a38-ac11-a5451fa6b5d2
+secrets:
+- name: admin-token-tpcpv</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="131-创建运行-busybox-的-pod-并设置-serviceaccount">131. 创建运行 busybox 的 Pod 并设置 serviceAccount</h4>
+
+<ul>
+<li>yaml 文件设置</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>Pod<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>creationTimestamp<span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="w">  </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">    </span>run<span class="p">:</span><span class="w"> </span>busybox<span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>busybox<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>serviceAccountName<span class="p">:</span><span class="w"> </span>admin<span class="w">
+</span><span class="w">  </span>containers<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>args<span class="p">:</span><span class="w">
+</span><span class="w">    </span>-<span class="w"> </span>/bin/sh<span class="w">
+</span><span class="w">    </span>-<span class="w"> </span>-c<span class="w">
+</span><span class="w">    </span>-<span class="w"> </span>sleep<span class="w"> </span><span class="m">3600</span><span class="w">
+</span><span class="w">    </span>image<span class="p">:</span><span class="w"> </span>busybox<span class="w">
+</span><span class="w">    </span>name<span class="p">:</span><span class="w"> </span>busybox<span class="w">
+</span><span class="w">    </span>resources<span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span><span class="w">  </span>dnsPolicy<span class="p">:</span><span class="w"> </span>ClusterFirst<span class="w">
+</span><span class="w">  </span>restartPolicy<span class="p">:</span><span class="w"> </span>Never<span class="w">
+</span><span class="w"></span>status<span class="p">:</span><span class="w"> </span>{}</code></pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li>创建并查看 Pod</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl create -f busybox.yml
+// verify
+kubectl describe po busybox</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="六-集群监控篇">六. 集群监控篇</h3>
+
+<p>这部分练习主要涉及下面一些目标：</p>
+
+<ul>
+<li>理解存活探针 livenessProbes and ReadinessProbes</li>
+<li>了解容器日志</li>
+<li>了解如何监控 K8S 中运行的应用</li>
+<li>了解 K8S 的 debug</li>
+</ul>
+
+<h4 id="132-创建带有-readiness-的-nginx-pod">132. 创建带有 Readiness 的 Nginx Pod</h4>
+
+<ul>
+<li>yaml 文件</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>Pod<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>creationTimestamp<span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="w">  </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">    </span>run<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>containers<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>image<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">    </span>name<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">    </span>ports<span class="p">:</span><span class="w">
+</span><span class="w">    </span>-<span class="w"> </span>containerPort<span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span><span class="w">    </span>readinessProbe<span class="p">:</span><span class="w">
+</span><span class="w">      </span>httpGet<span class="p">:</span><span class="w">
+</span><span class="w">        </span>path<span class="p">:</span><span class="w"> </span>/<span class="w">
+</span><span class="w">        </span>port<span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span><span class="w">    </span>resources<span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span><span class="w">  </span>dnsPolicy<span class="p">:</span><span class="w"> </span>ClusterFirst<span class="w">
+</span><span class="w">  </span>restartPolicy<span class="p">:</span><span class="w"> </span>Never<span class="w">
+</span><span class="w"></span>status<span class="p">:</span><span class="w"> </span>{}</code></pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li>创建并查看 readiness</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ kubectl create -f nginx-pod.yaml
+pod/nginx created
+
+
+$ kubectl describe pod nginx <span class="p">|</span> grep -i readiness
+    Readiness:      http-get http://:80/ <span class="nv">delay</span><span class="o">=</span>0s <span class="nv">timeout</span><span class="o">=</span>1s <span class="nv">period</span><span class="o">=</span>10s <span class="c1">#success=1 #failure=3</span></code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="133-创建带有-livenessprobe-的-nginx-pod">133. 创建带有 livenessProbe 的 Nginx Pod</h4>
+
+<ul>
+<li>yaml 文件</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>Pod<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>creationTimestamp<span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="w">  </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">    </span>run<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>containers<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>image<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">    </span>name<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">    </span>ports<span class="p">:</span><span class="w">
+</span><span class="w">    </span>-<span class="w"> </span>containerPort<span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span><span class="w">    </span>livenessProbe<span class="p">:</span><span class="w">
+</span><span class="w">      </span>httpGet<span class="p">:</span><span class="w">
+</span><span class="w">        </span>path<span class="p">:</span><span class="w"> </span>/healthz<span class="w">
+</span><span class="w">        </span>port<span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span><span class="w">    </span>resources<span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span><span class="w">  </span>dnsPolicy<span class="p">:</span><span class="w"> </span>ClusterFirst<span class="w">
+</span><span class="w">  </span>restartPolicy<span class="p">:</span><span class="w"> </span>Never<span class="w">
+</span><span class="w"></span>status<span class="p">:</span><span class="w"> </span>{}</code></pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li>创建并查看 Pod</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">$ kubectl create -f nginx-pod.yaml
+pod/nginx created
+
+$ kubectl describe pod nginx | grep -i readiness
+
+$ kubectl describe pod nginx | grep -i liveiness
+
+$ kubectl describe pod nginx | grep -i liveness
+    Liveness:       http-get http://:80/healthz delay=0s timeout=1s period=10s #success=1 #failure=3
+  Warning  Unhealthy  7s    kubelet, vm-0-2-ubuntu  Liveness probe failed: HTTP probe failed with statuscode: 404</pre></td></tr></table>
+</div>
+</div>
+<h4 id="134-创建-nginx-pod-添加-liveness-和-readiness">134. 创建 Nginx Pod，添加 liveness 和 readiness</h4>
+
+<ul>
+<li>yaml 文件</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>Pod<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>creationTimestamp<span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="w">  </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">    </span>run<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>containers<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>image<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">    </span>name<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">    </span>ports<span class="p">:</span><span class="w">
+</span><span class="w">    </span>-<span class="w"> </span>containerPort<span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span><span class="w">    </span>livenessProbe<span class="p">:</span><span class="w">
+</span><span class="w">      </span>httpGet<span class="p">:</span><span class="w">
+</span><span class="w">        </span>path<span class="p">:</span><span class="w"> </span>/healthz<span class="w">
+</span><span class="w">        </span>port<span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span><span class="w">    </span>readinessProbe<span class="p">:</span><span class="w">
+</span><span class="w">      </span>httpGet<span class="p">:</span><span class="w">
+</span><span class="w">        </span>path<span class="p">:</span><span class="w"> </span>/<span class="w">
+</span><span class="w">        </span>port<span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span><span class="w">    </span>resources<span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span><span class="w">  </span>dnsPolicy<span class="p">:</span><span class="w"> </span>ClusterFirst<span class="w">
+</span><span class="w">  </span>restartPolicy<span class="p">:</span><span class="w"> </span>Never<span class="w">
+</span><span class="w"></span>status<span class="p">:</span><span class="w"> </span>{}</code></pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li>创建并查看 Pod</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl create -f nginx-pod.yaml
+
+// verify
+kubectl describe pod nginx <span class="p">|</span> grep -i readiness
+kubectl describe pod nginx <span class="p">|</span> grep -i liveness</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="135-查看-liveness-和-reeadiness-的命令选项">135. 查看 liveness 和 reeadiness 的命令选项</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">kubectl explain Pod.spec.containers.livenessProbe
+kubectl explain Pod.spec.containers.readinessProbe</pre></td></tr></table>
+</div>
+</div>
+<h4 id="136-创建带有-readiness-和-liveness-的-pod-并设置初次检测时间与检测间隔">136. 创建带有 readiness 和 liveness 的 Pod，并设置初次检测时间与检测间隔</h4>
+
+<ul>
+<li>yaml 文件</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>Pod<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>creationTimestamp<span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="w">  </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">    </span>run<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>containers<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>image<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">    </span>name<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">    </span>ports<span class="p">:</span><span class="w">
+</span><span class="w">    </span>-<span class="w"> </span>containerPort<span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span><span class="w">    </span>livenessProbe<span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="c"># 启动 20s 后开始检测</span><span class="w">
+</span><span class="w">      </span>initialDelaySeconds<span class="p">:</span><span class="w"> </span><span class="m">20</span><span class="w">
+</span><span class="w">      </span><span class="c"># 每 25 秒检测一次</span><span class="w">
+</span><span class="w">      </span>periodSeconds<span class="p">:</span><span class="w"> </span><span class="m">25</span><span class="w">
+</span><span class="w">      </span>httpGet<span class="p">:</span><span class="w">
+</span><span class="w">        </span>path<span class="p">:</span><span class="w"> </span>/healthz<span class="w">
+</span><span class="w">        </span>port<span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span><span class="w">    </span>readinessProbe<span class="p">:</span><span class="w">
+</span><span class="w">      </span>initialDelaySeconds<span class="p">:</span><span class="w"> </span><span class="m">20</span><span class="w">
+</span><span class="w">      </span>periodSeconds<span class="p">:</span><span class="w"> </span><span class="m">25</span><span class="w">
+</span><span class="w">      </span>httpGet<span class="p">:</span><span class="w">
+</span><span class="w">        </span>path<span class="p">:</span><span class="w"> </span>/<span class="w">
+</span><span class="w">        </span>port<span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span><span class="w">    </span>resources<span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span><span class="w">  </span>dnsPolicy<span class="p">:</span><span class="w"> </span>ClusterFirst<span class="w">
+</span><span class="w">  </span>restartPolicy<span class="p">:</span><span class="w"> </span>Never<span class="w">
+</span><span class="w"></span>status<span class="p">:</span><span class="w"> </span>{}</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="137-创建-busybox-并打印信息">137.  创建 busybox 并打印信息</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 创建 Pod</span>
+$ kubectl run busybox --image<span class="o">=</span>busybox --restart<span class="o">=</span>Never -- /bin/sh -c <span class="s2">&#34;echo I am from busybox pod; sleep 3600;&#34;</span>
+pod/busybox created
+
+
+<span class="c1"># 打印日志</span>
+$ kubectl logs busybox
+I am from busybox pod</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="138-将上面-pod-的日志存入文件-busybox-logs-txt">138. 将上面 Pod 的日志存入文件 busybox-logs.txt</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ kubectl logs busybox &gt; busybox-logs.txt
+
+
+$ cat busybox-logs.txt
+I am from busybox pod</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="139-查看所有-events-基于-timestamp-排序-并将-events-信息存入到-file-log-文件中">139. 查看所有 events，基于 timestamp 排序，并将 events 信息存入到 file.log 文件中</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">kubectl get events --sort-by<span class="o">=</span>.metadata.creationTimestamp
+
+$ kubectl get events --sort-by<span class="o">=</span>.metadata.creationTimestamp &gt; file.log
+
+$ cat file.log
+LAST SEEN   TYPE      REASON      OBJECT        MESSAGE
+16m         Normal    Killing     pod/nginx     Stopping container nginx
+16m         Normal    Scheduled   pod/nginx     Successfully assigned default/nginx to vm-0-2-ubuntu
+16m         Normal    Pulling     pod/nginx     Pulling image <span class="s2">&#34;nginx&#34;</span>
+15m         Normal    Started     pod/nginx     Started container nginx
+15m         Normal    Created     pod/nginx     Created container nginx
+15m         Normal    Pulled      pod/nginx     Successfully pulled image <span class="s2">&#34;nginx&#34;</span></code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="140-创建-imgee-为-alpine-的-pod-并执行命令每-5s-打印一次日志">140. 创建 imgee 为 alpine 的 Pod 并执行命令每 5s 打印一次日志</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 创建 Pod</span>
+$ kubectl run hello --image<span class="o">=</span>alpine --restart<span class="o">=</span>Never  -- /bin/sh -c <span class="s2">&#34;while true; do echo &#39;Hi I am from Alpine&#39;; sleep 5;done&#34;</span>
+pod/hello created
+
+
+<span class="c1"># 查看日志</span>
+$ kubectl logs --follow hello
+Hi I am from Alpine
+Hi I am from Alpine
+Hi I am from Alpine</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="141-基于下面命令创建-pod-启动失败时查看错误原因并修正">141. 基于下面命令创建 Pod ，启动失败时查看错误原因并修正</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 创建 Pod</span>
+$ kubectl create -f https://gist.githubusercontent.com/bbachi/212168375b39e36e2e2984c097167b00/raw/1fd63509c3ae3a3d3da844640fb4cca744543c1c/not-running.yml
+
+pod/not-running created
+
+<span class="c1"># 查看 Pod</span>
+$ kubectl get pod not-running
+NAME          READY   STATUS             RESTARTS   AGE
+not-running   <span class="m">0</span>/1     ImagePullBackOff   <span class="m">0</span>          7s
+
+$ kubectl describe po not-running
+...
+Events:
+  Type     Reason          Age                From                    Message
+  ----     ------          ----               ----                    -------
+  Normal   Scheduled       39s                default-scheduler       Successfully assigned default/not-running to vm-0-2-ubuntu
+  Normal   SandboxChanged  34s                kubelet, vm-0-2-ubuntu  Pod sandbox changed, it will be killed and re-created.
+  Normal   Pulling         19s <span class="o">(</span>x2 over 37s<span class="o">)</span>  kubelet, vm-0-2-ubuntu  Pulling image <span class="s2">&#34;ngin&#34;</span>
+  Warning  Failed          16s <span class="o">(</span>x2 over 35s<span class="o">)</span>  kubelet, vm-0-2-ubuntu  Failed to pull image <span class="s2">&#34;ngin&#34;</span>: rpc error: <span class="nv">code</span> <span class="o">=</span> Unknown <span class="nv">desc</span> <span class="o">=</span> Error response from daemon: pull access denied <span class="k">for</span> ngin, repository does not exist or may require <span class="s1">&#39;docker login&#39;</span>: denied: requested access to the resource is denied
+  Warning  Failed          16s <span class="o">(</span>x2 over 35s<span class="o">)</span>  kubelet, vm-0-2-ubuntu  Error: ErrImagePull
+  Normal   BackOff         1s <span class="o">(</span>x4 over 33s<span class="o">)</span>   kubelet, vm-0-2-ubuntu  Back-off pulling image <span class="s2">&#34;ngin&#34;</span>
+  Warning  Failed          1s <span class="o">(</span>x4 over 33s<span class="o">)</span>   kubelet, vm-0-2-ubuntu  Error: ImagePullBackOff
+
+<span class="c1"># 修改错误</span>
+kubectl edit pod not-running
+or
+kubectl <span class="nb">set</span> image pod/not-running not-running<span class="o">=</span>nginx</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="142-利用下面命令创建-4-个-namespace-和-4-个-pods-查看错误的-pod-并修正">142. 利用下面命令创建 4 个 namespace 和 4 个 pods，查看错误的 pod 并修正</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ kubectl create -f https://gist.githubusercontent.com/bbachi/1f001f10337234d46806929d12245397/raw/84b7295fb077f15de979fec5b3f7a13fc69c6d83/problem-pod.yaml
+namespace/namespace1 created
+namespace/namespace2 created
+namespace/namespace3 created
+namespace/namespace4 created
+pod/pod1 created
+pod/pod2 created
+pod/pod3 created
+pod/pod4 created
+
+$ kubectl get po --all-namespaces
+
+$ kubectl get po -n namespace2
+NAME   READY   STATUS             RESTARTS   AGE
+pod2   <span class="m">0</span>/1     ImagePullBackOff   <span class="m">0</span>          46s
+
+$ kubectl <span class="nb">set</span> image pod/pod2 <span class="nv">pod2</span><span class="o">=</span>nginx -n namespace2
+pod/pod2 image updated
+
+$ kubectl get po -n namespace2
+NAME   READY   STATUS    RESTARTS   AGE
+pod2   <span class="m">1</span>/1     Running   <span class="m">0</span>          55s</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="143-查看所有-pod-的-cpu-与内存使用并查找出-cpu-使用率最高的三个">143. 查看所有 Pod 的 CPU 与内存使用并查找出 CPU 使用率最高的三个</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ kubectl top pod --all-namespaces <span class="p">|</span> sort --reverse --key <span class="m">3</span> --numeric <span class="p">|</span> head -3
+kube-system     kube-apiserver-vm-0-4-ubuntu                23m          308Mi
+kube-system     calico-node-njsrv                           23m          29Mi
+kube-system     calico-node-ltpqg                           17m          28Mi
+
+<span class="c1"># 将信息写入文件</span>
+$ kubectl top pod --all-namespaces <span class="p">|</span> sort --reverse --key <span class="m">3</span> --numeric <span class="p">|</span> head -3 &gt; cpu-usage.txt
+
+$ cat cpu-usage.txt
+kube-system     kube-apiserver-vm-0-4-ubuntu                23m          308Mi
+kube-system     calico-node-njsrv                           23m          29Mi
+kube-system     calico-node-ltpqg                           17m          28Mi</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="七-服务与网络篇">七. 服务与网络篇</h3>
+
+<p>这部分的了解主要有下面两个目的：</p>
+
+<ul>
+<li>了解 Service</li>
+<li>对 NetworkPolicies 有一个基本了解</li>
+</ul>
+
+<h4 id="144-创建-nginx-pod-打上-app-my-nginx-标签并开放-80-端口">144. 创建 Nginx Pod，打上 app=my-nginx 标签并开放 80 端口</h4>
+
+<ul>
+<li>yaml 文件</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>Pod<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>creationTimestamp<span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="w">  </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">    </span>app<span class="p">:</span><span class="w"> </span>my-nginx<span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>containers<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>image<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">    </span>name<span class="p">:</span><span class="w"> </span>nginx<span class="w">
+</span><span class="w">    </span>ports<span class="p">:</span><span class="w">
+</span><span class="w">    </span>-<span class="w"> </span>containerPort<span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span><span class="w">    </span>resources<span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span><span class="w">  </span>dnsPolicy<span class="p">:</span><span class="w"> </span>ClusterFirst<span class="w">
+</span><span class="w">  </span>restartPolicy<span class="p">:</span><span class="w"> </span>Never<span class="w">
+</span><span class="w"></span>status<span class="p">:</span><span class="w"> </span>{}</code></pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li>创建 Pod</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ kubectl create -f nginx.yaml
+pod/nginx created</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="145-为-pod-创建-service">145. 为 Pod 创建 Service</h4>
+
+<ul>
+<li>yaml 文件</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>Service<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>my-service<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>selector<span class="p">:</span><span class="w">
+</span><span class="w">    </span>app<span class="p">:</span><span class="w"> </span>my-nginx<span class="w">
+</span><span class="w">  </span>ports<span class="p">:</span><span class="w">
+</span><span class="w">    </span>-<span class="w"> </span>protocol<span class="p">:</span><span class="w"> </span>TCP<span class="w">
+</span><span class="w">      </span>port<span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span><span class="w">      </span>targetPort<span class="p">:</span><span class="w"> </span><span class="m">9376</span></code></pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li>创建 service</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">$ kubectl create -f nginx-svc.yaml
+service/my-service created</pre></td></tr></table>
+</div>
+</div>
+<h4 id="146-查看-pod-与-service">146. 查看 Pod 与 Service</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ kubectl get po nginx --show-labels
+NAME    READY   STATUS    RESTARTS   AGE     LABELS
+nginx   <span class="m">1</span>/1     Running   <span class="m">0</span>          2m17s   <span class="nv">app</span><span class="o">=</span>my-nginx
+
+
+$ kubectl get svc my-service -o wide
+NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT<span class="o">(</span>S<span class="o">)</span>   AGE   SELECTOR
+my-service   ClusterIP   <span class="m">10</span>.104.9.185   &lt;none&gt;        <span class="m">80</span>/TCP    38s   <span class="nv">app</span><span class="o">=</span>my-nginx</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="147-删除-my-service-并使用-kubectl-expose-命令重建">147. 删除 my-service，并使用 kubectl expose 命令重建</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ kubectl delete svc my-service
+service <span class="s2">&#34;my-service&#34;</span> deleted
+
+$ kubectl expose po nginx --port<span class="o">=</span><span class="m">80</span> --target-port<span class="o">=</span><span class="m">9376</span>
+service/nginx exposed
+
+$ kubectl get svc -l <span class="nv">app</span><span class="o">=</span>my-nginx
+NAME    TYPE        CLUSTER-IP      EXTERNAL-IP   PORT<span class="o">(</span>S<span class="o">)</span>   AGE
+nginx   ClusterIP   <span class="m">10</span>.109.228.97   &lt;none&gt;        <span class="m">80</span>/TCP    6s</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="148-删除上面创建的-service-并重建-指定-type-为-nodeport">148. 删除上面创建的 Service 并重建，指定 type 为 NodePort</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ kubectl delete svc nginx
+service <span class="s2">&#34;nginx&#34;</span> deleted
+
+
+$ kubectl expose po nginx --port<span class="o">=</span><span class="m">80</span> --type<span class="o">=</span>NodePort
+service/nginx exposed</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="149-创建临时-busybox-pod-并通过-nginx-service-访问-nginx-pod">149. 创建临时 busybox Pod 并通过 nginx Service 访问 Nginx Pod</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ kubectl get svc nginx -o wide
+NAME    TYPE       CLUSTER-IP      EXTERNAL-IP   PORT<span class="o">(</span>S<span class="o">)</span>        AGE    SELECTOR
+nginx   NodePort   <span class="m">10</span>.108.87.189   &lt;none&gt;        <span class="m">80</span>:31305/TCP   2m1s   <span class="nv">app</span><span class="o">=</span>my-nginx
+
+$ kubectl run busybox --image<span class="o">=</span>busybox --restart<span class="o">=</span>Never -it --rm -- wget -o- <span class="m">10</span>.108.87.189:80
+Connecting to <span class="m">10</span>.108.87.189:80 <span class="o">(</span><span class="m">10</span>.108.87.189:80<span class="o">)</span>
+saving to <span class="s1">&#39;index.html&#39;</span>
+index.html           <span class="m">100</span>% <span class="p">|</span>********************************<span class="p">|</span>   <span class="m">612</span>  <span class="m">0</span>:00:00 ETA
+<span class="s1">&#39;index.html&#39;</span> saved
+pod <span class="s2">&#34;busybox&#34;</span> deleted</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="150-创建-networkpolicy-拒绝所有入口流量">150. 创建 NetworkPolicy，拒绝所有入口流量</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>networking.k8s.io/v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>NetworkPolicy<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>default-deny<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>podSelector<span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span><span class="w">  </span>policyTypes<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>Ingress</code></pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li>创建 networkpolicy</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">$ kubectl create -f network-policy.yaml
+networkpolicy.networking.k8s.io/default-deny created</pre></td></tr></table>
+</div>
+</div>
+<p>以上就是完整的 150 个练习了，K8S 的学习是理论与实践并重的，既要理解集群、组件的设计思想与原理，还要熟练掌握各种 API 的操作，唯一的方法就是不断练习，不过 150 个练习我觉得内容设置的并不合理，有些地方重复了，而有些地方比如网络这一块练习量又不够，后面有时间了在这几篇文章的基础之上补充一部分其他的练习。</p>
+
+    </div>
+
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">邹英杰</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+      2020-04-27
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/kubernetes/">Kubernetes</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/java-%E8%B5%84%E6%BA%90%E5%85%B3%E9%97%AD%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/">
+            
+            <i class="iconfont">
+              <svg  class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="18" height="18">
+  <path d="M691.908486 949.511495l75.369571-89.491197c10.963703-12.998035 10.285251-32.864502-1.499144-44.378743L479.499795 515.267417 757.434875 204.940602c11.338233-12.190647 11.035334-32.285311-0.638543-44.850487l-80.46666-86.564541c-11.680017-12.583596-30.356378-12.893658-41.662889-0.716314L257.233596 494.235404c-11.332093 12.183484-11.041474 32.266891 0.657986 44.844348l80.46666 86.564541c1.772366 1.910513 3.706415 3.533476 5.750981 4.877077l306.620399 321.703933C662.505829 963.726242 680.945807 962.528973 691.908486 949.511495z"></path>
+</svg>
+
+            </i>
+            <span class="prev-text nav-default">Java 手动资源关闭最佳实践</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/kubernetes-150-%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%BB%83%E4%B9%A0%E4%B8%8A/">
+            <span class="next-text nav-default">Kubernetes 150 个操作练习（上）</span>
+            <span class="prev-text nav-mobile">Next</span>
+            
+            <i class="iconfont">
+              <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="18" height="18">
+  <path d="M332.091514 74.487481l-75.369571 89.491197c-10.963703 12.998035-10.285251 32.864502 1.499144 44.378743l286.278095 300.375162L266.565125 819.058374c-11.338233 12.190647-11.035334 32.285311 0.638543 44.850487l80.46666 86.564541c11.680017 12.583596 30.356378 12.893658 41.662889 0.716314l377.434212-421.426145c11.332093-12.183484 11.041474-32.266891-0.657986-44.844348l-80.46666-86.564541c-1.772366-1.910513-3.706415-3.533476-5.750981-4.877077L373.270379 71.774697C361.493148 60.273758 343.054193 61.470003 332.091514 74.487481z"></path>
+</svg>
+
+            </i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+
+  
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+    
+
+  
+
+        </div>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="icon-links">
+  
+  
+    <a href="yingjiezou1@gmail.com" rel="me noopener" class="iconfont"
+      title="email"  target="_blank"
+      >
+      <svg class="icon" viewBox="0 0 1451 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="36" height="36">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+    </a>
+  
+    <a href="https://twitter.com/BoyYingjiezou1" rel="me noopener" class="iconfont"
+      title="twitter"  target="_blank"
+      >
+      <svg class="icon" viewBox="0 0 1264 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="36" height="36">
+  <path d="M1229.8616 18.043658c0 0-117.852626 63.135335-164.151872 67.344358-105.225559-164.151872-505.082682-92.598492-437.738325 223.078185C278.622548 312.675223 89.216542 47.506814 89.216542 47.506814s-117.852626 189.406006 75.762402 345.139833C127.097743 396.85567 55.544363 371.601535 55.544363 371.601535S26.081207 535.753407 253.368414 615.724832c-21.045112 29.463156-113.643603 8.418045-113.643603 8.418045s25.254134 143.10676 231.496229 180.987961c-143.10676 130.479693-387.230056 92.598492-370.393967 105.225559 206.242095 189.406006 1119.599946 231.496229 1128.01799-643.98042C1179.353331 249.539887 1263.533778 123.269217 1263.533778 123.269217s-130.479693 37.881201-138.897738 33.672179C1225.652577 98.015083 1229.8616 18.043658 1229.8616 18.043658"></path>
+</svg>
+
+    </a>
+  
+    <a href="https://github.com/zouyingjie" rel="me noopener" class="iconfont"
+      title="github"  target="_blank"
+      >
+      <svg class="icon" style="" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="36" height="36">
+  <path d="M512 12.672c-282.88 0-512 229.248-512 512 0 226.261333 146.688 418.133333 350.08 485.76 25.6 4.821333 34.986667-11.008 34.986667-24.618667 0-12.16-0.426667-44.373333-0.64-87.04-142.421333 30.890667-172.458667-68.693333-172.458667-68.693333C188.672 770.986667 155.008 755.2 155.008 755.2c-46.378667-31.744 3.584-31.104 3.584-31.104 51.413333 3.584 78.421333 52.736 78.421333 52.736 45.653333 78.293333 119.850667 55.68 149.12 42.581333 4.608-33.109333 17.792-55.68 32.426667-68.48-113.706667-12.8-233.216-56.832-233.216-253.013333 0-55.893333 19.84-101.546667 52.693333-137.386667-5.76-12.928-23.04-64.981333 4.48-135.509333 0 0 42.88-13.738667 140.8 52.48 40.96-11.392 84.48-17.024 128-17.28 43.52 0.256 87.04 5.888 128 17.28 97.28-66.218667 140.16-52.48 140.16-52.48 27.52 70.528 10.24 122.581333 5.12 135.509333 32.64 35.84 52.48 81.493333 52.48 137.386667 0 196.693333-119.68 240-233.6 252.586667 17.92 15.36 34.56 46.762667 34.56 94.72 0 68.522667-0.64 123.562667-0.64 140.202666 0 13.44 8.96 29.44 35.2 24.32C877.44 942.592 1024 750.592 1024 524.672c0-282.752-229.248-512-512-512"></path>
+</svg>
+
+    </a>
+
+
+<a href="/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+    class="iconfont" title="rss" target="_blank">
+    <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="30" height="30">
+  <path d="M819.157333 1024C819.157333 574.592 449.408 204.8 0 204.8V0c561.706667 0 1024 462.293333 1024 1024h-204.842667zM140.416 743.04a140.8 140.8 0 0 1 140.501333 140.586667A140.928 140.928 0 0 1 140.074667 1024C62.72 1024 0 961.109333 0 883.626667s62.933333-140.544 140.416-140.586667zM678.784 1024h-199.04c0-263.210667-216.533333-479.786667-479.744-479.786667V345.173333c372.352 0 678.784 306.517333 678.784 678.826667z"></path>
+</svg>
+
+  </a>
+   
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+      2017 -
+    2021
+    <span class="heart">
+      
+      <i class="iconfont">
+        <svg class="icon" viewBox="0 0 1025 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="14" height="14">
+  <path d="M1000.1 247.9c-15.5-37.3-37.6-70.6-65.7-98.9-54.4-54.8-125.8-85-201-85-85.7 0-166 39-221.4 107.4C456.6 103 376.3 64 290.6 64c-75.1 0-146.5 30.4-201.1 85.6-28.2 28.5-50.4 61.9-65.8 99.3-16 38.8-24 79.9-23.6 122.2 0.7 91.7 40.1 177.2 108.1 234.8 3.1 2.6 6 5.1 8.9 7.8 14.9 13.4 58 52.8 112.6 102.7 93.5 85.5 209.9 191.9 257.5 234.2 7 6.1 15.8 9.5 24.9 9.5 9.2 0 18.1-3.4 24.9-9.5 34.5-30.7 105.8-95.9 181.4-165 74.2-67.8 150.9-138 195.8-178.2 69.5-57.9 109.6-144.4 109.9-237.3 0.1-42.5-8-83.6-24-122.2z"
+   fill="#8a8a8a"></path>
+</svg>
+
+      </i>
+    </span><span class="author">
+        邹英杰
+        
+      </span></span>
+
+  
+  
+
+  
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont">
+        
+        <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="35" height="35">
+  <path d="M510.866688 227.694839 95.449397 629.218702l235.761562 0-2.057869 328.796468 362.40389 0L691.55698 628.188232l241.942331-3.089361L510.866688 227.694839zM63.840492 63.962777l894.052392 0 0 131.813095L63.840492 195.775872 63.840492 63.962777 63.840492 63.962777zM63.840492 63.962777"></path>
+</svg>
+
+      </i>
+    </div>
+  </div>
+  
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+
+
+
+
+<script type="text/javascript" src="/js/main.638251f4230630f0335d8c6748e53a96f94b72670920b60c09a56fdc8bece214.js" integrity="sha256-Y4JR9CMGMPAzXYxnSOU6lvlLcmcJILYMCaVv3Ivs4hQ=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script type="text/javascript" src="/lib/photoswipe/photoswipe.min.js"></script>
+    <script type="text/javascript" src="/lib/photoswipe/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
