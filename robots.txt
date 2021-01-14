@@ -1,2 +1,2 @@
 User-agent: *
-Sitemap: zouyingjie.github.io/sitemap.xml
+Sitemap: sitemap.xml

@@ -2,192 +2,192 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on WhiteShores</title>
-    <link>zouyingjie.github.io/tags/</link>
+    <link>/tags/</link>
     <description>Recent content in Tags on WhiteShores</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Mon, 04 Mar 2019 16:01:23 +0800</lastBuildDate>
     
-	<atom:link href="zouyingjie.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>math</title>
-      <link>zouyingjie.github.io/tags/math/</link>
+      <link>/tags/math/</link>
       <pubDate>Mon, 04 Mar 2019 16:01:23 +0800</pubDate>
       
-      <guid>zouyingjie.github.io/tags/math/</guid>
+      <guid>/tags/math/</guid>
       <description></description>
     </item>
     
     <item>
       <title>preview</title>
-      <link>zouyingjie.github.io/tags/preview/</link>
+      <link>/tags/preview/</link>
       <pubDate>Mon, 04 Mar 2019 16:01:23 +0800</pubDate>
       
-      <guid>zouyingjie.github.io/tags/preview/</guid>
+      <guid>/tags/preview/</guid>
       <description></description>
     </item>
     
     <item>
       <title>tag-6</title>
-      <link>zouyingjie.github.io/tags/tag-6/</link>
+      <link>/tags/tag-6/</link>
       <pubDate>Mon, 04 Mar 2019 16:01:23 +0800</pubDate>
       
-      <guid>zouyingjie.github.io/tags/tag-6/</guid>
+      <guid>/tags/tag-6/</guid>
       <description></description>
     </item>
     
     <item>
       <title>shortcodes</title>
-      <link>zouyingjie.github.io/tags/shortcodes/</link>
+      <link>/tags/shortcodes/</link>
       <pubDate>Tue, 06 Mar 2018 16:01:23 +0800</pubDate>
       
-      <guid>zouyingjie.github.io/tags/shortcodes/</guid>
+      <guid>/tags/shortcodes/</guid>
       <description></description>
     </item>
     
     <item>
       <title>image</title>
-      <link>zouyingjie.github.io/tags/image/</link>
+      <link>/tags/image/</link>
       <pubDate>Sat, 03 Mar 2018 16:01:23 +0800</pubDate>
       
-      <guid>zouyingjie.github.io/tags/image/</guid>
+      <guid>/tags/image/</guid>
       <description></description>
     </item>
     
     <item>
       <title>tag-7</title>
-      <link>zouyingjie.github.io/tags/tag-7/</link>
+      <link>/tags/tag-7/</link>
       <pubDate>Sat, 03 Mar 2018 16:01:23 +0800</pubDate>
       
-      <guid>zouyingjie.github.io/tags/tag-7/</guid>
+      <guid>/tags/tag-7/</guid>
       <description></description>
     </item>
     
     <item>
       <title>footnote</title>
-      <link>zouyingjie.github.io/tags/footnote/</link>
+      <link>/tags/footnote/</link>
       <pubDate>Thu, 01 Mar 2018 16:01:23 +0800</pubDate>
       
-      <guid>zouyingjie.github.io/tags/footnote/</guid>
+      <guid>/tags/footnote/</guid>
       <description></description>
     </item>
     
     <item>
       <title>markdown</title>
-      <link>zouyingjie.github.io/tags/markdown/</link>
+      <link>/tags/markdown/</link>
       <pubDate>Thu, 01 Mar 2018 16:01:23 +0800</pubDate>
       
-      <guid>zouyingjie.github.io/tags/markdown/</guid>
+      <guid>/tags/markdown/</guid>
       <description></description>
     </item>
     
     <item>
       <title>tag-11</title>
-      <link>zouyingjie.github.io/tags/tag-11/</link>
+      <link>/tags/tag-11/</link>
       <pubDate>Thu, 01 Mar 2018 16:01:23 +0800</pubDate>
       
-      <guid>zouyingjie.github.io/tags/tag-11/</guid>
+      <guid>/tags/tag-11/</guid>
       <description></description>
     </item>
     
     <item>
       <title>tag-1</title>
-      <link>zouyingjie.github.io/tags/tag-1/</link>
+      <link>/tags/tag-1/</link>
       <pubDate>Mon, 01 Jan 2018 16:01:23 +0800</pubDate>
       
-      <guid>zouyingjie.github.io/tags/tag-1/</guid>
+      <guid>/tags/tag-1/</guid>
       <description></description>
     </item>
     
     <item>
       <title>tag-2</title>
-      <link>zouyingjie.github.io/tags/tag-2/</link>
+      <link>/tags/tag-2/</link>
       <pubDate>Mon, 01 Jan 2018 16:01:23 +0800</pubDate>
       
-      <guid>zouyingjie.github.io/tags/tag-2/</guid>
+      <guid>/tags/tag-2/</guid>
       <description></description>
     </item>
     
     <item>
       <title>tag-3</title>
-      <link>zouyingjie.github.io/tags/tag-3/</link>
+      <link>/tags/tag-3/</link>
       <pubDate>Mon, 01 Jan 2018 16:01:23 +0800</pubDate>
       
-      <guid>zouyingjie.github.io/tags/tag-3/</guid>
+      <guid>/tags/tag-3/</guid>
       <description></description>
     </item>
     
     <item>
       <title>English</title>
-      <link>zouyingjie.github.io/tags/english/</link>
+      <link>/tags/english/</link>
       <pubDate>Thu, 31 Aug 2017 15:43:48 +0800</pubDate>
       
-      <guid>zouyingjie.github.io/tags/english/</guid>
+      <guid>/tags/english/</guid>
       <description></description>
     </item>
     
     <item>
       <title>development</title>
-      <link>zouyingjie.github.io/tags/development/</link>
+      <link>/tags/development/</link>
       <pubDate>Sun, 28 Sep 2014 00:00:00 +0000</pubDate>
       
-      <guid>zouyingjie.github.io/tags/development/</guid>
+      <guid>/tags/development/</guid>
       <description></description>
     </item>
     
     <item>
       <title>go</title>
-      <link>zouyingjie.github.io/tags/go/</link>
+      <link>/tags/go/</link>
       <pubDate>Sun, 28 Sep 2014 00:00:00 +0000</pubDate>
       
-      <guid>zouyingjie.github.io/tags/go/</guid>
+      <guid>/tags/go/</guid>
       <description></description>
     </item>
     
     <item>
       <title>golang</title>
-      <link>zouyingjie.github.io/tags/golang/</link>
+      <link>/tags/golang/</link>
       <pubDate>Sun, 28 Sep 2014 00:00:00 +0000</pubDate>
       
-      <guid>zouyingjie.github.io/tags/golang/</guid>
+      <guid>/tags/golang/</guid>
       <description></description>
     </item>
     
     <item>
       <title>templates</title>
-      <link>zouyingjie.github.io/tags/templates/</link>
+      <link>/tags/templates/</link>
       <pubDate>Sun, 28 Sep 2014 00:00:00 +0000</pubDate>
       
-      <guid>zouyingjie.github.io/tags/templates/</guid>
+      <guid>/tags/templates/</guid>
       <description></description>
     </item>
     
     <item>
       <title>themes</title>
-      <link>zouyingjie.github.io/tags/themes/</link>
+      <link>/tags/themes/</link>
       <pubDate>Sun, 28 Sep 2014 00:00:00 +0000</pubDate>
       
-      <guid>zouyingjie.github.io/tags/themes/</guid>
+      <guid>/tags/themes/</guid>
       <description></description>
     </item>
     
     <item>
       <title>hugo</title>
-      <link>zouyingjie.github.io/tags/hugo/</link>
+      <link>/tags/hugo/</link>
       <pubDate>Wed, 02 Apr 2014 00:00:00 +0000</pubDate>
       
-      <guid>zouyingjie.github.io/tags/hugo/</guid>
+      <guid>/tags/hugo/</guid>
       <description></description>
     </item>
     
     <item>
       <title>jekyll</title>
-      <link>zouyingjie.github.io/tags/jekyll/</link>
+      <link>/tags/jekyll/</link>
       <pubDate>Mon, 10 Mar 2014 00:00:00 +0000</pubDate>
       
-      <guid>zouyingjie.github.io/tags/jekyll/</guid>
+      <guid>/tags/jekyll/</guid>
       <description></description>
     </item>
     
