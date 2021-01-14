@@ -66,13 +66,13 @@
   </url>
   
   <url>
-    <loc>http://localhost:1313/tags/math/</loc>
+    <loc>http://localhost:1313/categories/math/</loc>
     <lastmod>2019-03-05T16:01:23+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://localhost:1313/categories/math/</loc>
+    <loc>http://localhost:1313/tags/math/</loc>
     <lastmod>2019-03-05T16:01:23+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -90,13 +90,13 @@
   </url>
   
   <url>
-    <loc>http://localhost:1313/tags/shortcodes/</loc>
+    <loc>http://localhost:1313/categories/shortcodes/</loc>
     <lastmod>2018-03-07T16:01:23+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://localhost:1313/categories/shortcodes/</loc>
+    <loc>http://localhost:1313/tags/shortcodes/</loc>
     <lastmod>2018-03-07T16:01:23+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -185,13 +185,13 @@
   </url>
   
   <url>
-    <loc>http://localhost:1313/tags/english/</loc>
+    <loc>http://localhost:1313/categories/english/</loc>
     <lastmod>2017-08-31T15:43:48+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://localhost:1313/categories/english/</loc>
+    <loc>http://localhost:1313/tags/english/</loc>
     <lastmod>2017-08-31T15:43:48+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -242,13 +242,13 @@
   </url>
   
   <url>
-    <loc>http://localhost:1313/tags/golang/</loc>
+    <loc>http://localhost:1313/categories/golang/</loc>
     <lastmod>2014-09-28T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://localhost:1313/categories/golang/</loc>
+    <loc>http://localhost:1313/tags/golang/</loc>
     <lastmod>2014-09-28T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
@@ -299,13 +299,13 @@
   </url>
   
   <url>
-    <loc>http://localhost:1313/tags/syntax-highlighting/</loc>
+    <loc>http://localhost:1313/categories/syntax-highlighting/</loc>
     <lastmod>2017-08-30T16:01:23+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://localhost:1313/categories/syntax-highlighting/</loc>
+    <loc>http://localhost:1313/tags/syntax-highlighting/</loc>
     <lastmod>2017-08-30T16:01:23+08:00</lastmod>
     <priority>0</priority>
   </url>
