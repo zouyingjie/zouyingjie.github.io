@@ -29,12 +29,6 @@
   </url>
   
   <url>
-    <loc>zouyingjie.github.io/</loc>
-    <lastmod>2019-03-05T16:01:23+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>zouyingjie.github.io/post/math-preview/</loc>
     <lastmod>2019-03-05T16:01:23+08:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -49,6 +43,12 @@
   
   <url>
     <loc>zouyingjie.github.io/tags/</loc>
+    <lastmod>2019-03-05T16:01:23+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>zouyingjie.github.io/</loc>
     <lastmod>2019-03-05T16:01:23+08:00</lastmod>
     <priority>0</priority>
   </url>
