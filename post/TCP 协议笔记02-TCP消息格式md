@@ -1,0 +1,33 @@
+---
+title: TCP 协议笔记01-TCP 协发展历史与特性简介
+date: 2021-02-01
+tags: ['TCP']
+categories: ['TCP']
+description:  TCP 连接
+---
+
+前面提到 TCP 协议是面向流的数据传输，其传递的每个消息称为段（Segment），顾名思义就是整个数据流的一部分。
+
+在开始 TCP 相关功能讲解之前，先对 TCP 段的数据结构有一个基本的认知，带着对各个字段的疑问
+去学习后面的知识是一个不错的方式。
+
+TCP 数据包格式如图：
+
+
+下面是对各个字段的简要介绍
+
+|          字段名               | 字段大小（Bytes）|简介
+| ---------------------------- | --- | --- |
+ 源端口(Source Port)            |  2    |
+ 目的端口(Destination Port)      |  2    |
+ 序列号(Sequence Number)         |  4    |
+ 确认编号(Acknowledgment Number)|  4     |
+ 数据偏移(Data Offset)          |  1/2   |
+ 保留字段(Reserved)             |  3/4   |
+ 控制位(Control Bits)           |  3/4   |
+ 窗口（(Window)                 |  2     |
+ 校验和(Checksum)               |  2     |
+ 紧急指针(Urgent Pointer)        | 2     |
+ 可选字段(Options)               | 可变长度| 
+ 填充字段 (Padding)              | 可变长度| 
+ 数据（Data）                    | 可变长度| 

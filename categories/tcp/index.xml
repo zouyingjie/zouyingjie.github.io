@@ -1,15 +1,33 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>TCP on WhiteShores</title>
+    <title>TCP on 邹英杰的博客</title>
     <link>/categories/tcp/</link>
-    <description>Recent content in TCP on WhiteShores</description>
+    <description>Recent content in TCP on 邹英杰的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 12 Jul 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 01 Feb 2021 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/tcp/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>TCP 协议笔记01-TCP 协发展历史与特性简介</title>
+      <link>/post/tcp-%E5%8D%8F%E8%AE%AE%E7%AC%94%E8%AE%B001-tcp-%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%8E%86%E5%8F%B2%E4%B8%8E%E7%89%B9%E6%80%A7%E7%AE%80%E4%BB%8B/</link>
+      <pubDate>Mon, 01 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/post/tcp-%E5%8D%8F%E8%AE%AE%E7%AC%94%E8%AE%B001-tcp-%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%8E%86%E5%8F%B2%E4%B8%8E%E7%89%B9%E6%80%A7%E7%AE%80%E4%BB%8B/</guid>
+      <description>知识点梳理： TCP 的发展历史与功能 TCP 数据包格式 &amp;amp; 各个字段功能 CheckSum 的计算 MSS 的计算 控制位的选择：Push，Urgent TCP 连接的建立、管理与终止</description>
+    </item>
+    
+    <item>
+      <title>TCP 协议笔记02-TCP 连接建立与终止过程</title>
+      <link>/post/tcp-%E5%8D%8F%E8%AE%AE%E7%AC%94%E8%AE%B002-tcp-%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%BB%BA%E7%AB%8B%E7%AE%A1%E7%90%86%E4%B8%8E%E7%BB%88%E6%AD%A2/</link>
+      <pubDate>Mon, 01 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/post/tcp-%E5%8D%8F%E8%AE%AE%E7%AC%94%E8%AE%B002-tcp-%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%BB%BA%E7%AB%8B%E7%AE%A1%E7%90%86%E4%B8%8E%E7%BB%88%E6%AD%A2/</guid>
+      <description>一. TCP 状态机 二. TCP 连接建立过程 - 三次握手 1. 连接前准备 2. TCP 连接建立 【1】三次握手过程 【2】三次握手抓包分析 三. TCP 协议 二. TCP 连接终止过程 - 四次挥</description>
+    </item>
     
     <item>
       <title>TCP 数据收发过程抓包分析</title>

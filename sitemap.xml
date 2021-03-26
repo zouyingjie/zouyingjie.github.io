@@ -1,5 +1,6 @@
-<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
     <loc>/about/</loc>
@@ -10,7 +11,51 @@
   
   <url>
     <loc>/categories/</loc>
-    <lastmod>2020-05-10T19:31:28+08:00</lastmod>
+    <lastmod>2021-02-01T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/post/</loc>
+    <lastmod>2021-02-01T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/categories/tcp/</loc>
+    <lastmod>2021-02-01T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/tcp/</loc>
+    <lastmod>2021-02-01T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/post/tcp-%E5%8D%8F%E8%AE%AE%E7%AC%94%E8%AE%B001-tcp-%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%8E%86%E5%8F%B2%E4%B8%8E%E7%89%B9%E6%80%A7%E7%AE%80%E4%BB%8B/</loc>
+    <lastmod>2021-02-01T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>/post/tcp-%E5%8D%8F%E8%AE%AE%E7%AC%94%E8%AE%B002-tcp-%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%BB%BA%E7%AB%8B%E7%AE%A1%E7%90%86%E4%B8%8E%E7%BB%88%E6%AD%A2/</loc>
+    <lastmod>2021-02-01T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <lastmod>2021-02-01T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/</loc>
+    <lastmod>2021-02-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -31,24 +76,6 @@
     <lastmod>2020-05-10T19:31:28+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>/post/</loc>
-    <lastmod>2020-05-10T19:31:28+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/</loc>
-    <lastmod>2020-05-10T19:31:28+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/</loc>
-    <lastmod>2020-05-10T19:31:28+08:00</lastmod>
-    <priority>0</priority>
   </url>
   
   <url>
@@ -137,6 +164,18 @@
   </url>
   
   <url>
+    <loc>/categories/%E4%B8%AA%E4%BA%BA%E9%9A%8F%E7%AC%94/</loc>
+    <lastmod>2019-09-02T22:22:47+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/%E4%B8%AA%E4%BA%BA%E9%9A%8F%E7%AC%94/</loc>
+    <lastmod>2019-09-02T22:22:47+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/post/%E9%82%A3%E4%BA%9B%E5%B9%B3%E6%B7%A1%E7%9A%84%E4%B8%80%E5%A4%A9/</loc>
     <lastmod>2019-09-02T22:22:47+08:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -144,34 +183,10 @@
   </url>
   
   <url>
-    <loc>/categories/%E9%9A%8F%E7%AC%94/</loc>
-    <lastmod>2019-09-02T22:22:47+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/%E9%9A%8F%E7%AC%94/</loc>
-    <lastmod>2019-09-02T22:22:47+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>/post/arts%E5%91%A8%E5%B9%B4%E8%AE%B0/</loc>
     <lastmod>2019-08-03T12:29:16+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>/categories/%E4%B8%AA%E4%BA%BA%E9%9A%8F%E7%AC%94/</loc>
-    <lastmod>2019-08-03T12:29:16+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/%E4%B8%AA%E4%BA%BA%E9%9A%8F%E7%AC%94/</loc>
-    <lastmod>2019-08-03T12:29:16+08:00</lastmod>
-    <priority>0</priority>
   </url>
   
   <url>
@@ -218,18 +233,6 @@
     <lastmod>2019-07-19T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>/categories/tcp/</loc>
-    <lastmod>2019-07-12T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/tcp/</loc>
-    <lastmod>2019-07-12T00:00:00+00:00</lastmod>
-    <priority>0</priority>
   </url>
   
   <url>

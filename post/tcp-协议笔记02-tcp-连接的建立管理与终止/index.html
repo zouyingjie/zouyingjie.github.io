@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<meta name="description" content="TCP 连接">
+
+		<title>TCP 协议笔记02-TCP 连接建立与终止过程 &middot; 邹英杰的博客</title>
+
+		
+  		<link rel="stylesheet" href="/css/style.css">
+		<link rel="stylesheet" href="/css/fonts.css">
+		
+		<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+		<link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+		
+		<link href="" rel="alternate" type="application/rss+xml" title="邹英杰的博客" />
+	</head>
+
+    <body>
+        		<nav class="nav">
+			<div class="nav-container">
+				<a href="/">
+					<h2 class="nav-title">邹英杰的博客</h2>
+				</a>
+				<ul>
+    
+    
+        <li>
+            <a href="/">
+                
+                <span>Homepage</span>
+                
+            </a>
+        </li>
+    
+        <li>
+            <a href="/post/">
+                
+                <span>Archives</span>
+                
+            </a>
+        </li>
+    
+        <li>
+            <a href="/tags/">
+                
+                <span>Tags</span>
+                
+            </a>
+        </li>
+    
+        <li>
+            <a href="/categories/">
+                
+                <span>Categories</span>
+                
+            </a>
+        </li>
+    
+        <li>
+            <a href="/about/">
+                
+                <span>About</span>
+                
+            </a>
+        </li>
+    
+        <li>
+            <a href="https://gohugo.io">
+                
+                <span>external-link</span>
+                
+            </a>
+        </li>
+    
+</ul>
+			</div>
+		</nav>
+
+        
+
+<main>
+	<div class="post">
+		<div class="post-info">
+    <span>Written by</span>
+        邹英杰
+        <br>
+        <span>on&nbsp;</span><time datetime="2021-02-01 00:00:00 &#43;0000 UTC">February 1, 2021</time>
+</div>
+
+		<h1 class="post-title">TCP 协议笔记02-TCP 连接建立与终止过程</h1>
+<div class="post-line"></div>
+
+		
+
+		
+
+<!-- TOC -->
+
+<ul>
+<li><a href="#一-tcp-状态机">一. TCP 状态机</a></li>
+<li><a href="#二-tcp-连接建立过程---三次握手">二. TCP 连接建立过程 - 三次握手</a>
+
+<ul>
+<li><a href="#1-连接前准备">1. 连接前准备</a></li>
+<li><a href="#2-tcp-连接建立">2. TCP 连接建立</a></li>
+<li><a href="#1三次握手过程">【1】三次握手过程</a></li>
+<li><a href="#2三次握手抓包分析">【2】三次握手抓包分析</a></li>
+</ul></li>
+<li><a href="#三-tcp-协议">三. TCP 协议</a></li>
+<li><a href="#二-tcp-连接终止过程---四次挥手">二. TCP 连接终止过程 - 四次挥手</a></li>
+</ul>
+
+<!-- /TOC -->
+
+<h3 id="一-tcp-状态机">一. TCP 状态机</h3>
+
+<p>TCP 是一个巨复杂的协议，其采用了<a href="https://en.wikipedia.org/wiki/Finite-state_machine">有限状态机（FSM,finite state machine）</a> 来描述其自身的内部实现。</p>
+
+<p>对于状态机的实现，其有四个关键要素：</p>
+
+<ul>
+<li>状态 (State)</li>
+<li>事件 (Event)</li>
+<li>动作（Action）</li>
+<li>变迁（Transition ）</li>
+</ul>
+
+<p>其工作原理可以简单概括为：状态机处于某个<code>状态</code>，然后发生某个<code>事件</code>，该事件会引发一个<code>动作</code>，导致状态的 <code>变迁</code>。</p>
+
+<p>下图是 TCP 有限状态机的示意图</p>
+
+<p><img src="http://tcpipguide.com/free/diagrams/tcpfsm.png" alt="" /></p>
+
+<p>可以看到，最主要的两部分就是 TCP 连接建立和关闭时发生的一系列变化，下面详细看下。</p>
+
+<h3 id="二-tcp-连接建立过程-三次握手">二. TCP 连接建立过程 - 三次握手</h3>
+
+<h4 id="1-连接前准备">1. 连接前准备</h4>
+
+<p>TCP 每个连接都是独立存在的，因此每个连接的数据都需要单独维护。TCP 使用 <code>传输控制块(TCB，Transmission Control Block )</code>来存储连接的数据，同时 TCP 要负责实现滑动窗口机制</p>
+
+<p>每个 TCP 连接建立前必须先创建 TCB 块，</p>
+
+<h4 id="2-tcp-连接建立">2. TCP 连接建立</h4>
+
+<h5 id="1-三次握手过程">【1】三次握手过程</h5>
+
+<p>TCP 是一个面向连接的协议，协议的建立其实就是一个信息同步的过程，客户端和服务端需要告诉对象自己的一些参数和信息。TCP 的连接建立过程主要解决了如下几件事：</p>
+
+<ul>
+<li>同步序列号。</li>
+</ul>
+
+<p>TCP 连接建立过程一般包含三个步骤：</p>
+
+<ul>
+<li>1. 客户端发送 SYN 消息。</li>
+<li>2. 服务端响应 SYN，返回 ACK 消息，同时也包含自己的 SYN 信息。</li>
+<li>3. 客户端响应服务端的 SYN，向服务端发送 ACK 消息。</li>
+</ul>
+
+<p>上面三步也就是我们常说的三次握手（The Three-Way Handshake）过程。</p>
+
+<p>通过三次握手，TCP
+关于 TCP 连接建立的详细过程如下表：
+<img src="/tcp-connection-established.png" alt="" /></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"></pre></td>
+<td class="lntd">
+<pre class="chroma"></pre></td></tr></table>
+</div>
+</div>
+<p>TCP 三次握手示意图如下：</p>
+
+<p><img src="http://tcpipguide.com/free/diagrams/tcpopen3way.png" alt="" /></p>
+
+<h5 id="2-三次握手抓包分析">【2】三次握手抓包分析</h5>
+
+<h3 id="三-tcp-协议">三. TCP 协议</h3>
+
+<h3 id="二-tcp-连接终止过程-四次挥手">二. TCP 连接终止过程 - 四次挥手</h3>
+
+<p><img src="/tcp-connection-terimnation-01.png" alt="" /></p>
+
+<p>对于 TCP 连接的终止，大部分</p>
+
+<p><img src="http://www.tcpipguide.com/free/diagrams/tcpclosesimul.png" alt="" /></p>
+
+<p><img src="https://zouyingjie-blog.oss-cn-beijing.aliyuncs.com/fc_tcp_04.png" alt="" /></p>
+
+<p><img src="https://zouyingjie-blog.oss-cn-beijing.aliyuncs.com/WX20190716-124331%402x.png" alt="" /></p>
+
+<p><strong>ISN(Initial Sequence Number)</strong></p>
+
+<p><strong>连接超时时间</strong></p>
+
+<p>500ms 为单位，第一个超时时钟为 12 个，第二个为 48 个即 24s。</p>
+
+<p><strong>Maximum Segment Size</strong></p>
+
+<p>SYN 包中有 MSS Option 字段，用于表明自身可以接收的最大 Segment。</p>
+
+<p><strong>半关闭（Half-Close）</strong></p>
+
+
+		
+	</div>
+
+	<div class="pagination">
+		<a href="/post/java-%E8%B5%84%E6%BA%90%E5%85%B3%E9%97%AD%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/" class="left arrow">&#8592;</a>
+		<a href="/post/tcp-%E5%8D%8F%E8%AE%AE%E7%AC%94%E8%AE%B001-tcp-%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%8E%86%E5%8F%B2%E4%B8%8E%E7%89%B9%E6%80%A7%E7%AE%80%E4%BB%8B/" class="right arrow">&#8594;</a>
+
+		<a href="#" class="top">Top</a>
+	</div>
+</main>
+
+
+        		<footer>
+			
+			<span>
+			&copy; <time datetime="2021-03-26 18:21:16.324049 &#43;0800 CST m=&#43;0.060675125">2021</time> 邹英杰. Made with <a href='https://gohugo.io'>Hugo</a> using the <a href='https://github.com/EmielH/tale-hugo/'>Tale</a> theme.
+			</span>
+		</footer>
+
+    </body>
+</html>

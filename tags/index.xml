@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Tags on WhiteShores</title>
+    <title>Tags on 邹英杰的博客</title>
     <link>/tags/</link>
-    <description>Recent content in Tags on WhiteShores</description>
+    <description>Recent content in Tags on 邹英杰的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 10 May 2020 19:31:28 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 01 Feb 2021 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>TCP</title>
+      <link>/tags/tcp/</link>
+      <pubDate>Mon, 01 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/tcp/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Java</title>
@@ -57,18 +66,9 @@
     </item>
     
     <item>
-      <title>随笔</title>
-      <link>/tags/%E9%9A%8F%E7%AC%94/</link>
-      <pubDate>Mon, 02 Sep 2019 22:22:47 +0800</pubDate>
-      
-      <guid>/tags/%E9%9A%8F%E7%AC%94/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>个人随笔</title>
       <link>/tags/%E4%B8%AA%E4%BA%BA%E9%9A%8F%E7%AC%94/</link>
-      <pubDate>Sat, 03 Aug 2019 12:29:16 +0800</pubDate>
+      <pubDate>Mon, 02 Sep 2019 22:22:47 +0800</pubDate>
       
       <guid>/tags/%E4%B8%AA%E4%BA%BA%E9%9A%8F%E7%AC%94/</guid>
       <description></description>
@@ -89,15 +89,6 @@
       <pubDate>Tue, 30 Jul 2019 00:00:00 +0000</pubDate>
       
       <guid>/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>TCP</title>
-      <link>/tags/tcp/</link>
-      <pubDate>Fri, 12 Jul 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/tcp/</guid>
       <description></description>
     </item>
     
