@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noodp"/>
+    <meta name="author" content="邹英杰">
+    <meta name="description" content="邹英杰的个人博客">
+    
+    
+    <link rel="prev" href="https://example.com/2019/%E9%82%A3%E4%BA%9B%E5%B9%B3%E6%B7%A1%E7%9A%84%E4%B8%80%E5%A4%A9/" />
+    <link rel="next" href="https://example.com/2019/devops%E7%AC%94%E8%AE%B0-%E4%BB%8E0%E5%BC%80%E5%A7%8B%E6%90%AD%E5%BB%BAjenkins%E6%B5%81%E6%B0%B4%E7%BA%BF/" />
+    <link rel="canonical" href="https://example.com/2019/sed-introduction/" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <title>
+        
+        
+            Sed 入门教程 | AhriJ`s Blog
+        
+    </title>
+    <meta name="title" content="Sed 入门教程 | AhriJ`s Blog">
+    
+<link rel="stylesheet" href="/css/main.min.css">
+
+
+    
+    
+ 
+
+<script type="application/ld+json">
+{
+    "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/example.com"
+    },
+    "articleSection" : "posts",
+    "name" : "Sed 入门教程",
+    "headline" : "Sed 入门教程",
+    "description" : "关于 Sed 使用的全面总结",
+    "inLanguage" : "zh-cn",
+    "author" : "邹英杰",
+    "creator" : "邹英杰",
+    "publisher": "邹英杰",
+    "accountablePerson" : "邹英杰",
+    "copyrightHolder" : "邹英杰",
+    "copyrightYear" : "2019",
+    "datePublished": "2019-10-29 00:00:00 \x2b0000 UTC",
+    "dateModified" : "2019-10-29 00:00:00 \x2b0000 UTC",
+    "url" : "https:\/\/example.com\/2019\/sed-introduction\/",
+    "wordCount" : "3047",
+    "keywords" : [ "Shell", "AhriJ`s Blog"]
+}
+</script>
+
+  </head>
+    <body class="">
+        <div class="wrapper">
+            <nav class="navbar">
+    
+        <progress class="content_progress" max="0" value="0"></progress>
+    
+    <div class="container">
+        
+            <div class="navbar-header header-back2home-logo">
+                <span class="logo_mark" >>$</span>
+                <a href="https://example.com">
+                    <span class="logo_text" >cd /home/</span>
+                    <span class="logo_cursor" ></span>
+                </a>
+            </div>
+        
+        <div class="navbar-right">
+                
+                <span class="menu">
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="/about/" title="">About</a>
+                
+                <span class="divide"></span>
+                <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-dark-mode"></i></a>
+                </span>
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+    
+        <progress class="content_progress" max="0" value="0"></progress>
+    
+     <div class="container">
+        <div class="navbar">
+            <div class="navbar-header header-logo">
+                    <a href="https://example.com">AhriJ`s Blog</a>
+            </div>
+            <div class="navbar-right">
+                <div><a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-dark-mode"></i></a></div>
+                <div class="menu-toggle">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                <nav class="mb-md">
+                    
+                    
+                        <a class="menu-item" href="/posts/" title="">
+                            <h3>Blog</h3>
+                            <div class="menu-active"></div>
+                        </a>
+                    
+                        <a class="menu-item" href="/categories/" title="">
+                            <h3>Categories</h3>
+                            <div class="menu-active"></div>
+                        </a>
+                    
+                        <a class="menu-item" href="/tags/" title="">
+                            <h3>Tags</h3>
+                            <div class="menu-active"></div>
+                        </a>
+                    
+                        <a class="menu-item" href="/about/" title="">
+                            <h3>About</h3>
+                            <div class="menu-active"></div>
+                        </a>
+                    
+                </nav>
+        </div>
+    </div>
+</nav>
+            <main class="main">
+                <div class="container">
+                    
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">Sed 入门教程</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="https://example.com" rel="author">邹英杰</a> with ♥
+                <span class="post-time">
+                on <time datetime=2019-10-29 itemprop="datePublished">October 29, 2019</time>
+                </span>
+                in
+                
+                <i class="iconfont icon-folder"></i>
+                <span class="post-category">
+                        
+                        
+                        
+                          <a href="https://example.com/categories/shell/"> Shell, </a>
+                        
+                        
+                </span>
+                <span class="post-word-count">3047 words</span>
+        </div>
+    </header>
+
+    <div class="post-content">
+        
+
+        
+        
+
+        
+        
+        
+        
+        
+
+        
+        
+        
+
+        <h3 id="一-sed-简介">一. Sed 简介</h3>
+<p>Sed（Stream Editor），翻译过来就是流编辑器，通过 Sed 可以对 <em><strong>标准输出或者文件逐行</strong></em> 进行处理。</p>
+<h4 id="1-sed-的命令格式">1. Sed 的命令格式</h4>
+<p>Sed 的命令格式主要有下面两种：</p>
+<ul>
+<li>基于标准输出的文本处理</li>
+</ul>
+<pre><code>stdout | sed [option]  &quot;pattern command&quot;
+</code></pre><ul>
+<li>基于文件的文本处理</li>
+</ul>
+<pre><code>sed [option] &quot;pattern command&quot; file
+</code></pre><p>可以看到命令主要由三部分组成：</p>
+<ul>
+<li><code>option</code>：Sed 选项。用来控制处理流程，比如如何展示，是否将文本处理作用于源文件等。</li>
+<li><code>pattern</code>：匹配格式。用来进行文本匹配，结合正则表达式可以实现非常强大的文本匹配。</li>
+<li><code>command</code>：Sed 命令。用来指明进行什么操作，比如追加、替换、删除等操作。</li>
+</ul>
+<p>由此我们可以想到 Sed 的工作方式就是： <em><strong>遍历标准输出或者某个文件的每一行，然后对每一行的内容通过 <code>pattern</code> 进行匹配，将匹配到的内容基于 <code>command</code> 命令进行处理，然后根据 <code>option</code> 选项做对应的操作</strong></em>。接下来就看下 Sed 中常用的选项、命令的作用以及常用的 pattern 匹配模式。</p>
+<h3 id="二-sed-的常用选项">二. Sed 的常用选项</h3>
+<h4 id="-n只显示-sed-处理后的内容"><code>-n</code>：只显示 Sed 处理后的内容</h4>
+<p>首先我们创建一个测试文件，写入测试内容</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">
+<span style="color:#75715e"># 测试文件内容</span>
+<span style="color:#960050;background-color:#1e0010">$</span> cat a<span style="color:#f92672">.</span>txt
+first line
+second line
+third line
+forth
+</code></pre></div><p>不加选项，使用 <code>p</code> 命令将测试文件的内容打印一遍，<code>/line/</code> 表示匹配有 line 的行。按理说应该只有 3 行匹配，但最终所有的原文都会被打印了一遍。</p>
+<pre><code>$ sed &quot;/line/p&quot; a.txt 
+first line
+first line
+second line
+second line
+third line
+third line
+forth
+</code></pre><p>现在加上 <code>-n</code> 选项重新执行命令，可以看到现在只打印匹配到的行了。</p>
+<pre><code>$ sed -n &quot;/line/p&quot; a.txt
+first line
+second line
+third line
+</code></pre><h4 id="-e以选项中指定的-script-处理文本可以通过--e-选项指定多个命令"><code>-e</code>：以选项中指定的 script 处理文本，可以通过 <code>-e</code> 选项指定多个命令</h4>
+<p>如果我们想匹配 <code>line</code> 和 <code>LINE</code>，那么可以通过两个 -e 进行指定两个匹配模式，示例如下</p>
+<pre><code>$ cat a.txt
+first LINE
+second line
+third line
+
+$ sed -n  -e &quot;/line/p&quot; -e &quot;/LINE/p&quot; a.txt
+first LINE
+second line
+third line
+</code></pre><h4 id="-r支持扩展正则表达式"><code>-r</code>：支持扩展正则表达式</h4>
+<p>上面我们通过两个 <code>-e</code> 指定了两个匹配模式，分别查找 <code>line</code> 和 <code>LINE</code> 所在的行，其实这可以通过正则表达式实现，</p>
+<p>在扩展正则表达式中有逻辑或 <code>|</code> 的操作，Sed 默认不支持该操作，需要通过 <code>-r</code> 选项使其支持扩展正则表达式，然后就可以使用逻辑或操作实现多个模式的匹配了，示例如下：</p>
+<pre><code>$ sed -n -r &quot;/line|LINE/p&quot; a.txt
+first LINE
+second line
+third line
+</code></pre><h4 id="-f以选项中指定的-script-文件处理文本"><code>-f</code>：以选项中指定的 script 文件处理文本</h4>
+<p>当操作的选项过多时，使用 <code>-e</code> 在命令行中指定多个显得有些繁琐，我们可以将 Sed 命令写到一个脚本中，然后通过 <code>-f</code> 命令指定该脚本运行即可。例如上面的 <code>sed -n  -e &quot;/line/p&quot; -e &quot;/LINE/p&quot; a.txt</code> 命令可以通过执行 sed 脚本替换如下：</p>
+<pre><code>$ cat find.sed
+/line/p
+/LINE/p
+
+
+$ sed -n -f find.sed a.txt
+first LINE
+second line
+third line
+</code></pre><p>下面是 [Linux命令行与shell脚本编程大全] (<a href="https://book.douban.com/subject/26854226/">https://book.douban.com/subject/26854226/</a>) 中的一个例子：</p>
+<p>给出几行文本，将每行中的 brown 替换为 green，将 fox 替换为 elephant，将 dog 替换为 cat。如果通过 <code>-e</code> 选项则需要如下编写</p>
+<pre><code>➜  sed -e '
+s/brown/green/
+s/fox/elephant/
+s/dog/cat/' data1.txt
+The quick green elephant jumps over the lazy cat.
+The quick green elephant jumps over the lazy cat.
+The quick green elephant jumps over the lazy cat.
+The quick green elephant jumps over the lazy cat.
+</code></pre><p>通过编写脚本并使用 <code>-f</code> 选项就可以简化为下面的操作</p>
+<pre><code># sed 脚本内容
+➜  cat script1.sed
+s/brown/green/
+s/fox/elephant/
+s/dog/cat/
+
+# 通过 -f 指定 sed 脚本文件
+➜  sed -f script1.sed data1.txt
+The quick green elephant jumps over the lazy cat.
+The quick green elephant jumps over the lazy cat.
+The quick green elephant jumps over the lazy cat.
+The quick green elephant jumps over the lazy cat.
+</code></pre><h4 id="-i将编辑作用到源文件"><code>-i</code>：将编辑作用到源文件</h4>
+<p>Sed 的编辑默认是不会修改源文件的，我们可以通过 <code>-i</code> 选项改变这一点。示例如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Python" data-lang="Python"><span style="color:#75715e"># 将 line 替换为 LINE 并打印</span>
+<span style="color:#960050;background-color:#1e0010">$</span> sed <span style="color:#f92672">-</span>n <span style="color:#e6db74">&#34;s/line/LINE/g;p&#34;</span> a<span style="color:#f92672">.</span>txt
+first LINE
+second LINE
+third LINE
+
+<span style="color:#75715e"># 源文件没有变化</span>
+<span style="color:#960050;background-color:#1e0010">$</span> cat a<span style="color:#f92672">.</span>txt
+first LINE
+second line
+third line
+
+<span style="color:#75715e"># 添加 -i 选项重新操作</span>
+<span style="color:#960050;background-color:#1e0010">$</span> sed <span style="color:#f92672">-</span>n <span style="color:#f92672">-</span>i <span style="color:#e6db74">&#34;s/line/LINE/g;p&#34;</span> a<span style="color:#f92672">.</span>txt
+
+<span style="color:#75715e"># 源文件也发生了改变</span>
+<span style="color:#960050;background-color:#1e0010">$</span> cat a<span style="color:#f92672">.</span>txt
+first LINE
+second LINE
+third LINE
+</code></pre></div><h4 id="-h显示帮助"><code>-h</code>：显示帮助</h4>
+<pre><code>$ sed -h
+sed: invalid option -- 'h'
+Usage: sed [OPTION]... {script-only-if-no-other-script} [input-file]...
+
+  -n, --quiet, --silent
+                 suppress automatic printing of pattern space
+  -e script, --expression=script
+                 add the script to the commands to be executed
+  -f script-file, --file=script-file
+                 add the contents of script-file to the commands to be executed
+
+ . . . 
+</code></pre><h3 id="三-sed-常用的匹配格式">三. Sed 常用的匹配格式</h3>
+<p>Sed 可以通过行号、行区间、正则匹配、正则区间匹配进行文本的匹配。简要总结如下：</p>
+<h4 id="110command-行号匹配匹配第-10-行">【1】<code>10command</code>: 行号匹配，匹配第 10 行</h4>
+<p><em><strong>示例</strong></em></p>
+<pre><code># 删除第 10 行
+sed -i &quot;10d&quot; data.tx
+</code></pre><h4 id="21015command-行区间匹配匹配-10--15-行">【2】<code>10，15command</code>: 行区间匹配，匹配 10 ~ 15 行</h4>
+<p><em><strong>示例</strong></em></p>
+<pre><code># 删除 10 ~ 15 行
+sed -i &quot;10,15d&quot; data.txt
+</code></pre><h4 id="3105command-行号范围匹配">【3】<code>10，+5command</code>: 行号，范围匹配</h4>
+<p><em><strong>示例</strong></em></p>
+<pre><code># 从第 10 行开始，删除后面 5 行，即删除 10 ~ 16 行
+sed -i &quot;10,+5d&quot; data.txt
+
+</code></pre><h4 id="4-patterncommand-正则匹配">【4】 <code>/pattern/command</code>: 正则匹配</h4>
+<p><em><strong>示例</strong></em></p>
+<pre><code># 删除以 Add 开头的行
+sed -i &quot;/^Add/d&quot; data.txt
+</code></pre><h4 id="5pattern1pattern2command-正则区间匹配">【5】<code>/pattern1/,/pattern2/command</code>: 正则区间匹配</h4>
+<p>从匹配到 pattern1 的行开始，到匹配到 pattern2 的行结束，如果一直没有匹配到 <code>pattern2</code>，那么 Sed 会一直匹配到文本最有一行。</p>
+<p><em><strong>示例</strong></em></p>
+<pre><code>$ cat -n data1.txt
+     1	First Line
+     2	Add two
+     3	Third Line
+     4	Subtract three
+     5	SecondLine
+
+
+# 从以 Add 开头的行开始，删除到以 Substract 的行结束，预期删除 2 ~ 4 行的数据
+$ sed -i &quot;/^Add/, /^Subtract/d&quot; data1.txt
+
+$ cat -n data1.txt
+     1	First Line
+     2	SecondLine
+</code></pre><h4 id="6pattern13command-正则行号区间匹配">【6】<code>/pattern1/,3command</code>: 正则、行号区间匹配</h4>
+<p>可以将行号和正则匹配进行过混合使用，两者位置没有限制。</p>
+<p><em><strong>示例</strong></em></p>
+<pre><code>$ cat data3.txt
+First 1
+Second 2
+Third 3
+Forth 4
+Fifth 5
+
+# 打印 从匹配到 First 的行到 第 3 行
+$ sed -n &quot;/First/, 3p&quot; data3.txt
+First 1
+Second 2
+Third 3
+
+# 从第 3 行开始打印，一直到匹配诶到 Forth 的行
+# root @ node1 in ~/Shell/mooc-shell/cp06 [9:15:13]
+$ sed -n &quot;3,/Forth/p&quot; data3.txt
+Third 3
+Forth 4
+
+</code></pre><h3 id="四-sed-的常用命令">四. Sed 的常用命令</h3>
+<p>了解了常见的选项和匹配模式，接下来就是了解常用的命令了。命令的使用，就是结合上面提到的匹配模式，对匹配到的文本进行一系列的增删改查操作。</p>
+<h4 id="1p打印命令">【1】<code>p</code>：打印命令</h4>
+<p><em><strong>示例 1：打印第 3 行的内容</strong></em></p>
+<pre><code>$ cat -n line.txt
+     1	First line
+     2	Second line
+     3	Third line
+$ sed -n &quot;3p&quot; line.txt
+Third line
+</code></pre><p><em><strong>示例 2：打印 3 到 5 行的内容</strong></em></p>
+<pre><code>$ sed -n &quot;3,5p&quot; line.txt
+Third line
+4 line
+5 line
+</code></pre><p><em><strong>示例 3：打印以 root 开头的行</strong></em></p>
+<p>我们查询 <code>/etc/passwd</code> 文件中 root 用户的内容，命令如下：</p>
+<pre><code>$ sed -n &quot;/^root/p&quot; /etc/passwd
+root❌0:0:root:/root:/bin/zsh
+</code></pre><h4 id="2aiwr-追加命令">【2】<code>a/i/w/r</code> 追加命令</h4>
+<p>追加相关的命令有 <code>a</code>、<code>i</code>、<code>r</code>、<code>w</code> 四个，分别示例如下：</p>
+<pre><code># 演示文本内容
+$ cat data.txt
+Dog
+Cat
+Orange
+Apple
+
+</code></pre><ul>
+<li><code>a</code> 行后追加</li>
+</ul>
+<pre><code># 在第 1 ~ 2 行后面添加 This is animal 的文本
+$ sed  &quot;1,2a This is animal&quot; data.txt
+Dog
+This is animal
+Cat
+This is animal
+Orange
+Apple
+</code></pre><ul>
+<li><code>i</code> 行前追加</li>
+</ul>
+<pre><code># 在第 3 ~ 4 前面添加 This is fruit 的文本
+$ sed &quot;3,4i This is fruit&quot; data.txt
+Dog
+Cat
+This is fruit
+Orange
+This is fruit
+Apple
+
+</code></pre><ul>
+<li><code>r</code> 从外部文件读取，追加到匹配行后面</li>
+</ul>
+<pre><code># 读取 test.txt 文件的内容，追加到 1 ~ 2 行后面
+$ sed &quot;1,2r test.txt&quot; data.txt
+Dog
+I come from a file.
+Cat
+I come from a file.
+Orange
+Apple
+</code></pre><ul>
+<li><code>w</code> 将匹配的行写入外部文件</li>
+</ul>
+<pre><code># 从 Dog 所在的行开始匹配，直到 Orange 所在行，将所有匹配到的行写入 test.txt 文件
+$ sed -n &quot;/Dog/, /Orange/w test.txt&quot; data.txt
+
+$ cat test.txt
+Dog
+Cat
+Orange
+</code></pre><h4 id="3s-替换命令">【3】<code>s</code>: 替换命令</h4>
+<p>替换命令的格式如下:</p>
+<pre><code># 将匹配到 old 文本替换为 new 文本，如果一行中有多处匹配，默认只替换第一个
+s/old/new/flags：
+</code></pre><p>flag 表示替换标记，有下面四个选项：</p>
+<ul>
+<li><code>数字</code>：将匹配到的到的第 N 处进行替换</li>
+<li><code>g</code>：将匹配到的所有文本进行替换</li>
+<li><code>p</code>：将原先行打印出来</li>
+<li><code>w</code>：将替换的结果写到文件中</li>
+</ul>
+<p>一般来说 <code>数字</code> 和 <code>g</code> 用的较多，下面看几个相关示例：</p>
+<pre><code># 测试文件内容
+$ cat test.txt
+line line line
+cat  line  cat line
+dog  line  dog line
+</code></pre><p><em><strong>示例 1：默认替换第 1 处</strong></em></p>
+<pre><code># 将每行中的 line 替换为 大写的 LINE
+$ sed &quot;s/line/LINE/&quot; test.txt
+LINE line line
+cat  LINE  cat line
+dog  LINE  dog line
+</code></pre><p><em><strong>示例 2：替换第 2 处</strong></em></p>
+<pre><code>$ sed &quot;s/line/LINE/2&quot; test.txt
+line LINE line
+cat  line  cat LINE
+dog  line  dog LINE
+</code></pre><p><em><strong>示例 3：全部替换</strong></em></p>
+<pre><code>$ sed &quot;s/line/LINE/g&quot; test.txt
+LINE LINE LINE
+cat  LINE  cat LINE
+dog  LINE  dog LINE
+</code></pre><p><em><strong>示例 4：从第 2 处开始替换</strong></em></p>
+<pre><code>$ sed &quot;s/line/LINE/2g&quot; test.txt
+line LINE LINE
+cat  line  cat LINE
+dog  line  dog LINE
+</code></pre><h4 id="4d-删除命令">【4】<code>d</code>: 删除命令</h4>
+<p>在上面介绍匹配模式的部分 <code>-d</code> 命令已经使用过了，所以这里就不做赘述了。</p>
+<h3 id="四-反向引用">四. 反向引用</h3>
+<p>有时候我们希望在匹配到的文本基础之上进行改进，而不是完全替换掉。比如希望将文本中的 <code>apple</code> 全部变为复数形式 <code>apples</code>，这时候直接引用原文本，在原文本基础之上加一个 s 是很方便的操作，Sed 有两种方式可以实现对匹配文本的引用：</p>
+<h5 id="1-使用符号">1. 使用<code>&amp;</code>符号</h5>
+<p><em><strong>示例</strong></em></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Shell" data-lang="Shell">$ cat apple.txt
+I have some apple
+
+$ sed  <span style="color:#e6db74">&#34;s/apple/&amp;s/&#34;</span> apple.txt
+I have some apples
+</code></pre></div><p>可以看到原文本中的 <code>apple</code> 变为了 <code>apples</code>，<code>&amp;</code> 符号代表的就是匹配到的文本。</p>
+<pre><code>
+
+# root @ server001 in ~/Shell/mooc-shell/cp06 [9:16:07]
+$ sed -i &quot;s/Java../&amp;s/g&quot; test.txt
+
+# root @ server001 in ~/Shell/mooc-shell/cp06 [9:16:28]
+$ cat test.txt
+I learn Javaees
+I learn Javadds
+</code></pre><h5 id="2-使用-n-模式匹配-n-表示数字">2. 使用 <code>\N</code> 模式匹配 （N 表示数字）</h5>
+<p><code>\N</code> 也可以引用匹配到文本，和 <code>&amp;</code> 的不同在于:</p>
+<blockquote>
+<p>&amp; 只能引用全部，而 <code>\N</code> 的格式可以引用部分文本。可以将需要引用的部分用括号括起来，然后 <code>\N</code> 只会引用被括起来的部分，<code>\1</code> 表示被括起来的第 1 处，<code>\2</code> 表示第二处，依次类推。</p>
+</blockquote>
+<p>Sed 中命令中的括号需要进行转义，示例如下：</p>
+<pre><code>$ cat test.txt
+Cats and Dogs
+
+# root @ node1 in ~/Shell/mooc-shell/cp06 [21:04:20]
+# 匹配模式为 Cats + 字符串 + dogs 的文本
+# 通过加括号，\1 表示 Cats，\2 表示 Dogs，将匹配到的两个单词中间加 `` love ``
+$ sed &quot;s/\(Cats\).*\(Dogs\)/\1 love \2/&quot; test.txt
+Cats love Dogs
+</code></pre><p>以上即为 Sed 的简记，重点要理解 Sed 的工作方式，然后要熟练掌握还需要多加练习才行。</p>
+    </div>
+
+    <div class="post-copyright">
+            
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>邹英杰 </span>
+                </p>
+            
+
+            
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=https://example.com/2019/sed-introduction/>https://example.com/2019/sed-introduction/</span>
+            </p>
+            
+            
+            <p class="copyright-item lincese">
+                本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可
+            </p>
+            
+    </div>
+
+
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-tag"></i>Tag(s):
+            
+            <span class="tag"><a href="https://example.com/tags/shell/">
+                    #Shell</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> ·
+                <span><a href="https://example.com">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://example.com/2019/%E9%82%A3%E4%BA%9B%E5%B9%B3%E6%B7%A1%E7%9A%84%E4%B8%80%E5%A4%A9/" class="prev" rel="prev" title="那些平淡的一天"><i class="iconfont icon-left"></i>&nbsp;那些平淡的一天</a>
+        
+        
+        <a href="https://example.com/2019/devops%E7%AC%94%E8%AE%B0-%E4%BB%8E0%E5%BC%80%E5%A7%8B%E6%90%AD%E5%BB%BAjenkins%E6%B5%81%E6%B0%B4%E7%BA%BF/" class="next" rel="next" title="DevOps笔记-从0开始搭建Jenkins流水线">DevOps笔记-从0开始搭建Jenkins流水线&nbsp;<i class="iconfont icon-right"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+        
+            
+                <div id="gitalk-container"></div>
+<link rel="stylesheet" href="https://cdn.bootcss.com/gitalk/1.5.2/gitalk.css">
+<script src="https://cdn.bootcss.com/gitalk/1.5.2/gitalk.min.js"></script>
+<script>
+    const gitalk = new Gitalk({
+
+        clientID: '644ea43e1177645f4f35',
+        clientSecret: '40a7db92fa7b2f61bf9f93956a7db0a6ac84ad1f',
+        repo: 'zouyingjie.github.io',
+        owner: 'zouyingjie',
+        admin: ['zouyingjie'],
+        id: location.pathname, 
+        distractionFreeMode: false 
+    });
+    (function () {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.';
+            return;
+        }
+        gitalk.render('gitalk-container');
+    })();
+</script>
+
+            
+        
+    </div>
+</article>
+                </div>
+            </main>
+            <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2017 - 2021</span>
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i>
+         </span>
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://example.com">邹英杰</a> | </span>
+         
+
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/Mogeko/Mogege" target="_blank" rel="external nofollow">Mogege</a></span>
+    </div>
+</footer>
+
+
+
+
+
+
+<script defer src="/js/vendor_main.min.js"></script>
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/pangu@4.0.7/dist/browser/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script> pangu.spacingPage();</script>
+
+
+
+
+
+        </div>
+    </body>
+</html>
