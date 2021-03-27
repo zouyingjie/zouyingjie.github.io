@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Abouts on AhriJ`s Blog</title>
+    <link>https://zouyingjie.cn/about/</link>
+    <description>Recent content in Abouts on AhriJ`s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    
+	<atom:link href="https://zouyingjie.cn/about/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title></title>
+      <link>https://zouyingjie.cn/about/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zouyingjie.cn/about/about/</guid>
+      <description>一只猫</description>
+    </item>
+    
+  </channel>
+</rss>
