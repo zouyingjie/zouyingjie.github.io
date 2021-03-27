@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>DevOps笔记-Jenkins使用简记&#34; - 邹英杰的个人博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="Jenkins 踩坑总结">
+		<meta property="og:title" content="DevOps笔记-Jenkins使用简记&#34;" />
+<meta property="og:description" content="Jenkins 踩坑总结" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/devops%E7%AC%94%E8%AE%B0-jenkins%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/" />
+<meta property="article:published_time" content="2019-11-04T15:50:53+08:00" />
+<meta property="article:modified_time" content="2019-11-04T15:50:53+08:00" />
+
+		<meta itemprop="name" content="DevOps笔记-Jenkins使用简记&#34;">
+<meta itemprop="description" content="Jenkins 踩坑总结">
+<meta itemprop="datePublished" content="2019-11-04T15:50:53&#43;08:00" />
+<meta itemprop="dateModified" content="2019-11-04T15:50:53&#43;08:00" />
+<meta itemprop="wordCount" content="1142">
+
+
+
+<meta itemprop="keywords" content="Jenkins," />
+		<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="DevOps笔记-Jenkins使用简记&#34;"/>
+<meta name="twitter:description" content="Jenkins 踩坑总结"/>
+
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo logo--mixed">
+		<a class="logo__link" href="/" title="邹英杰的个人博客" rel="home">
+			<div class="logo__item logo__imagebox">
+					<img class="logo__img" src="/img/zouyingjie.jpg">
+				</div><div class="logo__item logo__text">
+					<div class="logo__title">邹英杰的个人博客</div>
+					<div class="logo__tagline">Be a good man</div>
+				</div>
+		</a>
+	</div>
+		<div class="divider"></div>
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">DevOps笔记-Jenkins使用简记&#34;</h1>
+			<div class="post__meta meta"><div class="meta__item-author meta__item">
+	<svg class="meta__icon icon icon-author" width="16" height="16" viewBox="0 0 12 16"><path d="M6 1c2.2 0 3.5 2 3.5 4.5C9.5 7 8.9 8.2 8 9c2.9.8 4 2.5 4 5v1H0v-1c0-2.5 1.1-4.2 4-5-.9-.8-1.5-2-1.5-3.5C2.5 3 3.8 1 6 1z"/></svg><span class="meta__text">邹英杰</span>
+</div>
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class="meta__text" datetime="2019-11-04T15:50:53&#43;08:00">2019-11-04</time></div></div>
+		</header>
+<div class="post__toc toc">
+	<div class="toc__title">Page content</div>
+	<div class="toc__menu">
+		<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#一-安装启动-jenkins">一. 安装启动 Jenkins</a></li>
+        <li><a href="#二-参数与环境变量的定义">二. 参数与环境变量的定义</a></li>
+        <li><a href="#三-github-push-与-github-pr-触发任务">三. Github Push 与 Github PR 触发任务</a></li>
+        <li><a href="#四-接入-sonarqube-代码检测">四. 接入 SonarQube 代码检测</a></li>
+        <li><a href="#五-读取-yamljson-文件内容">五. 读取 Yaml/Json 文件内容</a></li>
+        <li><a href="#六-创建共享库封装通用代码">六. 创建共享库封装通用代码</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+	</div>
+</div><div class="content post__content clearfix">
+			<p>最近用 Jenkins 将原来公司自研的 CICD 工具给替换掉了， Jenkins 本身的文档并不是很明晰，很多问题都需要自己尝试和搜索才能解决，这里简要记录下期间遇到的一些问题的解决方法。</p>
+<h3 id="一-安装启动-jenkins">一. 安装启动 Jenkins</h3>
+<h4 id="1-安装-java">1. 安装 Java</h4>
+<pre><code>sudo apt update
+sudo apt install openjdk-8-jdk
+</code></pre><h4 id="2-添加密钥与仓库">2. 添加密钥与仓库</h4>
+<pre><code>wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
+
+sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ &gt; /etc/apt/sources.list.d/jenkins.list'
+
+</code></pre><h4 id="3-安装-jenkins">3. 安装 Jenkins</h4>
+<pre><code>sudo apt update
+sudo apt install jenkins
+</code></pre><p>安装完成后通过 systemctl 命令可以查看状态</p>
+<pre><code>$ systemctl status jenkins
+● jenkins.service - LSB: Start Jenkins at boot time
+Loaded: loaded (/etc/init.d/jenkins; generated)
+Active: active (exited) since Wed 2018-08-22 13:03:08 PDT; 2min 16s ago
+    Docs: man:systemd-sysv-generator(8)
+    Tasks: 0 (limit: 2319)
+CGroup: /system.slice/jenkins.service
+</code></pre><h4 id="4-修改相关配置">4. 修改相关配置</h4>
+<p>通过 apt-get 安装启动后， Jenkins 工作目录如下：</p>
+<ul>
+<li><code>/etc/default/jenkins</code>: 配置文件地址</li>
+<li><code>/var/lib/jenkins</code>    : Jenkins 工作目录</li>
+<li><code>/var/cache/jenkins</code>  : Jenkins 缓存目录</li>
+<li><code>/var/log/jenkins</code>    : Jenkins 日志目录</li>
+</ul>
+<p>打开 <code>/etc/default/jenkins</code> 文件可以针对我们的要求对相应的配置进行设置，我最常改的设置有两个：</p>
+<p><em><strong>修改端口</strong></em></p>
+<pre><code># 默认是 8080，我这里改成了 8081
+HTTP_PORT=8081
+</code></pre><p><em><strong>修改用户和用户组</strong></em></p>
+<p>Jenkins 启动时会创建名为 <code>jenkins</code> 的用户名和用户组，这是 Jenkins 默认执行命令的用户，如果采用默认的用户，执行某些操作时可能会报没有权限的问题，因此建议改成自己常用的 user，比如我最常用的用户是 <code>ubuntu</code>，修改如下：</p>
+<pre><code># 默认是 jenkins
+JENKINS_USER  = ubuntu
+JENKINS_GROUP = ubuntu
+</code></pre><p>修改完重启 Jenkins 之后就可以通过 http://server_ip:8081 进行访问了，第一次访问会要求输入管理员密码，该密码会在 Jenkins 第一次启动时打印到日志中，从日志中复制出来填入即可。</p>
+<p><img src="https://zouyingjie-blog.oss-cn-beijing.aliyuncs.com/jenkins-admin-passwd.jpg" alt=""></p>
+<p><img src="https://zouyingjie-blog.oss-cn-beijing.aliyuncs.com/jenkins-pwd-02.png" alt=""></p>
+<p>初次访问一般会提示安装插件，选择安装默认插件即可。</p>
+<h3 id="二-参数与环境变量的定义">二. 参数与环境变量的定义</h3>
+<h4 id="1-定义环境变量">1. 定义环境变量</h4>
+<p>Jenkins pipeline 允许我们定义全局或者 stage 范围的环境变量，定义好通过 env.name 访问即可，对于一些需要在整个 pipeline 中用到的信息，可以考虑用环境变量进行定义，示例如下：</p>
+<pre><code>pipeline {
+    agent any
+
+    environment {
+        GLOBAL_ENV = 'global'
+    }
+
+    stages {
+        stage('Build') {
+            environment { 
+                STAGE_ENV = &quot;stage&quot;
+            }
+            steps {
+                echo &quot;${env.GLOBAL_ENV}&quot;
+                echo &quot;${env.stage}&quot;
+
+            }
+        }
+    }
+}
+</code></pre><h4 id="2-定义参数">2. 定义参数</h4>
+<p>对于一些动态的内容，可以考虑采用参数的形式，Jenkins pipeline 定义参数有两种形式：</p>
+<ul>
+<li><em><strong>Jenkins 管理界面定义</strong></em></li>
+<li><em><strong>pipeline 代码定义</strong></em></li>
+</ul>
+<h5 id="1jenkins-界面设置参数">【1】Jenkins 界面设置参数</h5>
+<p>首先可以在 Jenkins 的 Job 配置界面进行参数化构建，选择对应类型的参数，填入参数名、默认值和描述即可，如图：</p>
+<p><img src="https://zouyingjie-blog.oss-cn-beijing.aliyuncs.com/jenkins-params-build.png" alt=""></p>
+<h5 id="2pipeline-内定义参数">【2】pipeline 内定义参数</h5>
+<p>Jenkins 提供了 <code>parameters</code> 块来定义参数，官方文档示例如下，定义了 <code>string</code> 类型的  <code>PERSON</code> 参数，并设置了默认值为 <code>Mr Jenkins</code>，然后通过 <code>${params.PERSON}</code> 即可访问。</p>
+<pre><code>Jenkinsfile (Declarative Pipeline)
+pipeline {
+    agent any
+    parameters {
+        string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
+    }
+    stages {
+        stage('Example') {
+            steps {
+                echo &quot;Hello ${params.PERSON}&quot;
+            }
+        }
+    }
+}
+</code></pre><h5 id="3参数覆盖问题">【3】参数覆盖问题</h5>
+<p>在 pipeline 中定义的参数，会自动同步到 Jenkins Job 配置界面中显示，如果一个参数同时在配置界面和 pipeline 中进行了定义，那么 pipeline 中定义的默认值会覆盖掉在 Jenkins Job 设置界面设定的值。</p>
+<p>理想的方式是在 pipeline 中通过 <code>parameters</code> 定义参数并设置默认值，如果在 Jenkins Job 中没有显式配置参数，则使用默认值，如果进行了显式配置，则使用配置的值，可以通过三元运算符解决这个问题，示例如下：</p>
+<pre><code>Jenkinsfile (Declarative Pipeline)
+pipeline {
+    agent any
+    parameters {
+        string(name: 'PERSON', defaultValue: params.PERSION ?:'Mr Jenkins', description: 'Who should I say hello to?')
+    }
+    stages {
+        stage('Example') {
+            steps {
+                echo &quot;Hello ${params.PERSON}&quot;
+            }
+        }
+    }
+}
+</code></pre><p>这样每次定义参数前都先判断一下是否已经传递了参数值了，如果已经传递，则参数的值就是传递过来的值，如果没有则采用默认值。</p>
+<h3 id="三-github-push-与-github-pr-触发任务">三. Github Push 与 Github PR 触发任务</h3>
+<h4 id="1-github-设置-webhook">1. Github 设置 webhook</h4>
+<p>首先需要在 Github 对应的仓库中配置 webhook，地址是 https://jenkins_addr/github-webhook/，</p>
+<p><img src="https://zouyingjie-blog.oss-cn-beijing.aliyuncs.com/jenkins-webhok.png" alt=""></p>
+<p>然后选择需要发送请求的事件，我需要在代码 Push 和提交 PR 的时候触发 pipeline 执行，因此勾选了下面两个：</p>
+<p><img src="https://zouyingjie-blog.oss-cn-beijing.aliyuncs.com/github-webhook-pr.png" alt=""></p>
+<p>这样在仓库有代码 Push 和 PR 操作的时候就会向我们的 hook 地址发送请求了，每次发送都会在 webhook 下面生成记录，如图所示：</p>
+<p><img src="https://zouyingjie-blog.oss-cn-beijing.aliyuncs.com/WX20191212-124051%402x.png" alt=""></p>
+<p>可以在这里手动重新发送便于测试。</p>
+<h4 id="2-jenkins-创建-pipeline-设置项目地址">2. Jenkins 创建 pipeline 设置项目地址</h4>
+<p>首先在 Jenkins 中创建 pipeline，然后在 Github 项目中填入地址，用于标识该 pipeline 监听的项目，如图：</p>
+<p><img src="https://zouyingjie-blog.oss-cn-beijing.aliyuncs.com/github-pr-trigger-01.png" alt=""></p>
+<h4 id="3-github-push-触发">3. Github Push 触发</h4>
+<p>Github Push 的触发需要安装 <code>Github plugin</code> 插件，然后在 Job 的 <code>Build Trigger</code> 中勾选 <code>GitHub hook trigger for GITScm polling</code> 即可，如图：
+<img src="https://zouyingjie-blog.oss-cn-beijing.aliyuncs.com/github-trigger-02.png" alt=""></p>
+<p>为了保证触发，项目中必须已经添加了 Jenkinsfile 文件，并在 Job 中指定，如图所示，设置分支和 Jenkinsfile 路径，该 Job 就会监听对应分支的 Github Push 事件。</p>
+<p><img src="https://zouyingjie-blog.oss-cn-beijing.aliyuncs.com/github-trigger-03.png" alt=""></p>
+<p><em><strong>注意事项</strong></em></p>
+<ul>
+<li>我们必须先手动执行一次任务，后续才可以通过 Github Push 触发。</li>
+</ul>
+<h4 id="2-github-pr-触发">2. Github PR 触发</h4>
+<p>PR 的触发需要使用 <code>GitHub Integration Plugin</code> 插件，安装后在 Job 的 Build Trigger 就会有对应的选项，如下：</p>
+<p><img src="https://zouyingjie-blog.oss-cn-beijing.aliyuncs.com/github-trigger-05.png" alt=""></p>
+<p>可以看到有四种触发的方式，这里选择了 hook 触发，然后在下面选择要监听的事件，这里选择了 打开、关闭 PR 以及 PR 中的 commit 发生变化时执行触发。</p>
+<p>除了在 Job 中配置 PR 触发之外，还需要在 <code>Manage Jenkins -&gt; Configure System -&gt; Github Server</code> 配置 Server，如图</p>
+<p><img src="https://zouyingjie-blog.oss-cn-beijing.aliyuncs.com/github-trigger-06.png" alt=""></p>
+<p>Name 可以自定义，API URL 填写默认的 <code>https://api.github.com</code> 即可，token 填写在 Github 中生成的 token，这里有两点要求：</p>
+<ul>
+<li>生成 token 的成员必须对仓库有 admin 权限</li>
+<li>选中 <code>admin:repo_hook</code> 选项</li>
+</ul>
+<h3 id="四-接入-sonarqube-代码检测">四. 接入 SonarQube 代码检测</h3>
+<p>Jenkins 可以通过接入 <a href="https://www.sonarqube.org/">SonarQube</a> 在 CI/CD 过程中执行代码检测并将结果传送到 SonarQube Server 中，具体步骤如下：</p>
+<h4 id="1-安装插件">1. 安装插件</h4>
+<p>Jenkins 需要先安装 <code>SonarQube Scanner for Jenkins</code> 插件，在 <code>Manage Jenkins -&gt; Plugin Manager</code> 下搜索安装即可：</p>
+<p><img src="https://zouyingjie-blog.oss-cn-beijing.aliyuncs.com/sonar-plugin.png" alt=""></p>
+<h4 id="2-部署并配置-sonarserver">2. 部署并配置 SonarServer</h4>
+<p>参考官方文档 <a href="https://docs.sonarqube.org/latest/setup/get-started-2-minutes/">Get Started in Two Minutes Guide</a> 即可，这里不再赘述。
+安装完成后就可以在 Jenkins 中配置 SonarQube Server 的地址了，需要用到 token 进行验证，点击 SonarQube 的用户信息，在安全配置下生成对应的 token 复制即可，如图：</p>
+<p><img src="https://zouyingjie-blog.oss-cn-beijing.aliyuncs.com/sonar-admin-token.png" alt=""></p>
+<p>完成 SonarServer 的 安装和 token 生成后，在 <code>Manage Jenkins -&gt; Configure System -&gt;SonarQube servers（只有安装 SonarQube Scanner for Jenkins 插件后才会有该配置项）</code> 中设置 Server 地址，如下：</p>
+<p><img src="https://zouyingjie-blog.oss-cn-beijing.aliyuncs.com/qube-server.png" alt=""></p>
+<ul>
+<li>Name 是自定义的标识名称</li>
+<li>Server_URL 和 token 就是我们部署的 server 地址和上面生成的 token 了，填上后保存即可。</li>
+</ul>
+<h4 id="3-安装并配置-sonarscanner">3. 安装并配置 SonarScanner</h4>
+<p>首先要下载安装 SonarScanner，Linux 下载地址是 <a href="https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.2.0.1873-linux.zip">sonar-scanner-cli-4.2.0.1873-linux.zip</a>，下载完成解压后放到对应的目录即可，比如我放到了 <code>/opt/sonar_scanner</code> 下。</p>
+<pre><code>➜  ~  |&gt; mv sonar-scanner-4.2.0.1873-linux /opt/sonar_scanner
+</code></pre><p>下载完成后在 <code>Manage Jenkins -&gt; Global Tool Configuration -&gt; SonarQube Scanner</code> 下配置，因为我是安装在本地，直接配置工作目录，取好对应的名字即可，如下：</p>
+<p><img src="https://zouyingjie-blog.oss-cn-beijing.aliyuncs.com/sonarqube-scanner.png" alt=""></p>
+<h4 id="4-执行代码质量检测">4. 执行代码质量检测</h4>
+<p>Jenkins 提供了 <a href="https://jenkins.io/doc/pipeline/steps/sonar/#withsonarqubeenv-prepare-sonarqube-scanner-environment">withSonarQubeEnv</a> 块来执行代码检测。关于 Jenkins 的使用在 SonarQube 中有专门的文档<a href="https://docs.sonarqube.org/latest/analysis/scan/sonarscanner-for-jenkins/">SonarScanner for Jenkins</a> 介绍，还算详细，参考文档照着做就行，这里只简单给两个示例：</p>
+<h5 id="1分析-maven-项目">【1】分析 Maven 项目</h5>
+<p>对于 Maven 项目可以直接通过 mvn 命令执行，如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-groovy" data-lang="groovy">pipeline <span style="color:#f92672">{</span>
+    agent any
+    stages <span style="color:#f92672">{</span>
+        stage<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;Sonar&#39;</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            steps <span style="color:#f92672">{</span>
+                script <span style="color:#f92672">{</span>
+                    <span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#960050;background-color:#1e0010">填入</span> SonarQube servers <span style="color:#960050;background-color:#1e0010">中配置的名称，检测完成后就会自动发送到</span> SonarQube Server <span style="color:#960050;background-color:#1e0010">中。</span>
+                    withSonarQubeEnv<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;server name&#39;</span><span style="color:#f92672">){</span>
+                        sh <span style="color:#e6db74">&#34;mvn clean verify sonar:sonar -DskipTests&#34;</span>
+                    <span style="color:#f92672">}</span>
+                <span style="color:#f92672">}</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p><em><strong>sonar scanner 指定参数执行</strong></em></p>
+<p>上面是 Maven 项目的执行方式，还有更通用的是使用 <code>sonar-scanner </code> 命令指定参数执行，</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-groovy" data-lang="groovy">pipeline <span style="color:#f92672">{</span>
+    agent any
+    stages <span style="color:#f92672">{</span>
+        stage<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;Sonar&#39;</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            steps <span style="color:#f92672">{</span>
+                script <span style="color:#f92672">{</span>
+                    <span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#960050;background-color:#1e0010">填入</span> SonarQube servers <span style="color:#960050;background-color:#1e0010">中配置的名称，检测完成后就会自动发送到</span> SonarQube Server <span style="color:#960050;background-color:#1e0010">中。</span>
+                    withSonarQubeEnv<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;server name&#39;</span><span style="color:#f92672">){</span>
+                        sh <span style="color:#e6db74">&#34;${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=${PROJECT_NAME} -Dsonar.projectName=${PROJECT_NAME} -Dsonar.projectVersion=1.0 -Dsonar.projectBaseDir=${PROJECT_DIR} -Dsonar.sources=src  -Dsonar.sourceEncoding=UTF-8&#34;</span>
+                    <span style="color:#f92672">}</span>
+                <span style="color:#f92672">}</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p><code>sonar-scanner </code> 命令通过 -D 传递参数，具体如下：</p>
+<ul>
+<li>sonar.projectKey：项目 key</li>
+<li>sonar.projectName： 项目名称</li>
+<li>sonar.projectBaseDir： 项目目录</li>
+<li>sonar.projectVersion： 项目版本</li>
+<li>sonar.sources： 源代码目录</li>
+<li>sonar.sourceEncoding：编码方式</li>
+</ul>
+<p>除此之外还可以将配置写入到一个 <code>myproject.properties</code>文件中，然后指定文件进行分析即可：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-groovy" data-lang="groovy">pipeline <span style="color:#f92672">{</span>
+    agent any
+    stages <span style="color:#f92672">{</span>
+        stage<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;Sonar&#39;</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            steps <span style="color:#f92672">{</span>
+                script <span style="color:#f92672">{</span>
+                    withSonarQubeEnv<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;server name&#39;</span><span style="color:#f92672">){</span>
+                        sh <span style="color:#960050;background-color:#1e0010">&#34;</span>$<span style="color:#f92672">{</span>scannerHome<span style="color:#f92672">}</span><span style="color:#e6db74">/bin/</span>sonar<span style="color:#f92672">-</span>scanner  <span style="color:#f92672">-</span>Dproject<span style="color:#f92672">.</span><span style="color:#a6e22e">settings</span><span style="color:#f92672">=../</span>myproject<span style="color:#f92672">.</span><span style="color:#a6e22e">properties</span>
+                    <span style="color:#f92672">}</span>
+                <span style="color:#f92672">}</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><h3 id="五-读取-yamljson-文件内容">五. 读取 Yaml/Json 文件内容</h3>
+<p>在执行 CICD 时，有些环境、项目相关的配置我们可能会以 Yaml、Json 配置文件的形式进行管理，Jenkins 需要读取到对应的配置进行解析，可以通过 <a href="https://github.com/jenkinsci/pipeline-utility-steps-plugin/blob/master/docs/STEPS.md">pipeline-utility-steps-plugin</a> 插件实现，该插件提供了很多有用的功能，比如读写 Yaml、Json、Jar Manifest、Java Properties、CSV 文件、zip 解压缩文件等功能。这里仅简单介绍下读取 Yaml 、Json 文件的使用方式。</p>
+<p>文件内容简单如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yml" data-lang="yml"><span style="color:#66d9ef">project</span>:
+  <span style="color:#66d9ef">name</span>: test
+  <span style="color:#66d9ef">dockerFilePath</span>: rootfs/Dockerfile
+  <span style="color:#66d9ef">config</span>:
+    <span style="color:#66d9ef">port</span>: <span style="color:#ae81ff">8000</span>
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+    <span style="color:#f92672">&#34;project&#34;</span>: {
+        <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;test&#34;</span>,
+        <span style="color:#f92672">&#34;dockerFilePath&#34;</span>: <span style="color:#e6db74">&#34;rootfs/Dockerfile&#34;</span>,
+        <span style="color:#f92672">&#34;config&#34;</span>: {
+            <span style="color:#f92672">&#34;port&#34;</span>: <span style="color:#ae81ff">8000</span>
+        }
+    }
+}
+</code></pre></div><p>插件提供的读取方式非常简单，直接调用插件中的 readYaml 和 readJSON 方法即可。Pipeline 中使用方式如下：</p>
+<pre><code>pipeline {
+   agent any
+
+   stages {
+      stage('Read Yaml') {
+         steps {
+             script {
+                yaml_datas = readYaml file: &quot;/home/ubuntu/backdemo/test.yaml&quot;
+                
+                echo &quot;${yaml_datas}&quot;
+                echo &quot;${yaml_datas.project}&quot;
+                echo &quot;${yaml_datas.project.name}&quot;
+                echo &quot;${yaml_datas.project.config}&quot;
+             }
+         }
+      }
+       stage('Read Json') {
+         steps {
+             script {
+                json_datas = readJSON file: &quot;/home/ubuntu/backdemo/test.json&quot;
+            
+                echo &quot;${json_datas}&quot;
+                echo &quot;${json_datas.project}&quot;
+                echo &quot;${json_datas.project.name}&quot;
+                echo &quot;${json_datas.project.config}&quot;
+             }
+         }
+      }
+   }
+}
+</code></pre><p>读取内容赋值给变量，其实还是一个字典对象，可以通过 key 读取到对应的值，上述 Pipeline 执行结果打印如下：</p>
+<p><img src="https://zouyingjie-blog.oss-cn-beijing.aliyuncs.com/jenkins-read-yaml.png" alt=""></p>
+<h3 id="六-创建共享库封装通用代码">六. 创建共享库封装通用代码</h3>
+<p>在使用 Jenkins 执行 CICD 过程中，很多步骤和操作都是重复的。对于重复的步骤，如果在每个项目的 Jenkinsfile 里面都写一遍的话，维护起来就太麻烦了。Jenkins 提供了 <a href="https://jenkins.io/doc/book/pipeline/shared-libraries/">共享库</a> 的方式使我们可以将 pipeline、通用代码、配置文件等抽取到一个项目中，然后配置引用即可。</p>
+<h4 id="1-shared-libraries-简介">1. Shared Libraries 简介</h4>
+<p>Jenkins 共享库是一个用 Groovy 编写的项目，结构如下：</p>
+<p><em><strong>Project structure</strong></em></p>
+<pre><code>// 引用自官方文档
++- src                     # Groovy source files
+|   +- org
+|       +- foo
+|           +- Bar.groovy  # for org.foo.Bar class
++- vars
+|   +- foo.groovy          # for global 'foo' variable
+|   +- foo.txt             # help for 'foo' variable
++- resources               # resource files (external libraries only)
+|   +- org
+|       +- foo
+|           +- bar.json    # static helper data for org.foo.Bar
+</code></pre><p>可以看到项目有三个目录：</p>
+<ul>
+<li><code>src</code>: 和标准 Java 项目一样，src 下的定义的类将会在执行时加入到 classpath 中。</li>
+<li><code>vars</code>: 该目录用于创建一些脚本，一些通用的方法可以放在这里直接引用。</li>
+<li><code>resources</code>: 主要放置一些非 Groovy 类型的文件，比如 Json 文件。</li>
+</ul>
+<p>下面看一些编写共享库的示例：</p>
+<p><em><strong>创建类</strong></em></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-groovy" data-lang="groovy"><span style="color:#75715e">// src/com.ahri/Foo.groovy
+</span><span style="color:#75715e"></span><span style="color:#f92672">package</span> com<span style="color:#f92672">.</span><span style="color:#a6e22e">ahri</span>
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Foo</span> <span style="color:#f92672">{</span>
+
+    String <span style="color:#a6e22e">getName</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span>  <span style="color:#e6db74">&#34;This is Foo class&#34;</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+
+
+</code></pre></div><p><em><strong>编写脚本,封装通用方法</strong></em></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-groovy" data-lang="groovy"><span style="color:#75715e">// vars/utils.groovy
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">info</span><span style="color:#f92672">(</span>message<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    echo <span style="color:#e6db74">&#34;INFO: ${message}&#34;</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p><em><strong>封装 pipeline</strong></em></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-groovy" data-lang="groovy"><span style="color:#75715e">//vars/deploy-pipelne.groovy
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">call</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+    pipeline <span style="color:#f92672">{</span>
+        agent any
+    <span style="color:#f92672">}</span>
+
+    stages <span style="color:#f92672">{</span>
+        stage <span style="color:#f92672">(</span><span style="color:#e6db74">&#34;First Stage&#34;</span><span style="color:#f92672">){</span>
+            steps <span style="color:#f92672">{</span>
+                echo <span style="color:#e6db74">&#34;This is First Stage&#34;</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+
+        stage <span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Second Stage&#34;</span><span style="color:#f92672">){</span>
+            steps <span style="color:#f92672">{</span>
+                echo <span style="color:#e6db74">&#34;This is Second Stage&#34;</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p><em><strong>封装配置文件</strong></em></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="color:#960050;background-color:#1e0010">//</span> <span style="color:#960050;background-color:#1e0010">resources/config.json</span>
+{
+  <span style="color:#f92672">&#34;Config&#34;</span>: {
+    <span style="color:#f92672">&#34;host&#34;</span>: <span style="color:#e6db74">&#34;127.0.0.1&#34;</span>,
+    <span style="color:#f92672">&#34;port&#34;</span>: <span style="color:#ae81ff">8080</span>,
+    <span style="color:#f92672">&#34;minio&#34;</span>: {
+      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;TestProject&#34;</span>,
+      <span style="color:#f92672">&#34;user&#34;</span>: <span style="color:#e6db74">&#34;Ahri&#34;</span>,
+      <span style="color:#f92672">&#34;passwd&#34;</span>: <span style="color:#e6db74">&#34;1234&#34;</span>
+    }
+  }
+}
+</code></pre></div><h4 id="2-使用简介">2. 使用简介</h4>
+<h5 id="1jenkins-配置">【1】Jenkins 配置</h5>
+<ul>
+<li><code>Manager Jenkins</code> -&gt; <code>Configure System</code> -&gt; <code>Global Pipeline Libraries</code></li>
+</ul>
+<p><img src="https://zouyingjie-blog.oss-cn-beijing.aliyuncs.com/jenkins-global-library-config.png" alt="image"></p>
+<h4 id="2引入类">【2】引入类</h4>
+<pre><code>@Library(&quot;JenkinsHelper&quot;)
+import com.ahri.Foo
+pipeline {
+   agent any
+
+   stages {
+      stage('Hello') {
+         steps {
+            echo 'Hello World'
+            script {
+                Foo foo = new Foo()
+                def name = foo.getName()
+                echo &quot;${name}&quot;
+            }
+         }
+      }
+   }
+}
+</code></pre><h4 id="3使用脚本方法">【3】使用脚本方法</h4>
+<pre><code>@Library(&quot;JenkinsHelper&quot;)
+import com.ahri.Foo
+pipeline {
+   agent any
+
+   stages {
+      stage('Hello') {
+         steps {
+            echo 'Hello World'
+            script {
+                Foo foo = new Foo()
+                def name = foo.getName()
+                echo &quot;${name}&quot;
+                utils.info(&quot;This is utils info&quot;)
+            }
+         }
+      }
+   }
+}
+</code></pre><h4 id="5jenkinsfile-引用-pipeline">【5】Jenkinsfile 引用 pipeline</h4>
+<pre><code>// Jenkinsfile
+@Library(value='JenkinsHelper', changelog=false) _
+deploy-pipeline()
+</code></pre><h4 id="6加载-json">【6】加载 json</h4>
+<p>对于 resources 中的文件，Jenkins 可以通过 <code>libraryResource</code> 关键字直接读取，然后我们根据需要进行转换即可，下面是对 config.json 文件的解析示例：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-groovy" data-lang="groovy"><span style="color:#f92672">import</span> groovy.json.JsonSlurper
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">loadJson</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+    <span style="color:#75715e">// 读取文件内容
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">def</span> config_text <span style="color:#f92672">=</span> libraryResource <span style="color:#e6db74">&#39;config.json&#39;</span>
+
+    <span style="color:#75715e">// 转为 json 对象
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">def</span> jsonSlurper <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> JsonSlurper<span style="color:#f92672">()</span>
+    <span style="color:#66d9ef">def</span> config_object <span style="color:#f92672">=</span> jsonSlurper<span style="color:#f92672">.</span><span style="color:#a6e22e">parseText</span><span style="color:#f92672">(</span>config_text<span style="color:#f92672">)</span>
+
+    <span style="color:#75715e">// 操作对象，读取配置
+</span><span style="color:#75715e"></span>    echo <span style="color:#e6db74">&#34;${config_object}&#34;</span>
+    echo <span style="color:#e6db74">&#34;${config_object.config.minio}&#34;</span>
+    echo <span style="color:#e6db74">&#34;${config_object.config.minio.name}&#34;</span>
+
+<span style="color:#f92672">}</span>
+</code></pre></div><p>上面就是遇到的一些使用场景的简单总结，欢迎交流。</p>
+		</div>
+		<footer class="post__footer">
+			
+<div class="post__tags tags clearfix">
+	<svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/jenkins/" rel="tag">Jenkins</a>
+		</li>
+	</ul>
+</div>
+		</footer>
+	</article>
+</main>
+
+<div class="authorbox clearfix">
+	<figure class="authorbox__avatar">
+		<img alt="邹英杰 avatar" src="/img/avatar.png" class="avatar" height="90" width="90">
+	</figure>
+	<div class="authorbox__header">
+		<span class="authorbox__name">About 邹英杰</span>
+	</div>
+	<div class="authorbox__description">
+		John Doe&rsquo;s true identity is unknown. Maybe he is a successful blogger or writer. Nobody knows it.
+	</div>
+</div>
+
+<nav class="pager flex">
+	<div class="pager__item pager__item--prev">
+		<a class="pager__link" href="/posts/devops%E7%AC%94%E8%AE%B0-%E4%BB%8E0%E5%BC%80%E5%A7%8B%E6%90%AD%E5%BB%BAjenkins%E6%B5%81%E6%B0%B4%E7%BA%BF/" rel="prev">
+			<span class="pager__subtitle">«&thinsp;Previous</span>
+			<p class="pager__title">DevOps笔记-从0开始搭建Jenkins流水线</p>
+		</a>
+	</div>
+	<div class="pager__item pager__item--next">
+		<a class="pager__link" href="/posts/aws-nat-gateway-%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/" rel="next">
+			<span class="pager__subtitle">Next&thinsp;»</span>
+			<p class="pager__title">AWS NAT Gateway 使用简记</p>
+		</a>
+	</div>
+</nav>
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2021 John Doe.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+<script src="/js/custom.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
+</body>
+</html>

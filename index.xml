@@ -1,194 +1,230 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>邹英杰的博客</title>
+    <title>邹英杰的个人博客</title>
     <link>/</link>
-    <description>Recent content on 邹英杰的博客</description>
+    <description>Recent content on 邹英杰的个人博客</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en</language>
-    <lastBuildDate>Mon, 01 Feb 2021 00:00:00 +0000</lastBuildDate>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 26 Mar 2021 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>About</title>
-      <link>/about/</link>
-      <pubDate>Sun, 20 Aug 2017 21:38:52 +0800</pubDate>
+      <title>网络协议笔记-IPv4 协议</title>
+      <link>/posts/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E7%AC%94%E8%AE%B0-ipv4-%E5%8D%8F%E8%AE%AE/</link>
+      <pubDate>Fri, 26 Mar 2021 00:00:00 +0000</pubDate>
       
-      <guid>/about/</guid>
-      <description>北京 MegaEase 技术野蛮生长，Java、Go、K8S、云原生、微服务 有一只猫</description>
-    </item>
-    
-    <item>
-      <title>TCP 协议笔记01-TCP 协发展历史与特性简介</title>
-      <link>/post/tcp-%E5%8D%8F%E8%AE%AE%E7%AC%94%E8%AE%B001-tcp-%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%8E%86%E5%8F%B2%E4%B8%8E%E7%89%B9%E6%80%A7%E7%AE%80%E4%BB%8B/</link>
-      <pubDate>Mon, 01 Feb 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/post/tcp-%E5%8D%8F%E8%AE%AE%E7%AC%94%E8%AE%B001-tcp-%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%8E%86%E5%8F%B2%E4%B8%8E%E7%89%B9%E6%80%A7%E7%AE%80%E4%BB%8B/</guid>
-      <description>知识点梳理： TCP 的发展历史与功能 TCP 数据包格式 &amp;amp; 各个字段功能 CheckSum 的计算 MSS 的计算 控制位的选择：Push，Urgent TCP 连接的建立、管理与终止</description>
-    </item>
-    
-    <item>
-      <title>TCP 协议笔记02-TCP 连接建立与终止过程</title>
-      <link>/post/tcp-%E5%8D%8F%E8%AE%AE%E7%AC%94%E8%AE%B002-tcp-%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%BB%BA%E7%AB%8B%E7%AE%A1%E7%90%86%E4%B8%8E%E7%BB%88%E6%AD%A2/</link>
-      <pubDate>Mon, 01 Feb 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/post/tcp-%E5%8D%8F%E8%AE%AE%E7%AC%94%E8%AE%B002-tcp-%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%BB%BA%E7%AB%8B%E7%AE%A1%E7%90%86%E4%B8%8E%E7%BB%88%E6%AD%A2/</guid>
-      <description>一. TCP 状态机 二. TCP 连接建立过程 - 三次握手 1. 连接前准备 2. TCP 连接建立 【1】三次握手过程 【2】三次握手抓包分析 三. TCP 协议 二. TCP 连接终止过程 - 四次挥</description>
+      <guid>/posts/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E7%AC%94%E8%AE%B0-ipv4-%E5%8D%8F%E8%AE%AE/</guid>
+      <description></description>
     </item>
     
     <item>
       <title>Java 手动资源关闭最佳实践</title>
-      <link>/post/java-%E8%B5%84%E6%BA%90%E5%85%B3%E9%97%AD%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/</link>
+      <link>/posts/java-%E8%B5%84%E6%BA%90%E5%85%B3%E9%97%AD%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/</link>
       <pubDate>Sun, 10 May 2020 19:31:28 +0800</pubDate>
       
-      <guid>/post/java-%E8%B5%84%E6%BA%90%E5%85%B3%E9%97%AD%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/</guid>
-      <description>一. 为何需要资源关闭 对于某些资源，比如 IO 流对象、Socket 套接字、数据库连接等对象，如果在使用后不手动关闭，会导致资源一直被占用，最终造成</description>
+      <guid>/posts/java-%E8%B5%84%E6%BA%90%E5%85%B3%E9%97%AD%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/</guid>
+      <description></description>
     </item>
     
     <item>
       <title>Kubernetes 150 个操作练习（下）</title>
-      <link>/post/kubernetes-150-%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%BB%83%E4%B9%A0%E4%B8%8B/</link>
+      <link>/posts/kubernetes-150-%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%BB%83%E4%B9%A0%E4%B8%8B/</link>
       <pubDate>Mon, 27 Apr 2020 15:50:53 +0800</pubDate>
       
-      <guid>/post/kubernetes-150-%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%BB%83%E4%B9%A0%E4%B8%8B/</guid>
-      <description>150 个练习的最后一部分，这部分主要包含三个模块： 状态存储 配置 监控 服务与网络 四. 状态存储篇 这部分的练习主要是熟悉持久卷和持久卷声明的相关使用。 96.</description>
+      <guid>/posts/kubernetes-150-%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%BB%83%E4%B9%A0%E4%B8%8B/</guid>
+      <description></description>
     </item>
     
     <item>
       <title>Kubernetes 150 个操作练习（上）</title>
-      <link>/post/kubernetes-150-%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%BB%83%E4%B9%A0%E4%B8%8A/</link>
+      <link>/posts/kubernetes-150-%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%BB%83%E4%B9%A0%E4%B8%8A/</link>
       <pubDate>Thu, 23 Apr 2020 15:50:53 +0800</pubDate>
       
-      <guid>/post/kubernetes-150-%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%BB%83%E4%B9%A0%E4%B8%8A/</guid>
-      <description>原文链接：Practice Enough With These 150 Questions for the CKAD Exam。 看了 Medium 上的一篇文章记录了 150 个 Kubernetes 的练习，自己练习了一遍，在原文基础上加了一些自己实践过程中</description>
+      <guid>/posts/kubernetes-150-%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%BB%83%E4%B9%A0%E4%B8%8A/</guid>
+      <description></description>
     </item>
     
     <item>
       <title>Kubernetes 150 个操作练习（中）</title>
-      <link>/post/kubernetes-150-%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%BB%83%E4%B9%A0%E4%B8%AD/</link>
+      <link>/posts/kubernetes-150-%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%BB%83%E4%B9%A0%E4%B8%AD/</link>
       <pubDate>Thu, 23 Apr 2020 15:50:53 +0800</pubDate>
       
-      <guid>/post/kubernetes-150-%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%BB%83%E4%B9%A0%E4%B8%AD/</guid>
-      <description>原文链接：Practice Enough With These 150 Questions for the CKAD Exam。 看了 Medium 上的一篇文章记录了 150 个 Kubernetes 的练习，自己练习了一遍，在原文基础上加了一些自己实践过程中</description>
+      <guid>/posts/kubernetes-150-%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%BB%83%E4%B9%A0%E4%B8%AD/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>LeetCode 解题报告-328.奇偶链表</title>
+      <link>/posts/leetcode-%E8%A7%A3%E9%A2%98%E6%8A%A5%E5%91%8A-328.%E5%A5%87%E5%81%B6%E9%93%BE%E8%A1%A8/</link>
+      <pubDate>Mon, 20 Apr 2020 19:31:28 +0800</pubDate>
+      
+      <guid>/posts/leetcode-%E8%A7%A3%E9%A2%98%E6%8A%A5%E5%91%8A-328.%E5%A5%87%E5%81%B6%E9%93%BE%E8%A1%A8/</guid>
+      <description></description>
     </item>
     
     <item>
       <title>AWS NAT Gateway 使用简记</title>
-      <link>/post/aws-nat-gateway-%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/</link>
+      <link>/posts/aws-nat-gateway-%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/</link>
       <pubDate>Thu, 02 Apr 2020 12:29:16 +0800</pubDate>
       
-      <guid>/post/aws-nat-gateway-%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/</guid>
-      <description>最近项目遇到个需求，需要将后端的服务器出口统一成一个 IP，服务器在 AWS 上，这个可以用 AWS 的 NAT Gateway 实现，调研实施的过程中发现如果对 AWS 相关概念的话不熟</description>
+      <guid>/posts/aws-nat-gateway-%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/</guid>
+      <description></description>
     </item>
     
     <item>
       <title>DevOps笔记-Jenkins使用简记&#34;</title>
-      <link>/post/devops%E7%AC%94%E8%AE%B0-jenkins%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/</link>
+      <link>/posts/devops%E7%AC%94%E8%AE%B0-jenkins%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/</link>
       <pubDate>Mon, 04 Nov 2019 15:50:53 +0800</pubDate>
       
-      <guid>/post/devops%E7%AC%94%E8%AE%B0-jenkins%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/</guid>
-      <description>最近用 Jenkins 将原来公司自研的 CICD 工具给替换掉了， Jenkins 本身的文档并不是很明晰，很多问题都需要自己尝试和搜索才能解决，这里简要记录下期间遇到的一些问题的</description>
+      <guid>/posts/devops%E7%AC%94%E8%AE%B0-jenkins%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/</guid>
+      <description></description>
     </item>
     
     <item>
       <title>DevOps笔记-从0开始搭建Jenkins流水线</title>
-      <link>/post/devops%E7%AC%94%E8%AE%B0-%E4%BB%8E0%E5%BC%80%E5%A7%8B%E6%90%AD%E5%BB%BAjenkins%E6%B5%81%E6%B0%B4%E7%BA%BF/</link>
+      <link>/posts/devops%E7%AC%94%E8%AE%B0-%E4%BB%8E0%E5%BC%80%E5%A7%8B%E6%90%AD%E5%BB%BAjenkins%E6%B5%81%E6%B0%B4%E7%BA%BF/</link>
       <pubDate>Mon, 04 Nov 2019 15:50:53 +0800</pubDate>
       
-      <guid>/post/devops%E7%AC%94%E8%AE%B0-%E4%BB%8E0%E5%BC%80%E5%A7%8B%E6%90%AD%E5%BB%BAjenkins%E6%B5%81%E6%B0%B4%E7%BA%BF/</guid>
-      <description>上一篇文章总结了一些使用 Jenkins 期间遇到的一些坑，这篇文章就在其基础之上介绍从 0 开始搭建一个 Jenkins 流水线。 一. 梳理流程 一. 安装启动 Jenkins 1. 安装 Java 1 2 sudo apt update</description>
+      <guid>/posts/devops%E7%AC%94%E8%AE%B0-%E4%BB%8E0%E5%BC%80%E5%A7%8B%E6%90%AD%E5%BB%BAjenkins%E6%B5%81%E6%B0%B4%E7%BA%BF/</guid>
+      <description></description>
     </item>
     
     <item>
       <title>Sed 入门教程</title>
-      <link>/post/sed-%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/</link>
+      <link>/posts/sed-%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/</link>
       <pubDate>Tue, 29 Oct 2019 00:00:00 +0000</pubDate>
       
-      <guid>/post/sed-%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/</guid>
-      <description>一. Sed 简介 Sed（Stream Editor），翻译过来就是流编辑器，通过 Sed 可以对 标准输出或者文件逐行 进行处理。 1. Sed 的命令格式 Sed 的命令格式主要</description>
+      <guid>/posts/sed-%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/</guid>
+      <description></description>
     </item>
     
     <item>
       <title>那些平淡的一天</title>
-      <link>/post/%E9%82%A3%E4%BA%9B%E5%B9%B3%E6%B7%A1%E7%9A%84%E4%B8%80%E5%A4%A9/</link>
+      <link>/posts/%E9%82%A3%E4%BA%9B%E5%B9%B3%E6%B7%A1%E7%9A%84%E4%B8%80%E5%A4%A9/</link>
       <pubDate>Mon, 02 Sep 2019 22:22:47 +0800</pubDate>
       
-      <guid>/post/%E9%82%A3%E4%BA%9B%E5%B9%B3%E6%B7%A1%E7%9A%84%E4%B8%80%E5%A4%A9/</guid>
+      <guid>/posts/%E9%82%A3%E4%BA%9B%E5%B9%B3%E6%B7%A1%E7%9A%84%E4%B8%80%E5%A4%A9/</guid>
       <description></description>
     </item>
     
     <item>
       <title>ARTS 周年记</title>
-      <link>/post/arts%E5%91%A8%E5%B9%B4%E8%AE%B0/</link>
+      <link>/posts/arts%E5%91%A8%E5%B9%B4%E8%AE%B0/</link>
       <pubDate>Sat, 03 Aug 2019 12:29:16 +0800</pubDate>
       
-      <guid>/post/arts%E5%91%A8%E5%B9%B4%E8%AE%B0/</guid>
+      <guid>/posts/arts%E5%91%A8%E5%B9%B4%E8%AE%B0/</guid>
       <description>&lt;p&gt;ARTS 打卡，一不小心坚持一年了&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>LeetCode-95、96. Unique Binary Search Trees-简记</title>
-      <link>/post/leetcode-9596.-unique-binary-search-trees-%E7%AE%80%E8%AE%B0/</link>
+      <link>/posts/leetcode-9596.-unique-binary-search-trees-%E7%AE%80%E8%AE%B0/</link>
       <pubDate>Tue, 30 Jul 2019 00:00:00 +0000</pubDate>
       
-      <guid>/post/leetcode-9596.-unique-binary-search-trees-%E7%AE%80%E8%AE%B0/</guid>
+      <guid>/posts/leetcode-9596.-unique-binary-search-trees-%E7%AE%80%E8%AE%B0/</guid>
       <description>&lt;p&gt;LeetCode 平衡二叉树刷题训练。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>Java 虚拟机的内存分区以及内存分配与垃圾策略</title>
-      <link>/post/java-%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E5%8C%BA%E4%BB%A5%E5%8F%8A%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9E%83%E5%9C%BE%E7%AD%96%E7%95%A5/</link>
+      <link>/posts/java-%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E5%8C%BA%E4%BB%A5%E5%8F%8A%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9E%83%E5%9C%BE%E7%AD%96%E7%95%A5/</link>
       <pubDate>Mon, 29 Jul 2019 00:00:00 +0000</pubDate>
       
-      <guid>/post/java-%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E5%8C%BA%E4%BB%A5%E5%8F%8A%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9E%83%E5%9C%BE%E7%AD%96%E7%95%A5/</guid>
+      <guid>/posts/java-%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E5%8C%BA%E4%BB%A5%E5%8F%8A%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9E%83%E5%9C%BE%E7%AD%96%E7%95%A5/</guid>
       <description>&lt;p&gt;《深入理解 Java 虚拟机》第二、三章学习笔记&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>LeetCode-337. House Robber III-简记</title>
-      <link>/post/leetcode-337.-house-robber-iii-%E7%AE%80%E8%AE%B0/</link>
+      <link>/posts/leetcode-337.-house-robber-iii-%E7%AE%80%E8%AE%B0/</link>
       <pubDate>Tue, 23 Jul 2019 00:00:00 +0000</pubDate>
       
-      <guid>/post/leetcode-337.-house-robber-iii-%E7%AE%80%E8%AE%B0/</guid>
+      <guid>/posts/leetcode-337.-house-robber-iii-%E7%AE%80%E8%AE%B0/</guid>
       <description>&lt;p&gt;LeetCode 动态规划刷题训练。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>LeetCode-198. House Robber-简记</title>
-      <link>/post/leetcode-198.-house-robber-%E7%AE%80%E8%AE%B0/</link>
+      <link>/posts/leetcode-198.-house-robber-%E7%AE%80%E8%AE%B0/</link>
       <pubDate>Fri, 19 Jul 2019 00:00:00 +0000</pubDate>
       
-      <guid>/post/leetcode-198.-house-robber-%E7%AE%80%E8%AE%B0/</guid>
+      <guid>/posts/leetcode-198.-house-robber-%E7%AE%80%E8%AE%B0/</guid>
       <description>&lt;p&gt;LeetCode 动态规划刷题训练。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>TCP 数据收发过程抓包分析</title>
-      <link>/post/tcp-%E6%95%B0%E6%8D%AE%E6%94%B6%E5%8F%91%E8%BF%87%E7%A8%8B%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/</link>
+      <link>/posts/tcp-%E6%95%B0%E6%8D%AE%E6%94%B6%E5%8F%91%E8%BF%87%E7%A8%8B%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/</link>
       <pubDate>Fri, 12 Jul 2019 00:00:00 +0000</pubDate>
       
-      <guid>/post/tcp-%E6%95%B0%E6%8D%AE%E6%94%B6%E5%8F%91%E8%BF%87%E7%A8%8B%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/</guid>
+      <guid>/posts/tcp-%E6%95%B0%E6%8D%AE%E6%94%B6%E5%8F%91%E8%BF%87%E7%A8%8B%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/</guid>
       <description></description>
     </item>
     
     <item>
       <title>ES 准实时存储机制与文档的分布式存储过程</title>
-      <link>/post/es-%E5%87%86%E5%AE%9E%E6%97%B6%E5%AD%98%E5%82%A8%E6%9C%BA%E5%88%B6%E4%B8%8E%E6%96%87%E6%A1%A3%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/</link>
+      <link>/posts/es-%E5%87%86%E5%AE%9E%E6%97%B6%E5%AD%98%E5%82%A8%E6%9C%BA%E5%88%B6%E4%B8%8E%E6%96%87%E6%A1%A3%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/</link>
       <pubDate>Mon, 12 Nov 2018 20:38:40 +0000</pubDate>
       
-      <guid>/post/es-%E5%87%86%E5%AE%9E%E6%97%B6%E5%AD%98%E5%82%A8%E6%9C%BA%E5%88%B6%E4%B8%8E%E6%96%87%E6%A1%A3%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/</guid>
+      <guid>/posts/es-%E5%87%86%E5%AE%9E%E6%97%B6%E5%AD%98%E5%82%A8%E6%9C%BA%E5%88%B6%E4%B8%8E%E6%96%87%E6%A1%A3%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/</guid>
       <description>&lt;p&gt;ES 准实时查询原理与分布式读写过程。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>基于ELK与ElaticAlert搭建系统监控报警</title>
-      <link>/post/%E5%9F%BA%E4%BA%8Eelk%E4%B8%8Eelaticalert%E6%90%AD%E5%BB%BA%E7%B3%BB%E7%BB%9F%E7%9B%91%E6%8E%A7%E6%8A%A5%E8%AD%A6/</link>
+      <link>/posts/%E5%9F%BA%E4%BA%8Eelk%E4%B8%8Eelaticalert%E6%90%AD%E5%BB%BA%E7%B3%BB%E7%BB%9F%E7%9B%91%E6%8E%A7%E6%8A%A5%E8%AD%A6/</link>
       <pubDate>Mon, 12 Nov 2018 20:38:40 +0000</pubDate>
       
-      <guid>/post/%E5%9F%BA%E4%BA%8Eelk%E4%B8%8Eelaticalert%E6%90%AD%E5%BB%BA%E7%B3%BB%E7%BB%9F%E7%9B%91%E6%8E%A7%E6%8A%A5%E8%AD%A6/</guid>
-      <description>之前学习了通过 ELK 进行 Nginx 的日志收集与分析，有了日志之后我们就可以通过解析日志近实时的监控服务器的访问状态了。通常 Nginx 都是作为代理服务器进行使用的</description>
+      <guid>/posts/%E5%9F%BA%E4%BA%8Eelk%E4%B8%8Eelaticalert%E6%90%AD%E5%BB%BA%E7%B3%BB%E7%BB%9F%E7%9B%91%E6%8E%A7%E6%8A%A5%E8%AD%A6/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>【ELK笔记】ELK的安装，快速搭建一个ELK日志分析平台</title>
+      <link>/posts/elk%E7%AC%94%E8%AE%B0elk%E7%9A%84%E5%AE%89%E8%A3%85%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AAelk%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90%E5%B9%B3%E5%8F%B0/</link>
+      <pubDate>Mon, 19 Mar 2018 20:38:40 +0000</pubDate>
+      
+      <guid>/posts/elk%E7%AC%94%E8%AE%B0elk%E7%9A%84%E5%AE%89%E8%A3%85%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AAelk%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90%E5%B9%B3%E5%8F%B0/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Scrapy 入门笔记(4) 使用 Pipeline 保存数据</title>
+      <link>/posts/scrapy-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B04-%E4%BD%BF%E7%94%A8-pipeline-%E4%BF%9D%E5%AD%98%E6%95%B0%E6%8D%AE/</link>
+      <pubDate>Sat, 20 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/scrapy-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B04-%E4%BD%BF%E7%94%A8-pipeline-%E4%BF%9D%E5%AD%98%E6%95%B0%E6%8D%AE/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Scrapy 入门笔记(3) Item 类数据转换与 ItemLoader 机制解析</title>
+      <link>/posts/scrapy-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B03-item-%E7%B1%BB%E6%95%B0%E6%8D%AE%E8%BD%AC%E6%8D%A2%E4%B8%8E-itemloader-%E6%9C%BA%E5%88%B6%E8%A7%A3%E6%9E%90/</link>
+      <pubDate>Mon, 15 May 2017 20:26:47 +0000</pubDate>
+      
+      <guid>/posts/scrapy-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B03-item-%E7%B1%BB%E6%95%B0%E6%8D%AE%E8%BD%AC%E6%8D%A2%E4%B8%8E-itemloader-%E6%9C%BA%E5%88%B6%E8%A7%A3%E6%9E%90/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Scrapy 入门笔记(2) xpath 与 css 解析以及解析网页示例</title>
+      <link>/posts/scrapy-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B02-xpath-%E4%B8%8E-css-%E8%A7%A3%E6%9E%90%E4%BB%A5%E5%8F%8A%E8%A7%A3%E6%9E%90%E7%BD%91%E9%A1%B5%E7%A4%BA%E4%BE%8B/</link>
+      <pubDate>Wed, 10 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/scrapy-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B02-xpath-%E4%B8%8E-css-%E8%A7%A3%E6%9E%90%E4%BB%A5%E5%8F%8A%E8%A7%A3%E6%9E%90%E7%BD%91%E9%A1%B5%E7%A4%BA%E4%BE%8B/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Scrapy 入门笔记(1) Scrapy 项目搭建与架构介绍</title>
+      <link>/posts/scrapy-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01-scrapy-%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA%E4%B8%8E%E6%9E%B6%E6%9E%84%E4%BB%8B%E7%BB%8D/</link>
+      <pubDate>Mon, 08 May 2017 10:57:14 +0000</pubDate>
+      
+      <guid>/posts/scrapy-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01-scrapy-%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA%E4%B8%8E%E6%9E%B6%E6%9E%84%E4%BB%8B%E7%BB%8D/</guid>
+      <description></description>
     </item>
     
   </channel>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Scrapy 入门笔记(3) Item 类数据转换与 ItemLoader 机制解析 - 邹英杰的个人博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="Scrapy 的 Item 类封装数据以及 ItemLoader 加载数据机制">
+		<meta property="og:title" content="Scrapy 入门笔记(3) Item 类数据转换与 ItemLoader 机制解析" />
+<meta property="og:description" content="Scrapy 的 Item 类封装数据以及 ItemLoader 加载数据机制" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/scrapy-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B03-item-%E7%B1%BB%E6%95%B0%E6%8D%AE%E8%BD%AC%E6%8D%A2%E4%B8%8E-itemloader-%E6%9C%BA%E5%88%B6%E8%A7%A3%E6%9E%90/" />
+<meta property="article:published_time" content="2017-05-15T20:26:47+00:00" />
+<meta property="article:modified_time" content="2017-05-15T20:26:47+00:00" />
+
+		<meta itemprop="name" content="Scrapy 入门笔记(3) Item 类数据转换与 ItemLoader 机制解析">
+<meta itemprop="description" content="Scrapy 的 Item 类封装数据以及 ItemLoader 加载数据机制">
+<meta itemprop="datePublished" content="2017-05-15T20:26:47&#43;00:00" />
+<meta itemprop="dateModified" content="2017-05-15T20:26:47&#43;00:00" />
+<meta itemprop="wordCount" content="442">
+
+
+
+<meta itemprop="keywords" content="Scrapy,爬虫," />
+		<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Scrapy 入门笔记(3) Item 类数据转换与 ItemLoader 机制解析"/>
+<meta name="twitter:description" content="Scrapy 的 Item 类封装数据以及 ItemLoader 加载数据机制"/>
+
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo logo--mixed">
+		<a class="logo__link" href="/" title="邹英杰的个人博客" rel="home">
+			<div class="logo__item logo__imagebox">
+					<img class="logo__img" src="/img/zouyingjie.jpg">
+				</div><div class="logo__item logo__text">
+					<div class="logo__title">邹英杰的个人博客</div>
+					<div class="logo__tagline">Be a good man</div>
+				</div>
+		</a>
+	</div>
+		<div class="divider"></div>
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Scrapy 入门笔记(3) Item 类数据转换与 ItemLoader 机制解析</h1>
+			<div class="post__meta meta"><div class="meta__item-author meta__item">
+	<svg class="meta__icon icon icon-author" width="16" height="16" viewBox="0 0 12 16"><path d="M6 1c2.2 0 3.5 2 3.5 4.5C9.5 7 8.9 8.2 8 9c2.9.8 4 2.5 4 5v1H0v-1c0-2.5 1.1-4.2 4-5-.9-.8-1.5-2-1.5-3.5C2.5 3 3.8 1 6 1z"/></svg><span class="meta__text">邹英杰</span>
+</div>
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class="meta__text" datetime="2017-05-15T20:26:47Z">2017-05-15</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2l1 2h8v11h-16v-13z"/></svg><span class="meta__text"><a class="meta__link" href="/categories/scrapy/" rel="category">Scrapy</a>, <a class="meta__link" href="/categories/%E7%88%AC%E8%99%AB/" rel="category">爬虫</a>
+	</span>
+</div></div>
+		</header>
+<div class="post__toc toc">
+	<div class="toc__title">Page content</div>
+	<div class="toc__menu">
+		<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#一-创建-item-类">一. 创建 Item 类</a></li>
+        <li><a href="#二-使用-itemloader-解析数据">二. 使用 ItemLoader 解析数据</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+	</div>
+</div><div class="content post__content clearfix">
+			<h3 id="一-创建-item-类">一. 创建 Item 类</h3>
+<p>为了将网页解析后获取的数据进行格式化，便于数据的传递与进一步的操作，Scrapy 提供了 Item 类来对数据进行封装。
+要使用 Item 类非常简单，直接继承 scrapy 的 Item 类即可，然后可以定义相应的属性字段来对数据进行存储，其字段类型为 scrapy.Field()。 Scrapy 只提供了 Field() 一种字段类型，可以用来存储任意类型的数据。
+现在我们根据上一节解析到的 StackoverFlow 的问题来创建我们的 Item 类，代码如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Python" data-lang="Python"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">StackQuestionItem</span>(scrapy<span style="color:#f92672">.</span>Item):
+
+    queston_title <span style="color:#f92672">=</span> scrapy<span style="color:#f92672">.</span>Field()
+    question_votes <span style="color:#f92672">=</span> scrapy<span style="color:#f92672">.</span>Field()
+    question_answers <span style="color:#f92672">=</span> scrapy<span style="color:#f92672">.</span>Field()
+    question_views <span style="color:#f92672">=</span> scrapy<span style="color:#f92672">.</span>Field()
+    tags <span style="color:#f92672">=</span> scrapy<span style="color:#f92672">.</span>Field()
+</code></pre></div><p>创建完成后就可以在 parse 方法中将解析到的数据进行封装了, 结合上一篇文章中的解析代码如下:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Python" data-lang="Python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">parse_by_css</span>(self, response):
+
+       questions <span style="color:#f92672">=</span> response<span style="color:#f92672">.</span>css(<span style="color:#e6db74">&#39;div.question-summary&#39;</span>)
+       <span style="color:#66d9ef">for</span> question <span style="color:#f92672">in</span> questions:
+
+           question_votes <span style="color:#f92672">=</span> question<span style="color:#f92672">.</span>css(<span style="color:#e6db74">&#39;.votes strong::text&#39;</span>)<span style="color:#f92672">.</span>extract_first()
+           question_title <span style="color:#f92672">=</span> question<span style="color:#f92672">.</span>css(<span style="color:#e6db74">&#34;a.question-hyperlink::text&#34;</span>)<span style="color:#f92672">.</span>extract_first()
+           question_answers <span style="color:#f92672">=</span> question<span style="color:#f92672">.</span>css(<span style="color:#e6db74">&#39;.answered strong::text&#39;</span>)<span style="color:#f92672">.</span>extract_first()
+           question_views <span style="color:#f92672">=</span> question<span style="color:#f92672">.</span>css(<span style="color:#e6db74">&#39;.views::attr(title)&#39;</span>)<span style="color:#f92672">.</span>extract_first()
+           tags <span style="color:#f92672">=</span> question<span style="color:#f92672">.</span>css(<span style="color:#e6db74">&#39;.tags a::text&#39;</span>)<span style="color:#f92672">.</span>extract()
+
+           question_item <span style="color:#f92672">=</span> StackQuestionItem()
+           question_item[<span style="color:#e6db74">&#34;question_title&#34;</span>] <span style="color:#f92672">=</span> question_title
+           question_item[<span style="color:#e6db74">&#34;question_votes&#34;</span>] <span style="color:#f92672">=</span> question_votes
+           question_item[<span style="color:#e6db74">&#39;question_answers&#39;</span>] <span style="color:#f92672">=</span> question_answers
+           question_item[<span style="color:#e6db74">&#39;question_views&#39;</span>] <span style="color:#f92672">=</span> question_views
+           question_item[<span style="color:#e6db74">&#39;tags&#39;</span>] <span style="color:#f92672">=</span> tags
+
+           <span style="color:#66d9ef">yield</span> question_item
+
+</code></pre></div><p>生成的 Item 类通过 yield 返回时，Scrapy 会根据 settings 文件中的配置来传输到对应的 pipeline 类中，其默认已经给我们创建好了一个 pipeline 类，配置文件如下:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Python" data-lang="Python"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">StackoverflowspiderPipeline</span>:
+
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">process_item</span>(self, item, spider):
+
+        <span style="color:#75715e"># 获取到 Item 中的所有值</span>
+        title <span style="color:#f92672">=</span> item<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#39;question_title&#39;</span>)
+        votes <span style="color:#f92672">=</span> item<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#39;question_votes&#39;</span>)
+        answers <span style="color:#f92672">=</span> item<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#39;question_answers&#39;</span>)
+        views <span style="color:#f92672">=</span> item<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#39;question_views&#39;</span>)
+        tags <span style="color:#f92672">=</span> item<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#39;tags&#39;</span>)
+        <span style="color:#66d9ef">return</span> item
+
+</code></pre></div><p>上面就是默认生成的 pipeline 类，可以看到自动生成了一个 process_item() 方法来处理传递过来的 Item，关于 pipeline 的内容后面会专门介绍，Item 类的基本使用就像上面这样，非常简单，下面我们看下其 ItemLoader 机制。</p>
+<h3 id="二-使用-itemloader-解析数据">二. 使用 ItemLoader 解析数据</h3>
+<h4 id="1-itemloader-简介">1. ItemLoader 简介</h4>
+<p>通过之前的学习，已经知道网页的基本解析流程就是先通过 css/xpath 方法进行解析，然后再把值封装到 Item 中，如果有特殊需要的话还要对解析到的数据进行转换处理，这样当解析代码或者数据转换要求过多的时候，会导致代码量变得极为庞大，从而降低了可维护性。同时在  sipider 中编写过多的数据处理代码某种程度上也违背了单一职责的代码设计原则。我们需要使用一种更加简洁的方式来获取与处理网页数据，ItemLoader 就是用来完成这件事情的。</p>
+<p>ItemLoader 类位于  scrapy.loader ，它可以接收一个 Item 实例来指定要加载的 Item, 然后指定 response 或者 selector 来确定要解析的内容，最后提供了 add_css()、 add_xpath() 方法来对通过 css 、 xpath 解析赋值，还有 add_value() 方法来单独进行赋值。
+示例代码如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Python" data-lang="Python"><span style="color:#f92672">from</span> scrapy.loader <span style="color:#f92672">import</span> ItemLoader
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">parse</span>(self, response):
+    questions <span style="color:#f92672">=</span> response<span style="color:#f92672">.</span>css(<span style="color:#e6db74">&#39;div.question-summary&#39;</span>)
+    <span style="color:#66d9ef">for</span> question <span style="color:#f92672">in</span> questions:
+
+        <span style="color:#75715e"># 指定了 StackQuestionItem 实例，另外因为我们已经解析了 response 获取到了所有问题的 selector，因此这里指定的是 selector 而不是 response。</span>
+        item_loader <span style="color:#f92672">=</span> DefaultItemLoader(item<span style="color:#f92672">=</span>StackQuestionItem(),  selector<span style="color:#f92672">=</span>question)
+
+        <span style="color:#75715e"># 下面是使用 add_css 方法，传递 Item 类的字段名称和对应的 css 解析语法</span>
+        <span style="color:#75715e"># 如果使用 add_xpath 方法的话只需要传递对应的 xpath 解析语法几个</span>
+        item_loader<span style="color:#f92672">.</span>add_css(<span style="color:#e6db74">&#39;question_title&#39;</span>, <span style="color:#e6db74">&#39;a.question-hyperlink::text&#39;</span>)
+        item_loader<span style="color:#f92672">.</span>add_css(<span style="color:#e6db74">&#39;question_votes&#39;</span>, <span style="color:#e6db74">&#39;.votes strong::text&#39;</span>)
+        item_loader<span style="color:#f92672">.</span>add_css(<span style="color:#e6db74">&#39;question_answers&#39;</span>, <span style="color:#e6db74">&#39;.answered strong::text&#39;</span>)
+        item_loader<span style="color:#f92672">.</span>add_css(<span style="color:#e6db74">&#39;question_views&#39;</span>, <span style="color:#e6db74">&#39;.views::attr(title)&#39;</span>)
+        item_loader<span style="color:#f92672">.</span>add_css(<span style="color:#e6db74">&#39;tags&#39;</span>, <span style="color:#e6db74">&#39;.tags a::text&#39;</span>))
+
+        <span style="color:#75715e"># 添加值示例.可以直接设置值</span>
+        item_loader<span style="color:#f92672">.</span>add_value(<span style="color:#e6db74">&#39;url&#39;</span>, response<span style="color:#f92672">.</span>url)
+</code></pre></div><p>上面就是简要的示例代码，可以看到相比之前的解析，赋值和解析代码合并在了一起，爬虫文件中的代码量减少了一半。当解析的数据很多而且还需要进行
+特殊转换比如通过正则进行匹配替换的时候其效果更佳的明显。</p>
+<p>上面代码解析完成后生成的都是一个 list，其值如下:
+<img src="/img/scrapy_03_01.png" alt="ItemLoader 默认解析结果"></p>
+<p>可以看到无论解析出来的值的数量是多少，ItemLoader 默认都会返回一个 list。在之前的方式中我们都是通过 extract_first() 获取第一个值或者通过 extract() 解析到值后进行遍历的。在 ItemLoader 中，为我们提供了 processor 来对数据进行处理。</p>
+<p>在 ItemLoader 类中，提供了 default_output_processor 和 default_input_processor 来对数据的输入与输出进行解析，
+如果我们需要只获取解析后的第一个值，可以指定 default_output_processor 为 TakeFirst() 即可，这是 Scrapy 提供的一个解析处理类，
+用来获取第一个元素，代码如下:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Python" data-lang="Python"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DefaultItemLoader</span>(ItemLoader):
+    default_output_processor <span style="color:#f92672">=</span> TakeFirst()
+</code></pre></div><p>完成自定义的 ItemLoader 类之后就可以在 parse 中使用了</p>
+<pre><code>item_loader = DefaultItemLoader(item=StackQuestionItem(),  selector=question)
+
+item_loader.add_css('question_title', 'a.question-hyperlink::text')
+item_loader.add_css('question_votes', '.votes strong::text')
+item_loader.add_css('question_answers', '.answered strong::text')
+item_loader.add_css('question_views', '.views::attr(title)')
+item_loader.add_css('tags', '.tags a::text')
+
+question_item = item_loader.load_item()
+</code></pre><p>上面的代码使用了自定义的 DefaultItemLoader，因为会获取到 list 中的第一个值，但是对于 tags 而言我们要的是 list 而不是通用的获取的第一个值，
+对于这种特殊的处理情况，就需要在 Item 类中进行设置了。</p>
+<p>Scrapy 允许我们在声明 Item 类定义其字段时，为每一个字段设置单独的数据处理方法，代码如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Python" data-lang="Python">
+<span style="color:#f92672">from</span> scrapy.loader.processors <span style="color:#f92672">import</span> MapCompose, TakeFirst, Join
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">add_prefix</span>(value):
+  <span style="color:#66d9ef">return</span>  <span style="color:#e6db74">&#39;Question:&#39;</span> <span style="color:#f92672">+</span> value
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">StackQuestionItem</span>(scrapy<span style="color:#f92672">.</span>Item):
+  question_title <span style="color:#f92672">=</span> scrapy<span style="color:#f92672">.</span>Field(
+        <span style="color:#75715e"># 指定任意函数对值进行处理</span>
+        <span style="color:#75715e"># 指定 lambda</span>
+        <span style="color:#75715e"># input_processor=MapCompose(lambda x: &#39;Question:&#39; + x ),</span>
+        <span style="color:#75715e"># 指定处理函数</span>
+        input_processor<span style="color:#f92672">=</span>MapCompose(add_prefix),
+
+        <span style="color:#75715e"># 使用 TakeFirst 来取到第一个值进行返回</span>
+        <span style="color:#75715e"># output_processor=TakeFirst(),</span>
+    )
+    question_votes <span style="color:#f92672">=</span> scrapy<span style="color:#f92672">.</span>Field()
+    question_answers <span style="color:#f92672">=</span> scrapy<span style="color:#f92672">.</span>Field()
+    question_views <span style="color:#f92672">=</span> scrapy<span style="color:#f92672">.</span>Field()
+    tags <span style="color:#f92672">=</span> scrapy<span style="color:#f92672">.</span>Field(
+        output_processor<span style="color:#f92672">=</span>Join(<span style="color:#e6db74">&#39;,&#39;</span>),
+    )
+</code></pre></div><p>可以看到，我们可以在字段定义时想 scrapy.Field() 中指定 input_processor 和 output_processor 两个参数来指定对数据的处理。</p>
+<p>scrapy 提供 的 MapCompose 方法允许我们指定一系列的处理方法，Scrapy 会将 解析到的 list 中的值依次传递到每个方法中对值进行处理，这里
+我们在 title 前面加了 ‘Question:’ 前缀。然后在 tags 中通过 Join() 设置了分隔符来连接每一个 tag。关于更多的处理方法可以参阅官方文档，解析后获取到的结果如下：</p>
+<p><img src="/img/scrapy_03_02.png" alt="ItemLoader 默认解析结果"></p>
+<p>可以看到 tag 已经使用逗号分隔符连接起来了，title 前面也加上了 &lsquo;Question:&rsquo; 前缀。
+最后在总结一下操作过程，首先定义一个 ItemLoader 类同时指定通用的 input/output 处理方法，然后在 parse 方法中声明 ItemLoader ，传递 Item 实例 和 response/selector。 通过 ItemLoader 的 add_css/add_xpath/add_value 来进行赋值。
+如果对数据有特殊的处理，就在 Item 类的 Field 中传递 input_processor 和 output_processor 来指定处理函数，来完成整个数据的解析和处理。</p>
+<p>关于 ItemLoader 的说明就到这里了，更加详细的操作可以参阅官方文档。接下来就是讲 Item 实例传递到 pipeline 进行处理了。下一篇将简要介绍 Pipeline 的使用，包括 Scrapy 提供的常用 Pipeline 类以及自定义 Pipeline 类。</p>
+		</div>
+		<footer class="post__footer">
+			
+<div class="post__tags tags clearfix">
+	<svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/scrapy/" rel="tag">Scrapy</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a>
+		</li>
+	</ul>
+</div>
+		</footer>
+	</article>
+</main>
+
+<div class="authorbox clearfix">
+	<figure class="authorbox__avatar">
+		<img alt="邹英杰 avatar" src="/img/avatar.png" class="avatar" height="90" width="90">
+	</figure>
+	<div class="authorbox__header">
+		<span class="authorbox__name">About 邹英杰</span>
+	</div>
+	<div class="authorbox__description">
+		John Doe&rsquo;s true identity is unknown. Maybe he is a successful blogger or writer. Nobody knows it.
+	</div>
+</div>
+
+<nav class="pager flex">
+	<div class="pager__item pager__item--prev">
+		<a class="pager__link" href="/posts/scrapy-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B02-xpath-%E4%B8%8E-css-%E8%A7%A3%E6%9E%90%E4%BB%A5%E5%8F%8A%E8%A7%A3%E6%9E%90%E7%BD%91%E9%A1%B5%E7%A4%BA%E4%BE%8B/" rel="prev">
+			<span class="pager__subtitle">«&thinsp;Previous</span>
+			<p class="pager__title">Scrapy 入门笔记(2) xpath 与 css 解析以及解析网页示例</p>
+		</a>
+	</div>
+	<div class="pager__item pager__item--next">
+		<a class="pager__link" href="/posts/scrapy-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B04-%E4%BD%BF%E7%94%A8-pipeline-%E4%BF%9D%E5%AD%98%E6%95%B0%E6%8D%AE/" rel="next">
+			<span class="pager__subtitle">Next&thinsp;»</span>
+			<p class="pager__title">Scrapy 入门笔记(4) 使用 Pipeline 保存数据</p>
+		</a>
+	</div>
+</nav>
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2021 John Doe.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+<script src="/js/custom.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
+</body>
+</html>

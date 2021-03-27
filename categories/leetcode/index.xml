@@ -1,40 +1,49 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>LeetCode on 邹英杰的博客</title>
+    <title>LeetCode on 邹英杰的个人博客</title>
     <link>/categories/leetcode/</link>
-    <description>Recent content in LeetCode on 邹英杰的博客</description>
+    <description>Recent content in LeetCode on 邹英杰的个人博客</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en</language>
-    <lastBuildDate>Tue, 30 Jul 2019 00:00:00 +0000</lastBuildDate>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 20 Apr 2020 19:31:28 +0800</lastBuildDate>
     
 	<atom:link href="/categories/leetcode/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
+      <title>LeetCode 解题报告-328.奇偶链表</title>
+      <link>/posts/leetcode-%E8%A7%A3%E9%A2%98%E6%8A%A5%E5%91%8A-328.%E5%A5%87%E5%81%B6%E9%93%BE%E8%A1%A8/</link>
+      <pubDate>Mon, 20 Apr 2020 19:31:28 +0800</pubDate>
+      
+      <guid>/posts/leetcode-%E8%A7%A3%E9%A2%98%E6%8A%A5%E5%91%8A-328.%E5%A5%87%E5%81%B6%E9%93%BE%E8%A1%A8/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>LeetCode-95、96. Unique Binary Search Trees-简记</title>
-      <link>/post/leetcode-9596.-unique-binary-search-trees-%E7%AE%80%E8%AE%B0/</link>
+      <link>/posts/leetcode-9596.-unique-binary-search-trees-%E7%AE%80%E8%AE%B0/</link>
       <pubDate>Tue, 30 Jul 2019 00:00:00 +0000</pubDate>
       
-      <guid>/post/leetcode-9596.-unique-binary-search-trees-%E7%AE%80%E8%AE%B0/</guid>
+      <guid>/posts/leetcode-9596.-unique-binary-search-trees-%E7%AE%80%E8%AE%B0/</guid>
       <description>&lt;p&gt;LeetCode 平衡二叉树刷题训练。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>LeetCode-337. House Robber III-简记</title>
-      <link>/post/leetcode-337.-house-robber-iii-%E7%AE%80%E8%AE%B0/</link>
+      <link>/posts/leetcode-337.-house-robber-iii-%E7%AE%80%E8%AE%B0/</link>
       <pubDate>Tue, 23 Jul 2019 00:00:00 +0000</pubDate>
       
-      <guid>/post/leetcode-337.-house-robber-iii-%E7%AE%80%E8%AE%B0/</guid>
+      <guid>/posts/leetcode-337.-house-robber-iii-%E7%AE%80%E8%AE%B0/</guid>
       <description>&lt;p&gt;LeetCode 动态规划刷题训练。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>LeetCode-198. House Robber-简记</title>
-      <link>/post/leetcode-198.-house-robber-%E7%AE%80%E8%AE%B0/</link>
+      <link>/posts/leetcode-198.-house-robber-%E7%AE%80%E8%AE%B0/</link>
       <pubDate>Fri, 19 Jul 2019 00:00:00 +0000</pubDate>
       
-      <guid>/post/leetcode-198.-house-robber-%E7%AE%80%E8%AE%B0/</guid>
+      <guid>/posts/leetcode-198.-house-robber-%E7%AE%80%E8%AE%B0/</guid>
       <description>&lt;p&gt;LeetCode 动态规划刷题训练。&lt;/p&gt;</description>
     </item>
     

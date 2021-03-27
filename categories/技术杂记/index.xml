@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>技术杂记 on 邹英杰的博客</title>
+    <title>技术杂记 on 邹英杰的个人博客</title>
     <link>/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%AE%B0/</link>
-    <description>Recent content in 技术杂记 on 邹英杰的博客</description>
+    <description>Recent content in 技术杂记 on 邹英杰的个人博客</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en</language>
+    <language>en-us</language>
     <lastBuildDate>Thu, 02 Apr 2020 12:29:16 +0800</lastBuildDate>
     
 	<atom:link href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%AE%B0/index.xml" rel="self" type="application/rss+xml" />
@@ -13,11 +13,11 @@
     
     <item>
       <title>AWS NAT Gateway 使用简记</title>
-      <link>/post/aws-nat-gateway-%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/</link>
+      <link>/posts/aws-nat-gateway-%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/</link>
       <pubDate>Thu, 02 Apr 2020 12:29:16 +0800</pubDate>
       
-      <guid>/post/aws-nat-gateway-%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/</guid>
-      <description>最近项目遇到个需求，需要将后端的服务器出口统一成一个 IP，服务器在 AWS 上，这个可以用 AWS 的 NAT Gateway 实现，调研实施的过程中发现如果对 AWS 相关概念的话不熟</description>
+      <guid>/posts/aws-nat-gateway-%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/</guid>
+      <description></description>
     </item>
     
   </channel>

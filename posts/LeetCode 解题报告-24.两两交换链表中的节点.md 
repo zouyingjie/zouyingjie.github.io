@@ -1,0 +1,83 @@
+---
+title: "LeetCode 解题报告-24.两两交换链表中的节点"
+date: 2020-04-20T19:31:28+08:00
+tags: ['LeetCode', "算法"]
+categories: ['LeetCode', "算法"]
+---
+
+今天做 LeetCode [24.两两交换链表中的节点](https://leetcode.com/problems/swap-nodes-in-pairs/)，难度为 **Medium**。
+
+### 一. 题目要求
+
+给定一个链表，两两交换其中相邻的节点，并返回交换后的链表。
+
+示例:
+
+> Given 1->2->3->4, you should return the list as 2->1->4->3.
+
+### 二. 解题思路 & 代码
+
+
+这道题难点在于搞清楚反转过程中节点指针的变化情况，每次交换都要涉及下面四个几点：
+
+
+- 当前节点 A
+- 当前节点 next 节点 B ，要与当前节点做交换
+- 当前节点的 next.next 节点，作为下一次遍历执行交换的节点
+- 当前节点的 pre 节点，交换完成后需要 **将其 next 指向 B**。
+
+
+具体实现代码如下：
+
+```java
+class Solution {
+      public ListNode swapPairs(ListNode head) {
+        if(head == null) {
+            return null;
+        }
+
+        if(head.next == null) {
+            return head;
+        }
+
+        ListNode result = head.next;
+
+        // 最开始 pre 节点为空
+        ListNode preNode = null;
+
+        // 从 header 节点开始
+        // 因为是两两交换，因此要判断 node 和 node.next 都不为空才行
+        ListNode node = head;
+        while(node != null && node.next != null) {
+            
+            // 当前节点的 next 节点
+            ListNode next = node.next;
+
+            // 当前节点的 next.next 节点
+            // 事先记录下来作为下一个要遍历交换的节点
+            ListNode tmpNextNode = next.next;
+
+
+            // 交换节点
+            // 将 B 指向 A
+            next.next = node;
+            // 将 A 指向 Next
+            node.next = tmpNextNode;
+            
+            //  preNode 不为空的话，需要将 PreNode.next 指向 B
+            if(preNode != null) {
+                preNode.next = next;
+            }
+            
+            // 词汇书
+            preNode = node;
+            node = tmpNextNode;
+        }
+        return result;
+    }
+}
+```
+
+### 三. 解题后记
+
+解题思路挺好想的，不算难，但是交换过程中各个节点的变换是非常容易搞混的，面对这种题目最好的方式就是画图，把各个节点的位置变换用图画清楚，写起来思路也就不容易乱了。

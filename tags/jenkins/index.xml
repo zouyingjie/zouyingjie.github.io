@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Jenkins on 邹英杰的博客</title>
+    <title>Jenkins on 邹英杰的个人博客</title>
     <link>/tags/jenkins/</link>
-    <description>Recent content in Jenkins on 邹英杰的博客</description>
+    <description>Recent content in Jenkins on 邹英杰的个人博客</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en</language>
+    <language>en-us</language>
     <lastBuildDate>Mon, 04 Nov 2019 15:50:53 +0800</lastBuildDate>
     
 	<atom:link href="/tags/jenkins/index.xml" rel="self" type="application/rss+xml" />
@@ -13,20 +13,20 @@
     
     <item>
       <title>DevOps笔记-Jenkins使用简记&#34;</title>
-      <link>/post/devops%E7%AC%94%E8%AE%B0-jenkins%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/</link>
+      <link>/posts/devops%E7%AC%94%E8%AE%B0-jenkins%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/</link>
       <pubDate>Mon, 04 Nov 2019 15:50:53 +0800</pubDate>
       
-      <guid>/post/devops%E7%AC%94%E8%AE%B0-jenkins%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/</guid>
-      <description>最近用 Jenkins 将原来公司自研的 CICD 工具给替换掉了， Jenkins 本身的文档并不是很明晰，很多问题都需要自己尝试和搜索才能解决，这里简要记录下期间遇到的一些问题的</description>
+      <guid>/posts/devops%E7%AC%94%E8%AE%B0-jenkins%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/</guid>
+      <description></description>
     </item>
     
     <item>
       <title>DevOps笔记-从0开始搭建Jenkins流水线</title>
-      <link>/post/devops%E7%AC%94%E8%AE%B0-%E4%BB%8E0%E5%BC%80%E5%A7%8B%E6%90%AD%E5%BB%BAjenkins%E6%B5%81%E6%B0%B4%E7%BA%BF/</link>
+      <link>/posts/devops%E7%AC%94%E8%AE%B0-%E4%BB%8E0%E5%BC%80%E5%A7%8B%E6%90%AD%E5%BB%BAjenkins%E6%B5%81%E6%B0%B4%E7%BA%BF/</link>
       <pubDate>Mon, 04 Nov 2019 15:50:53 +0800</pubDate>
       
-      <guid>/post/devops%E7%AC%94%E8%AE%B0-%E4%BB%8E0%E5%BC%80%E5%A7%8B%E6%90%AD%E5%BB%BAjenkins%E6%B5%81%E6%B0%B4%E7%BA%BF/</guid>
-      <description>上一篇文章总结了一些使用 Jenkins 期间遇到的一些坑，这篇文章就在其基础之上介绍从 0 开始搭建一个 Jenkins 流水线。 一. 梳理流程 一. 安装启动 Jenkins 1. 安装 Java 1 2 sudo apt update</description>
+      <guid>/posts/devops%E7%AC%94%E8%AE%B0-%E4%BB%8E0%E5%BC%80%E5%A7%8B%E6%90%AD%E5%BB%BAjenkins%E6%B5%81%E6%B0%B4%E7%BA%BF/</guid>
+      <description></description>
     </item>
     
   </channel>

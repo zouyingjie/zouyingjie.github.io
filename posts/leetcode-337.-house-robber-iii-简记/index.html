@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>LeetCode-337. House Robber III-简记 - 邹英杰的个人博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="">
+		<meta property="og:title" content="LeetCode-337. House Robber III-简记" />
+<meta property="og:description" content="LeetCode 动态规划刷题训练。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/leetcode-337.-house-robber-iii-%E7%AE%80%E8%AE%B0/" />
+<meta property="article:published_time" content="2019-07-23T00:00:00+00:00" />
+<meta property="article:modified_time" content="2019-07-23T00:00:00+00:00" />
+
+		<meta itemprop="name" content="LeetCode-337. House Robber III-简记">
+<meta itemprop="description" content="LeetCode 动态规划刷题训练。">
+<meta itemprop="datePublished" content="2019-07-23T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2019-07-23T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="353">
+
+
+
+<meta itemprop="keywords" content="LeetCode,动态规划," />
+		<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="LeetCode-337. House Robber III-简记"/>
+<meta name="twitter:description" content="LeetCode 动态规划刷题训练。"/>
+
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo logo--mixed">
+		<a class="logo__link" href="/" title="邹英杰的个人博客" rel="home">
+			<div class="logo__item logo__imagebox">
+					<img class="logo__img" src="/img/zouyingjie.jpg">
+				</div><div class="logo__item logo__text">
+					<div class="logo__title">邹英杰的个人博客</div>
+					<div class="logo__tagline">Be a good man</div>
+				</div>
+		</a>
+	</div>
+		<div class="divider"></div>
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">LeetCode-337. House Robber III-简记</h1>
+			<div class="post__meta meta"><div class="meta__item-author meta__item">
+	<svg class="meta__icon icon icon-author" width="16" height="16" viewBox="0 0 12 16"><path d="M6 1c2.2 0 3.5 2 3.5 4.5C9.5 7 8.9 8.2 8 9c2.9.8 4 2.5 4 5v1H0v-1c0-2.5 1.1-4.2 4-5-.9-.8-1.5-2-1.5-3.5C2.5 3 3.8 1 6 1z"/></svg><span class="meta__text">邹英杰</span>
+</div>
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class="meta__text" datetime="2019-07-23T00:00:00Z">2019-07-23</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2l1 2h8v11h-16v-13z"/></svg><span class="meta__text"><a class="meta__link" href="/categories/leetcode/" rel="category">LeetCode</a>
+	</span>
+</div></div>
+		</header>
+<div class="post__toc toc">
+	<div class="toc__title">Page content</div>
+	<div class="toc__menu">
+		<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+	</div>
+</div><div class="content post__content clearfix">
+			<p>LeetCode 动态规划刷题训练。</p>
+<p>LeetCode 第 <a href="https://leetcode.com/problems/house-robber-iii/">337. House Robber III）</a>，题目概要如下：</p>
+<blockquote>
+<p>在上次打劫完一条街道之后和一圈房屋后，小偷又发现了一个新的可行窃的地区。这个地区只有一个入口，我们称之为“根”。 除了“根”之外，每栋房子有且只有一个“父“房子与之相连。一番侦察之后，聪明的小偷意识到“这个地方的所有房屋的排列类似于一棵二叉树”。 如果两个直接相连的房子在同一天晚上被打劫，房屋将自动报警。</p>
+<p>计算在不触动警报的情况下，小偷一晚能够盗取的最高金额。</p>
+<p>示例 1:</p>
+<p>输入: [3,2,3,null,3,null,1]</p>
+</blockquote>
+<pre><code>     3
+    / \
+
+   2   3
+    \   \ 
+     3   1
+</code></pre><blockquote>
+<p>输出: 7
+解释: 小偷一晚能够盗取的最高金额 = 3 + 3 + 1 = 7.
+示例 2:</p>
+</blockquote>
+<blockquote>
+<p>输入: [3,4,5,1,3,null,1]</p>
+</blockquote>
+<pre><code>     3
+    / \
+   4   5
+  / \   \ 
+ 1   3   1
+</code></pre><blockquote>
+<p>输出: 9
+解释: 小偷一晚能够盗取的最高金额 = 4 + 5 = 9.</p>
+</blockquote>
+<p>和第一道题目的区别是现在的数据结构变成了二叉树。不过无论怎么变，解题思路不会变</p>
+<ul>
+<li>当前步骤都是之前状态的叠加，因此一般可以通过递归来解决</li>
+<li>在当前步骤往往会面临一个 &ldquo;TO BE OR NOT TO BE&rdquo; 场景</li>
+</ul>
+<p>那么对于二叉树的每个节点存在三种状态：</p>
+<ul>
+<li>父节点被打劫，不打劫该节点</li>
+<li>父节点没有被打劫，打劫该节点</li>
+<li>父节点没有被打劫，不打劫该节点</li>
+</ul>
+<h4 id="1-根节点递归">1. 根节点递归</h4>
+<p>了解了每个节点的状态，就可以通过递归求解了，代码如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Java" data-lang="Java"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">rob</span><span style="color:#f92672">(</span>TreeNode root<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+
+       <span style="color:#66d9ef">return</span> Math<span style="color:#f92672">.</span><span style="color:#a6e22e">max</span><span style="color:#f92672">(</span>helper<span style="color:#f92672">(</span>root<span style="color:#f92672">,</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">),</span> helper<span style="color:#f92672">(</span>root<span style="color:#f92672">,</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">));</span>
+   <span style="color:#f92672">}</span>
+   
+   <span style="color:#75715e">// robParent 表示父节点是否被打劫
+</span><span style="color:#75715e"></span>   <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">helper</span><span style="color:#f92672">(</span>TreeNode node<span style="color:#f92672">,</span> <span style="color:#66d9ef">boolean</span> robParent<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+
+       <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>node <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+           <span style="color:#66d9ef">return</span> 0<span style="color:#f92672">;</span>
+       <span style="color:#f92672">}</span>
+       <span style="color:#66d9ef">int</span> val <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span>
+       <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>robParent<span style="color:#f92672">)</span> <span style="color:#f92672">{</span> <span style="color:#75715e">// 父节点被打劫，跳过该节点
+</span><span style="color:#75715e"></span>           val <span style="color:#f92672">=</span> helper<span style="color:#f92672">(</span>node<span style="color:#f92672">.</span><span style="color:#a6e22e">left</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">)</span>  <span style="color:#f92672">+</span> helper<span style="color:#f92672">(</span>node<span style="color:#f92672">.</span><span style="color:#a6e22e">right</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">);</span>
+       <span style="color:#f92672">}</span><span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span> <span style="color:#75715e">// 父节点没有被打劫，有两种选择：打劫当前节点或者不打劫，取两者的最大值。
+</span><span style="color:#75715e"></span>           val <span style="color:#f92672">=</span> Math<span style="color:#f92672">.</span><span style="color:#a6e22e">max</span><span style="color:#f92672">(</span>node<span style="color:#f92672">.</span><span style="color:#a6e22e">val</span> <span style="color:#f92672">+</span> helper<span style="color:#f92672">(</span>node<span style="color:#f92672">.</span><span style="color:#a6e22e">left</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">)</span> <span style="color:#f92672">+</span> helper<span style="color:#f92672">(</span>node<span style="color:#f92672">.</span><span style="color:#a6e22e">right</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">),</span> helper<span style="color:#f92672">(</span>node<span style="color:#f92672">.</span><span style="color:#a6e22e">left</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">)</span> <span style="color:#f92672">+</span> helper<span style="color:#f92672">(</span>node<span style="color:#f92672">.</span><span style="color:#a6e22e">right</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">));</span>
+       <span style="color:#f92672">}</span>
+       <span style="color:#66d9ef">return</span> val<span style="color:#f92672">;</span>
+   <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>上面就是第一种递归求解的方法。实际测试中是可以通过的，但是耗时 1000 多 ms。原因是递归过程中存在大量的重复计算，比如对于根节点，首先计算标识传 true 的情况，测试会 执行</p>
+<p><code>val = helper(node.left, false)  + helper(node.right, false);</code> 代码，而当传 false 时还会执行一遍。因此优化思路和之前一样，空间换时间，记录递归过程的中间值，避免重复计算。</p>
+<h4 id="2-根节点递归--缓存中间值">2. 根节点递归 + 缓存中间值</h4>
+<p>对于每个节点，都有父节点被打劫和不被打劫两种情况，因此我们需要记录下每个节点在这两种情况下的最大收益值，因此需要两个 Map 集合，而 key 就是当前节点。整体代码如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Java" data-lang="Java"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> <span style="color:#f92672">{</span>
+
+   <span style="color:#66d9ef">private</span> Map<span style="color:#f92672">&lt;</span>TreeNode<span style="color:#f92672">,</span> Integer<span style="color:#f92672">&gt;</span> robParentMap <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> HashMap<span style="color:#f92672">&lt;&gt;();</span>
+   <span style="color:#66d9ef">private</span> Map<span style="color:#f92672">&lt;</span>TreeNode<span style="color:#f92672">,</span> Integer<span style="color:#f92672">&gt;</span> notRobParentMap <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> HashMap<span style="color:#f92672">&lt;&gt;();</span>
+
+   <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">rob</span><span style="color:#f92672">(</span>TreeNode root<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+       <span style="color:#66d9ef">return</span> Math<span style="color:#f92672">.</span><span style="color:#a6e22e">max</span><span style="color:#f92672">(</span>helper<span style="color:#f92672">(</span>root<span style="color:#f92672">,</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">),</span> helper<span style="color:#f92672">(</span>root<span style="color:#f92672">,</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">));</span>
+   <span style="color:#f92672">}</span>
+
+   <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">helper</span><span style="color:#f92672">(</span>TreeNode node<span style="color:#f92672">,</span> <span style="color:#66d9ef">boolean</span> robParent<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+
+       <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>node <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+           <span style="color:#66d9ef">return</span> 0<span style="color:#f92672">;</span>
+       <span style="color:#f92672">}</span>
+
+       <span style="color:#66d9ef">int</span> val <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span>
+       <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>robParent<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+           <span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>robParentMap<span style="color:#f92672">.</span><span style="color:#a6e22e">containsKey</span><span style="color:#f92672">(</span>node<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+               val <span style="color:#f92672">=</span> helper<span style="color:#f92672">(</span>node<span style="color:#f92672">.</span><span style="color:#a6e22e">left</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">)</span>  <span style="color:#f92672">+</span> helper<span style="color:#f92672">(</span>node<span style="color:#f92672">.</span><span style="color:#a6e22e">right</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">);</span>
+               robParentMap<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>node<span style="color:#f92672">,</span> val<span style="color:#f92672">);</span>
+           <span style="color:#f92672">}</span>
+           <span style="color:#66d9ef">return</span> robParentMap<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>node<span style="color:#f92672">);</span>
+
+       <span style="color:#f92672">}</span><span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+           <span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>notRobParentMap<span style="color:#f92672">.</span><span style="color:#a6e22e">containsKey</span><span style="color:#f92672">(</span>node<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+               val <span style="color:#f92672">=</span> Math<span style="color:#f92672">.</span><span style="color:#a6e22e">max</span><span style="color:#f92672">(</span>node<span style="color:#f92672">.</span><span style="color:#a6e22e">val</span> <span style="color:#f92672">+</span> helper<span style="color:#f92672">(</span>node<span style="color:#f92672">.</span><span style="color:#a6e22e">left</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">)</span> <span style="color:#f92672">+</span> helper<span style="color:#f92672">(</span>node<span style="color:#f92672">.</span><span style="color:#a6e22e">right</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">),</span> helper<span style="color:#f92672">(</span>node<span style="color:#f92672">.</span><span style="color:#a6e22e">left</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">)</span> <span style="color:#f92672">+</span> helper<span style="color:#f92672">(</span>node<span style="color:#f92672">.</span><span style="color:#a6e22e">right</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">));</span>
+               notRobParentMap<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>node<span style="color:#f92672">,</span> val<span style="color:#f92672">);</span>
+           <span style="color:#f92672">}</span>
+           <span style="color:#66d9ef">return</span> notRobParentMap<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>node<span style="color:#f92672">);</span>
+       <span style="color:#f92672">}</span>
+   <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>上面代码通过两个 Map 分别记录中间值，这样就避免了重复计算的情况。实际检测运行时间为 7ms，和第一版实现相比性能已经得到极大优化了。</p>
+<h4 id="3-正向迭代">3. 正向迭代</h4>
+<p>上面通过递归+缓存中间值的方式已经将性能极大优化了，但是一般来说凡是可以逆向递归的都可以通过正向遍历来实现。对于二叉树，其遍历方式有三种：</p>
+<ul>
+<li>前序遍历</li>
+<li>中序遍历</li>
+<li>后序遍历</li>
+</ul>
+<p>我们需要计算完两个子节点的打劫情况后在计算当前节点的打劫收益，因此要使用后序遍历。这里我们使用数组来记录每个节点的最大收益值，数组长度为 2，第 1 个元素表示没有打劫父节点时当前节点的最大收益值，第 2 个元素表示打劫父节点时当前节点最大收益值。整体代码如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Java" data-lang="Java"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> <span style="color:#f92672">{</span>
+     <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">rob</span><span style="color:#f92672">(</span>TreeNode root<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">int</span><span style="color:#f92672">[]</span> nums <span style="color:#f92672">=</span> postOrder<span style="color:#f92672">(</span>root<span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">return</span> Math<span style="color:#f92672">.</span><span style="color:#a6e22e">max</span><span style="color:#f92672">(</span>nums<span style="color:#f92672">[</span>0<span style="color:#f92672">],</span> nums<span style="color:#f92672">[</span>1<span style="color:#f92672">]);</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span><span style="color:#f92672">[]</span> <span style="color:#a6e22e">postOrder</span><span style="color:#f92672">(</span>TreeNode node<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>node <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">int</span><span style="color:#f92672">[]{</span>0<span style="color:#f92672">,</span> 0<span style="color:#f92672">};</span>
+        <span style="color:#f92672">}</span>
+        <span style="color:#75715e">//每个数组的第 1 个值为不读父节点时的最大收益值，第二个为读父节点时的最大收益值。
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">int</span><span style="color:#f92672">[]</span> nums1 <span style="color:#f92672">=</span> postOrder<span style="color:#f92672">(</span>node<span style="color:#f92672">.</span><span style="color:#a6e22e">left</span><span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">int</span><span style="color:#f92672">[]</span> nums2 <span style="color:#f92672">=</span> postOrder<span style="color:#f92672">(</span>node<span style="color:#f92672">.</span><span style="color:#a6e22e">right</span><span style="color:#f92672">);</span>
+
+        <span style="color:#66d9ef">int</span> num1 <span style="color:#f92672">=</span> nums1<span style="color:#f92672">[</span>1<span style="color:#f92672">]</span> <span style="color:#f92672">+</span> nums2<span style="color:#f92672">[</span>1<span style="color:#f92672">];</span> 
+        <span style="color:#66d9ef">int</span> num2 <span style="color:#f92672">=</span> Math<span style="color:#f92672">.</span><span style="color:#a6e22e">max</span><span style="color:#f92672">(</span>num1<span style="color:#f92672">,</span> node<span style="color:#f92672">.</span><span style="color:#a6e22e">val</span> <span style="color:#f92672">+</span> nums1<span style="color:#f92672">[</span>0<span style="color:#f92672">]</span> <span style="color:#f92672">+</span> nums2<span style="color:#f92672">[</span>0<span style="color:#f92672">]);</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">int</span><span style="color:#f92672">[]{</span>num1<span style="color:#f92672">,</span> num2<span style="color:#f92672">};</span>
+
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>这样就省去了缓存中间值需要的额外存储空间和大量的判断、取值存值操作。提交后实际测试为 1ms，可以看到相比解法二性能又得到了进一步的提升。</p>
+<p>通过这道题目可以进一步总结出动态规划做题的相关套路：</p>
+<ul>
+<li>
+<ol>
+<li>找递归公式，逆向递归求解</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>空间换时间，缓存递归中间值，优化性能。</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>变逆向递归为正向遍历，求解。</li>
+</ol>
+</li>
+</ul>
+		</div>
+		<footer class="post__footer">
+			
+<div class="post__tags tags clearfix">
+	<svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/leetcode/" rel="tag">LeetCode</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" rel="tag">动态规划</a>
+		</li>
+	</ul>
+</div>
+		</footer>
+	</article>
+</main>
+
+<div class="authorbox clearfix">
+	<figure class="authorbox__avatar">
+		<img alt="邹英杰 avatar" src="/img/avatar.png" class="avatar" height="90" width="90">
+	</figure>
+	<div class="authorbox__header">
+		<span class="authorbox__name">About 邹英杰</span>
+	</div>
+	<div class="authorbox__description">
+		John Doe&rsquo;s true identity is unknown. Maybe he is a successful blogger or writer. Nobody knows it.
+	</div>
+</div>
+
+<nav class="pager flex">
+	<div class="pager__item pager__item--prev">
+		<a class="pager__link" href="/posts/leetcode-198.-house-robber-%E7%AE%80%E8%AE%B0/" rel="prev">
+			<span class="pager__subtitle">«&thinsp;Previous</span>
+			<p class="pager__title">LeetCode-198. House Robber-简记</p>
+		</a>
+	</div>
+	<div class="pager__item pager__item--next">
+		<a class="pager__link" href="/posts/java-%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E5%8C%BA%E4%BB%A5%E5%8F%8A%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9E%83%E5%9C%BE%E7%AD%96%E7%95%A5/" rel="next">
+			<span class="pager__subtitle">Next&thinsp;»</span>
+			<p class="pager__title">Java 虚拟机的内存分区以及内存分配与垃圾策略</p>
+		</a>
+	</div>
+</nav>
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2021 John Doe.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+<script src="/js/custom.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
+</body>
+</html>

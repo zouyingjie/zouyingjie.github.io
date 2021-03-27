@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>【ELK笔记】ELK的安装，快速搭建一个ELK日志分析平台 - 邹英杰的个人博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="">
+		<meta property="og:title" content="【ELK笔记】ELK的安装，快速搭建一个ELK日志分析平台" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/elk%E7%AC%94%E8%AE%B0elk%E7%9A%84%E5%AE%89%E8%A3%85%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AAelk%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90%E5%B9%B3%E5%8F%B0/" />
+<meta property="article:published_time" content="2018-03-19T20:38:40+00:00" />
+<meta property="article:modified_time" content="2018-03-19T20:38:40+00:00" />
+
+		<meta itemprop="name" content="【ELK笔记】ELK的安装，快速搭建一个ELK日志分析平台">
+<meta itemprop="description" content="">
+<meta itemprop="datePublished" content="2018-03-19T20:38:40&#43;00:00" />
+<meta itemprop="dateModified" content="2018-03-19T20:38:40&#43;00:00" />
+<meta itemprop="wordCount" content="466">
+
+
+
+<meta itemprop="keywords" content="ELK," />
+		<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="【ELK笔记】ELK的安装，快速搭建一个ELK日志分析平台"/>
+<meta name="twitter:description" content=""/>
+
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo logo--mixed">
+		<a class="logo__link" href="/" title="邹英杰的个人博客" rel="home">
+			<div class="logo__item logo__imagebox">
+					<img class="logo__img" src="/img/zouyingjie.jpg">
+				</div><div class="logo__item logo__text">
+					<div class="logo__title">邹英杰的个人博客</div>
+					<div class="logo__tagline">Be a good man</div>
+				</div>
+		</a>
+	</div>
+		<div class="divider"></div>
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">【ELK笔记】ELK的安装，快速搭建一个ELK日志分析平台</h1>
+			<div class="post__meta meta"><div class="meta__item-author meta__item">
+	<svg class="meta__icon icon icon-author" width="16" height="16" viewBox="0 0 12 16"><path d="M6 1c2.2 0 3.5 2 3.5 4.5C9.5 7 8.9 8.2 8 9c2.9.8 4 2.5 4 5v1H0v-1c0-2.5 1.1-4.2 4-5-.9-.8-1.5-2-1.5-3.5C2.5 3 3.8 1 6 1z"/></svg><span class="meta__text">邹英杰</span>
+</div>
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class="meta__text" datetime="2018-03-19T20:38:40Z">2018-03-19</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2l1 2h8v11h-16v-13z"/></svg><span class="meta__text"><a class="meta__link" href="/categories/elk/" rel="category">ELK</a>
+	</span>
+</div></div>
+		</header>
+<div class="post__toc toc">
+	<div class="toc__title">Page content</div>
+	<div class="toc__menu">
+		<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#一-elasticsearch-的安装与运行">一. ElasticSearch 的安装与运行</a></li>
+        <li><a href="#二-filebeats-与-logstash-的安装">二. FileBeats 与 LogStash 的安装</a></li>
+        <li><a href="#三-kibana-的安装运行">三. Kibana 的安装运行</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+	</div>
+</div><div class="content post__content clearfix">
+			<p>ELK 是 ElasticSearch、 LogStash、 Kibana 三个开源工具的简称，现在还包括 Beats，其分工如下:</p>
+<ul>
+<li>LogStash/Beats: 负责数据的收集与处理</li>
+<li>ElasticSearch: 一个开源的分布式搜索引擎，负责数据的存储、检索和分析</li>
+<li>Kibana: 提供了可视化的界面。负责数据的可视化操作</li>
+</ul>
+<p>基于 ELK Stack 可以构建日志分析平台、数据分析搜索平台等非常有用的项目。</p>
+<p>作为学习笔记的第一篇，简单介绍下 ELK 各个软件的安装与简单配置，快速的搭建一个日志的查询平台</p>
+<h3 id="一-elasticsearch-的安装与运行">一. ElasticSearch 的安装与运行</h3>
+<p>ES 是一个基于 Lucene 的使用 Java 开发的开源搜索引擎，因此其运行是基于 JVM 的，因此在安装之前需要保证已经安装了 Java 环境。ES 要求使用 Java8 或者更高版本的 Java 环境。</p>
+<p>确定机器已经安装了 Java 环境后，就可以安装 ES 了。官网提供了压缩包可以直接下载，</p>
+<pre><code># 下载压缩包
+wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.2.2.tar.gz
+# 解压
+tar -xzf elasticsearch-6.2.2.tar.gz
+# 进入文件
+cd elasticsearch-6.2.2/
+</code></pre><p>下载解压完成后进入目录，启动命令在 bin 目录下，直接运行命令就可以启动了</p>
+<pre><code>bin/elasticsearch
+</code></pre><p>ElasticSearch 的默认启动端口是 9200。手动访问出现如下信息说明启动成功。</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWctYmxvZy5jc2RuLm5ldC8yMDE4MDMxOTExMjk0NjkzNz93YXRlcm1hcmsvMi90ZXh0L0x5OWliRzluTG1OelpHNHVibVYwTDBGb2NtbGZTZz09L2ZvbnQvNWE2TDVMMlQvZm9udHNpemUvNDAwL2ZpbGwvSTBKQlFrRkNNQT09L2Rpc3NvbHZlLzcw" alt="这里写图片描述"></p>
+<h3 id="二-filebeats-与-logstash-的安装">二. FileBeats 与 LogStash 的安装</h3>
+<p>LogStash 可以用来对日志进行收集并进行过滤整理后输出到 ES 中，FileBeats 是一个更加轻量级的日志收集工具。
+现在最常用的方式是通过 FileBeats 收集目标日志，然后统一输出到 LogStash 做进一步的过滤，在由 LogStash 输出到 ES 中进行存储。</p>
+<h4 id="1-logstash-的安装运行">1. LogStash 的安装运行</h4>
+<p>官方提供了压缩包下载， <a href="https://www.elastic.co/downloads/logstash">https://www.elastic.co/downloads/logstash</a> 。 下载完成后解压即可。</p>
+<pre><code>tar zxvf logstash-6.2.2.tar.gz
+# 进入目录
+cd logstash-6.2.2
+</code></pre><p>LogStash 的运行需要指定一个配置文件，来指定数据的流向，我们在当前目录下创建一个 first.conf 文件，其内容如下:</p>
+<pre><code># 配置输入为 beats
+input {
+    beats {
+            port =&gt; &quot;5044&quot;
+
+    }
+
+}
+# 数据过滤
+filter {
+    grok {
+            match =&gt; { &quot;message&quot; =&gt; &quot;%{COMBINEDAPACHELOG}&quot; }
+
+    }
+    geoip {
+            source =&gt; &quot;clientip&quot;
+
+    }
+
+}
+# 输出到本机的 ES
+output {
+    elasticsearch {
+            hosts =&gt; [ &quot;localhost:9200&quot;  ]
+
+    }
+
+}
+</code></pre><p>上面配置了 LogStash 输出日志到 ES 中，具体字段在后面的笔记中会详细介绍，这里先用起来再说。
+配置完成后就可以通过如下方式启动 LogStash 了</p>
+<pre><code>bin/logstash -f first.conf --config.reload.automatic
+</code></pre><p>可以看到命令行会打印出如下信息， 可以看到 LogStash 默认端口为 5044:</p>
+<pre><code>[2018-03-08T23:12:44,087][WARN ][logstash.config.source.multilocal] Ignoring the 'pipelines.yml' file because modules or command line options are specified
+[2018-03-08T23:12:44,925][INFO ][logstash.runner          ] Starting Logstash {&quot;logstash.version&quot;=&gt;&quot;6.2.2&quot;}
+[2018-03-08T23:12:45,623][INFO ][logstash.agent           ] Successfully started Logstash API endpoint {:port=&gt;9600}
+[2018-03-08T23:12:49,960][INFO ][logstash.pipeline        ] Starting pipeline {:pipeline_id=&gt;&quot;main&quot;, &quot;pipeline.workers&quot;=&gt;4, &quot;pipeline.batch.size&quot;=&gt;125, &quot;pipeline.batch.delay&quot;=&gt;50}
+[2018-03-08T23:12:50,882][INFO ][logstash.outputs.elasticsearch] Elasticsearch pool URLs updated {:changes=&gt;{:removed=&gt;[], :added=&gt;[http://localhost:9200/]}}
+[2018-03-08T23:12:50,894][INFO ][logstash.outputs.elasticsearch] Running health check to see if an Elasticsearch connection is working {:healthcheck_url=&gt;http://localhost:9200/, :path=&gt;&quot;/&quot;}
+[2018-03-08T23:12:51,303][WARN ][logstash.outputs.elasticsearch] Restored connection to ES instance {:url=&gt;&quot;http://localhost:9200/&quot;}
+[2018-03-08T23:12:51,595][INFO ][logstash.outputs.elasticsearch] ES Output version determined {:es_version=&gt;nil}
+[2018-03-08T23:12:51,604][WARN ][logstash.outputs.elasticsearch] Detected a 6.x and above cluster: the `type` event field won't be used to determine the document _type {:es_version=&gt;6}
+[2018-03-08T23:12:51,641][INFO ][logstash.outputs.elasticsearch] Using mapping template from {:path=&gt;nil}
+[2018-03-08T23:12:51,676][INFO ][logstash.outputs.elasticsearch] Attempting to install template {:manage_template=&gt;{&quot;template&quot;=&gt;&quot;logstash-*&quot;, &quot;version&quot;=&gt;60001, &quot;settings&quot;=&gt;{&quot;index.refresh_interval&quot;=&gt;&quot;5s&quot;}, &quot;mappings&quot;=&gt;{&quot;_default_&quot;=&gt;{&quot;dynamic_templates&quot;=&gt;[{&quot;message_field&quot;=&gt;{&quot;path_match&quot;=&gt;&quot;message&quot;, &quot;match_mapping_type&quot;=&gt;&quot;string&quot;, &quot;mapping&quot;=&gt;{&quot;type&quot;=&gt;&quot;text&quot;, &quot;norms&quot;=&gt;false}}}, {&quot;string_fields&quot;=&gt;{&quot;match&quot;=&gt;&quot;*&quot;, &quot;match_mapping_type&quot;=&gt;&quot;string&quot;, &quot;mapping&quot;=&gt;{&quot;type&quot;=&gt;&quot;text&quot;, &quot;norms&quot;=&gt;false, &quot;fields&quot;=&gt;{&quot;keyword&quot;=&gt;{&quot;type&quot;=&gt;&quot;keyword&quot;, &quot;ignore_above&quot;=&gt;256}}}}}], &quot;properties&quot;=&gt;{&quot;@timestamp&quot;=&gt;{&quot;type&quot;=&gt;&quot;date&quot;}, &quot;@version&quot;=&gt;{&quot;type&quot;=&gt;&quot;keyword&quot;}, &quot;geoip&quot;=&gt;{&quot;dynamic&quot;=&gt;true, &quot;properties&quot;=&gt;{&quot;ip&quot;=&gt;{&quot;type&quot;=&gt;&quot;ip&quot;}, &quot;location&quot;=&gt;{&quot;type&quot;=&gt;&quot;geo_point&quot;}, &quot;latitude&quot;=&gt;{&quot;type&quot;=&gt;&quot;half_float&quot;}, &quot;longitude&quot;=&gt;{&quot;type&quot;=&gt;&quot;half_float&quot;}}}}}}}}
+[2018-03-08T23:12:51,773][INFO ][logstash.outputs.elasticsearch] New Elasticsearch output {:class=&gt;&quot;LogStash::Outputs::ElasticSearch&quot;, :hosts=&gt;[&quot;//localhost:9200&quot;]}
+[2018-03-08T23:12:52,176][INFO ][logstash.filters.geoip   ] Using geoip database {:path=&gt;&quot;/Users/zouyingjie/soft/study/ELK/logstash-6.2.2/vendor/bundle/jruby/2.3.0/gems/logstash-filter-geoip-5.0.3-java/vendor/GeoLite2-City.mmdb&quot;}
+[2018-03-08T23:12:53,026][INFO ][logstash.inputs.beats    ] Beats inputs: Starting input listener {:address=&gt;&quot;0.0.0.0:5044&quot;}
+[2018-03-08T23:12:53,195][INFO ][logstash.pipeline        ] Pipeline started succesfully {:pipeline_id=&gt;&quot;main&quot;, :thread=&gt;&quot;#&lt;Thread:0x66461e40 run&gt;&quot;}
+[2018-03-08T23:12:53,290][INFO ][org.logstash.beats.Server] Starting server on port: 5044
+[2018-03-08T23:12:53,401][INFO ][logstash.agent           ] Pipelines running {:count=&gt;1, :pipelines=&gt;[&quot;main&quot;]}
+
+</code></pre><h4 id="2-安装运行-filebeats">2. 安装运行 FileBeats</h4>
+<p>FileBeats 也提供了下载包，地址为 <a href="https://www.elastic.co/downloads/beats/filebeat">https://www.elastic.co/downloads/beats/filebeat</a> 。找到系统对应的包下载后解压即可。</p>
+<pre><code>tar zxvf filebeat-6.2.2-darwin-x86_64.tar.gz
+cd filebeat-6.2.2-darwin-x86_64
+</code></pre><p>进入目录编辑 filebeat.yml 找到对应的配置项，配置如下</p>
+<pre><code>- type: log
+   # Change to true to enable this prospector configuration.
+    enabled: True
+
+    # Paths that should be crawled and fetched. Glob based paths.
+    # 读取 Nginx 的日志
+    paths:
+      - /usr/local/nginx/logs/*.log
+
+#----------------------------- Logstash output --------------------------------
+# 输出到本机的 LogStash
+output.logstash:
+  # The Logstash hosts
+  hosts: [&quot;localhost:5044&quot;]
+</code></pre><p>配置完成后执行如下命令，启动 FileBeat 即可</p>
+<pre><code># FileBeat 需要以 root 身份启动，因此先更改配置文件的权限
+sudo chown root filebeat.yml
+sudo ./filebeat -e -c filebeat.yml -d &quot;publish&quot;
+</code></pre><h3 id="三-kibana-的安装运行">三. Kibana 的安装运行</h3>
+<p>Kibana 也提供了对应的安装包下载，链接为 <a href="https://www.elastic.co/downloads/kibana">https://www.elastic.co/downloads/kibana</a> , Mac、Linux、Win 都有对应的安装包，直接下载解压即可</p>
+<pre><code>tar zxvf kibana-6.2.2-darwin-x86_64.tar.gz
+cd kibana-6.2.2-darwin-x86_64
+# 直接启动即可
+bin/kibana
+</code></pre><p>Kibana 默认链接了本机的 9200 端口，其绑定的端口为 5601，启动成功后直接访问 127.0.0.1:5601 端口即可,界面如下。我因为安装了 x-pack 插件因此显示的项可能会多一些，这个暂时忽略.</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWctYmxvZy5jc2RuLm5ldC8yMDE4MDMxOTExMzEyMjg0MD93YXRlcm1hcmsvMi90ZXh0L0x5OWliRzluTG1OelpHNHVibVYwTDBGb2NtbGZTZz09L2ZvbnQvNWE2TDVMMlQvZm9udHNpemUvNDAwL2ZpbGwvSTBKQlFrRkNNQT09L2Rpc3NvbHZlLzcw" alt="这里写图片描述"></p>
+<p>点击右上方的 Discover. 界面会提示创建索引模式，通过这个来检索 ES 中的索引，可以看到已经有一个 Logstash 的索引了，输入名称进行完全匹配，</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWctYmxvZy5jc2RuLm5ldC8yMDE4MDMxOTExMzEzOTQ2ND93YXRlcm1hcmsvMi90ZXh0L0x5OWliRzluTG1OelpHNHVibVYwTDBGb2NtbGZTZz09L2ZvbnQvNWE2TDVMMlQvZm9udHNpemUvNDAwL2ZpbGwvSTBKQlFrRkNNQT09L2Rpc3NvbHZlLzcw" alt="这里写图片描述"></p>
+<p>这里选定一个时间戳，使用默认的 timestamp 即可，设置完成后我们可以根据时间范围筛选数据。</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWctYmxvZy5jc2RuLm5ldC8yMDE4MDMxOTExMzIwNzE0OD93YXRlcm1hcmsvMi90ZXh0L0x5OWliRzluTG1OelpHNHVibVYwTDBGb2NtbGZTZz09L2ZvbnQvNWE2TDVMMlQvZm9udHNpemUvNDAwL2ZpbGwvSTBKQlFrRkNNQT09L2Rpc3NvbHZlLzcw" alt="这里写图片描述"></p>
+<p>设置完成后创建后显示如下</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWctYmxvZy5jc2RuLm5ldC8yMDE4MDMxOTExMzI0Nzg2OD93YXRlcm1hcmsvMi90ZXh0L0x5OWliRzluTG1OelpHNHVibVYwTDBGb2NtbGZTZz09L2ZvbnQvNWE2TDVMMlQvZm9udHNpemUvNDAwL2ZpbGwvSTBKQlFrRkNNQT09L2Rpc3NvbHZlLzcw" alt="这里写图片描述"></p>
+<p>这时在点击 Discover 就可以看到我们创建的索引了，此时输入 UnicodeEncodeError 已经返回了匹配到的日志信息。
+<img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWctYmxvZy5jc2RuLm5ldC8yMDE4MDMxOTExMzIyNjQzNT93YXRlcm1hcmsvMi90ZXh0L0x5OWliRzluTG1OelpHNHVibVYwTDBGb2NtbGZTZz09L2ZvbnQvNWE2TDVMMlQvZm9udHNpemUvNDAwL2ZpbGwvSTBKQlFrRkNNQT09L2Rpc3NvbHZlLzcw" alt="这里写图片描述"></p>
+<p>至此就完成了简单的日志分析平台的搭建。OK，关于安装就介绍到这里，后面正式开始对整个 ELK Stack 的学习。</p>
+		</div>
+		<footer class="post__footer">
+			
+<div class="post__tags tags clearfix">
+	<svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/elk/" rel="tag">ELK</a>
+		</li>
+	</ul>
+</div>
+		</footer>
+	</article>
+</main>
+
+<div class="authorbox clearfix">
+	<figure class="authorbox__avatar">
+		<img alt="邹英杰 avatar" src="/img/avatar.png" class="avatar" height="90" width="90">
+	</figure>
+	<div class="authorbox__header">
+		<span class="authorbox__name">About 邹英杰</span>
+	</div>
+	<div class="authorbox__description">
+		John Doe&rsquo;s true identity is unknown. Maybe he is a successful blogger or writer. Nobody knows it.
+	</div>
+</div>
+
+<nav class="pager flex">
+	<div class="pager__item pager__item--prev">
+		<a class="pager__link" href="/posts/scrapy-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B04-%E4%BD%BF%E7%94%A8-pipeline-%E4%BF%9D%E5%AD%98%E6%95%B0%E6%8D%AE/" rel="prev">
+			<span class="pager__subtitle">«&thinsp;Previous</span>
+			<p class="pager__title">Scrapy 入门笔记(4) 使用 Pipeline 保存数据</p>
+		</a>
+	</div>
+	<div class="pager__item pager__item--next">
+		<a class="pager__link" href="/posts/%E5%9F%BA%E4%BA%8Eelk%E4%B8%8Eelaticalert%E6%90%AD%E5%BB%BA%E7%B3%BB%E7%BB%9F%E7%9B%91%E6%8E%A7%E6%8A%A5%E8%AD%A6/" rel="next">
+			<span class="pager__subtitle">Next&thinsp;»</span>
+			<p class="pager__title">基于ELK与ElaticAlert搭建系统监控报警</p>
+		</a>
+	</div>
+</nav>
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2021 John Doe.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+<script src="/js/custom.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
+</body>
+</html>

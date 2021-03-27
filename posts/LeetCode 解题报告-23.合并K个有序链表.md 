@@ -1,0 +1,221 @@
+---
+title: "LeetCode 解题报告-23.合并 K 个有序链表"
+date: 2020-04-22T19:31:28+08:00
+tags: ['LeetCode', "算法"]
+categories: ['LeetCode', "算法"]
+---
+
+今天做 LeetCode [23. 合并 K 个有序链表](https://leetcode.com/problems/merge-k-sorted-lists/)，难度为 **Hard**。
+
+### 一. 题目要求
+
+本题算是 [21. 合并两个有序链表](https://leetcode.com/problems/merge-two-sorted-lists) 的进阶题目，21 题给的是两个链表，本题给的是多个链表进行合并。
+
+**例子**
+
+> Input:
+> [
+>   1->4->5,
+>   1->3->4,
+>   2->6
+> ]
+> Output: 1->1->2->3->4->4->5->6
+
+
+### 二. 解题思路 & 代码
+
+**解法一: 逐个 Merge**
+
+对于两个有序链表的合并我们已经解决了，其逻辑可以在这里复用。解这道题首先想到的就是遍历所有链表，从第 1 个开始进行逐个合并，即先将第 1 个和第 2 个链表合并，用合并后的结果在与第 3 个链表合并，依次类推。假设给定的链表数为 K，那么共需要执行 K-1 次 「合并两个链表」的操作。
+
+**实现代码**
+
+```java
+
+class Solution {
+    public ListNode mergeKLists(ListNode[] lists) {
+
+        if (Objects.isNull(lists) || lists.length == 0) {
+            return null;
+        }
+
+        int len = lists.length;
+        if (len == 1) {
+            return lists[0];
+        }
+
+        // 1. 先将前两个链表合并
+        ListNode result = mergeTwoLists(lists[0], lists[1]);
+
+        // 2. 从第 3 个开始，逐个遍历并合并
+        for (int i = 2; i < len; i ++) {
+            result = mergeTwoLists(result, lists[i]);
+        }
+        return result;
+    }
+    
+    // 复用合并两个有序链表的逻辑
+    public ListNode mergeTwoLists(ListNode l1,ListNode l2) {
+
+        if (Objects.isNull(l1)) {
+            return l2;
+        }
+
+        if (Objects.isNull(l2)) {
+            return l1;
+        }
+
+       ListNode head;
+        if (l1.val <= l2.val) {
+            head = l1;
+        }else {
+            head = l2;
+        }
+
+       ListNode tailNode = head;
+        while (l1 != null && l2 != null) {
+            if (l1.val <= l2.val) {
+               ListNode next = l1.next;
+                tailNode.next = l1;
+                l1 = next;
+
+            }else {
+               ListNode next = l2.next;
+                tailNode.next = l2;
+                l2 = next;
+            }
+            tailNode = tailNode.next;
+        }
+
+        if (Objects.isNull(l1)) {
+            tailNode.next = l2;
+        }else {
+            tailNode.next = l1;
+        }
+        return head;
+    }
+}
+
+```
+
+**代码运行情况**
+- Runtime: 94 ms，Less of 17.71%。
+- Memory Usage: 41.3 MB，less than 39.35% 。
+
+上面说了这里一共需要 K-1 次合并，每次合并都需要遍历一遍已合并过的链表，因此对于第 1 个链表，需要经过 K-1 次遍历，第二个就是 K-2 次遍历... 对于给定的
+有 K 个链表的数组，数组中的第 I 个链表需要遍历的次数的 K-I。整个过程存在大量的重复遍历与合并，因此算法尚有优化的空间。
+
+
+**解法二: 递归 & 两两合并**
+
+对上述优化的思路就是尽可能减少各个链表的合并次数。逐个合并会导致遍历次数增大，那如果我们先将另外的链表合并，然后在与之前已经合并好的链表再次合并呢？
+
+举个例子，给定一个含有 8 个链表的集合，如果采用逐个合并的方式，我需要执行 **8-1=7 次遍历合并**，如果我先将集合中的链表两两合并，然后在对两两合并后的集合再次执行合并，直到合并为一个链表，这时候需要遍历与合并的次数为
+
+> 第一次两两合并：8 个链表合并为 4 个
+> 第二次两两合并：4 个链表合并为 2 个
+> 第三次两两合并：2 个链表合并为 1 个
+
+可以看到只需要 3 次合并就可以完成，
+
+**解题思路**
+
+- 将给定的集合两两合并，并将合并后的链表添加到新的集合中
+- 如果新集合长度 > 1，执行递归，继续合并
+- 如果新集合长度为 1，说明合并结束，返回结果
+
+**实现代码**
+
+```java
+class Solution {
+    public ListNode mergeKLists(ListNode[] lists) {
+
+        if (Objects.isNull(lists) || lists.length == 0) {
+            return null;
+        }
+
+        int len = lists.length;
+        if (len == 1) {
+            return lists[0];
+        }
+
+        List<ListNode> nodes = new ArrayList<>(Arrays.asList(lists));
+        return helper(nodes);
+    }
+	
+	// 递归操作，针对链表集合两两合并，并将合并后的结果作为集合继续进行
+	// 两两合并，直到集合中的链表只有一个，表示合并完成。
+    private ListNode helper(List<ListNode> nodes) {
+
+        List<ListNode> newNodes = new ArrayList<>();
+
+        int size = nodes.size();
+        for (int i = 0; i <= size - 1; i += 2) {
+
+            if (i + 1 < size) {
+                newNodes.add(mergeTwoLists(nodes.get(i), nodes.get(i + 1)));
+            } else {
+                newNodes.add(nodes.get(i));
+            }
+        }
+        if (newNodes.size() == 1) {
+            return newNodes.get(0);
+        }
+        return helper(newNodes);
+    }
+	
+	// 复用合并两个代码的逻辑
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+
+        if (Objects.isNull(l1)) {
+            return l2;
+        }
+
+        if (Objects.isNull(l2)) {
+            return l1;
+        }
+
+        ListNode head;
+        if (l1.val <= l2.val) {
+            head = l1;
+        } else {
+            head = l2;
+        }
+
+        ListNode tailNode = head;
+        while (l1 != null && l2 != null) {
+            if (l1.val <= l2.val) {
+                ListNode next = l1.next;
+                tailNode.next = l1;
+                l1 = next;
+
+            } else {
+                ListNode next = l2.next;
+                tailNode.next = l2;
+                l2 = next;
+            }
+            tailNode = tailNode.next;
+        }
+
+        if (Objects.isNull(l1)) {
+            tailNode.next = l2;
+        } else {
+            tailNode.next = l1;
+        }
+        return head;
+    }
+}
+
+```
+**代码运行情况**
+
+- **Runtime: 2 ms, faster than 94.35%**
+- **Memory Usage: 41.5 MB, less than 37.71%**
+
+可以看到改进后的版本相对第一版有了非常大的改进。
+
+### 三. 解题后记
+
+
+两种解法严格来说都不难想到，但这里在链表之外还考察了递归，对于递归用的不熟的同学可能会花些时间才能思考清楚，算是一道非常好的练习递归的题目。
+

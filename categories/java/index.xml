@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Java on 邹英杰的博客</title>
+    <title>Java on 邹英杰的个人博客</title>
     <link>/categories/java/</link>
-    <description>Recent content in Java on 邹英杰的博客</description>
+    <description>Recent content in Java on 邹英杰的个人博客</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en</language>
+    <language>en-us</language>
     <lastBuildDate>Sun, 10 May 2020 19:31:28 +0800</lastBuildDate>
     
 	<atom:link href="/categories/java/index.xml" rel="self" type="application/rss+xml" />
@@ -13,19 +13,19 @@
     
     <item>
       <title>Java 手动资源关闭最佳实践</title>
-      <link>/post/java-%E8%B5%84%E6%BA%90%E5%85%B3%E9%97%AD%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/</link>
+      <link>/posts/java-%E8%B5%84%E6%BA%90%E5%85%B3%E9%97%AD%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/</link>
       <pubDate>Sun, 10 May 2020 19:31:28 +0800</pubDate>
       
-      <guid>/post/java-%E8%B5%84%E6%BA%90%E5%85%B3%E9%97%AD%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/</guid>
-      <description>一. 为何需要资源关闭 对于某些资源，比如 IO 流对象、Socket 套接字、数据库连接等对象，如果在使用后不手动关闭，会导致资源一直被占用，最终造成</description>
+      <guid>/posts/java-%E8%B5%84%E6%BA%90%E5%85%B3%E9%97%AD%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/</guid>
+      <description></description>
     </item>
     
     <item>
       <title>Java 虚拟机的内存分区以及内存分配与垃圾策略</title>
-      <link>/post/java-%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E5%8C%BA%E4%BB%A5%E5%8F%8A%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9E%83%E5%9C%BE%E7%AD%96%E7%95%A5/</link>
+      <link>/posts/java-%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E5%8C%BA%E4%BB%A5%E5%8F%8A%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9E%83%E5%9C%BE%E7%AD%96%E7%95%A5/</link>
       <pubDate>Mon, 29 Jul 2019 00:00:00 +0000</pubDate>
       
-      <guid>/post/java-%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E5%8C%BA%E4%BB%A5%E5%8F%8A%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9E%83%E5%9C%BE%E7%AD%96%E7%95%A5/</guid>
+      <guid>/posts/java-%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E5%8C%BA%E4%BB%A5%E5%8F%8A%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9E%83%E5%9C%BE%E7%AD%96%E7%95%A5/</guid>
       <description>&lt;p&gt;《深入理解 Java 虚拟机》第二、三章学习笔记&lt;/p&gt;</description>
     </item>
     

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Scrapy 入门笔记(1) Scrapy 项目搭建与架构介绍 - 邹英杰的个人博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="Scrapy 项目以及爬虫的创建，Scrapy 项目各个部分的作用以及大致的执行流程。">
+		<meta property="og:title" content="Scrapy 入门笔记(1) Scrapy 项目搭建与架构介绍" />
+<meta property="og:description" content="Scrapy 项目以及爬虫的创建，Scrapy 项目各个部分的作用以及大致的执行流程。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/scrapy-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01-scrapy-%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA%E4%B8%8E%E6%9E%B6%E6%9E%84%E4%BB%8B%E7%BB%8D/" />
+<meta property="article:published_time" content="2017-05-08T10:57:14+00:00" />
+<meta property="article:modified_time" content="2017-05-08T10:57:14+00:00" />
+
+		<meta itemprop="name" content="Scrapy 入门笔记(1) Scrapy 项目搭建与架构介绍">
+<meta itemprop="description" content="Scrapy 项目以及爬虫的创建，Scrapy 项目各个部分的作用以及大致的执行流程。">
+<meta itemprop="datePublished" content="2017-05-08T10:57:14&#43;00:00" />
+<meta itemprop="dateModified" content="2017-05-08T10:57:14&#43;00:00" />
+<meta itemprop="wordCount" content="239">
+
+
+
+<meta itemprop="keywords" content="Scrapy,爬虫," />
+		<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Scrapy 入门笔记(1) Scrapy 项目搭建与架构介绍"/>
+<meta name="twitter:description" content="Scrapy 项目以及爬虫的创建，Scrapy 项目各个部分的作用以及大致的执行流程。"/>
+
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo logo--mixed">
+		<a class="logo__link" href="/" title="邹英杰的个人博客" rel="home">
+			<div class="logo__item logo__imagebox">
+					<img class="logo__img" src="/img/zouyingjie.jpg">
+				</div><div class="logo__item logo__text">
+					<div class="logo__title">邹英杰的个人博客</div>
+					<div class="logo__tagline">Be a good man</div>
+				</div>
+		</a>
+	</div>
+		<div class="divider"></div>
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Scrapy 入门笔记(1) Scrapy 项目搭建与架构介绍</h1>
+			<div class="post__meta meta"><div class="meta__item-author meta__item">
+	<svg class="meta__icon icon icon-author" width="16" height="16" viewBox="0 0 12 16"><path d="M6 1c2.2 0 3.5 2 3.5 4.5C9.5 7 8.9 8.2 8 9c2.9.8 4 2.5 4 5v1H0v-1c0-2.5 1.1-4.2 4-5-.9-.8-1.5-2-1.5-3.5C2.5 3 3.8 1 6 1z"/></svg><span class="meta__text">邹英杰</span>
+</div>
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class="meta__text" datetime="2017-05-08T10:57:14Z">2017-05-08</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2l1 2h8v11h-16v-13z"/></svg><span class="meta__text"><a class="meta__link" href="/categories/scrapy/" rel="category">Scrapy</a>, <a class="meta__link" href="/categories/%E7%88%AC%E8%99%AB/" rel="category">爬虫</a>
+	</span>
+</div></div>
+		</header>
+<div class="post__toc toc">
+	<div class="toc__title">Page content</div>
+	<div class="toc__menu">
+		<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#一-scrapy-项目创建与介绍">一. Scrapy 项目创建与介绍</a></li>
+        <li><a href="#二-scrapy-爬虫执行流程概述">二. Scrapy 爬虫执行流程概述</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+	</div>
+</div><div class="content post__content clearfix">
+			<p><em><strong>最近学习用 Scrapy 框架写爬虫，简单来说爬虫就是从网上抓取网页，解析网页，然后进行数据的存储与分析，将从网页的解析到数据的转换存储。将学习过程中用到的解析技术，Scrapy 的各个模块使用与进阶到分布式爬虫学到的知识点、遇到的问题以及解决方法记录于此，以作总结与备忘，也希望对需要的同学有所帮助。</strong></em></p>
+<p>本篇文章作为开篇，主要介绍 Scrapy 项目以及爬虫的创建，也简要概述了 Scrapy 项目各个部分的作用以及大致的执行流程。
+<img src="/img/cat_01.jpeg" alt=""></p>
+<hr>
+<!-- raw HTML omitted -->
+<h3 id="一-scrapy-项目创建与介绍">一. Scrapy 项目创建与介绍</h3>
+<p>首先是 Scrapy 的安装，这里直接使用 pip 进行安装即可</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">pip install scrapy
+</code></pre></div><p>安装完成后就可以使用 scrapy 命令来创建项目了，如下：</p>
+<pre><code>scrapy startproject FirstSpider
+</code></pre><p>上面的命令只是生成了一个 Scrapy 项目，之后还需要创建爬虫才能爬取，创建爬虫的命令如下：</p>
+<pre><code>scrapy genspider stack http://stackoverflow.com/
+</code></pre><p>使用 scrapy genspider 来创建一个爬虫，并且指定名称为 stack, 起始爬取路径为 <a href="http://stackoverflow.com/">http://stackoverflow.com/</a></p>
+<p>创建完成后的项目目录结构如下：</p>
+<p><img src="/img/scrapy_note_01.png" alt="Scrapy 项目结构图"></p>
+<p>可以看到在项目目录下会有一个与项目名同名的 FirstSpider 包，里面是我们 Scrapy 项目的各个模块。下面对项目的每个部分做简要解释：</p>
+<h4 id="spiders">spiders/</h4>
+<p>顾名思义就是爬虫的 package。我们创建的爬虫文件都会自动生成在该 package 下, 可以看到之前创建的 stack 已经在这里了。</p>
+<h4 id="itemspy">items.py</h4>
+<p>用来存放 Item 类的文件，Item 类可以理解为数据的中转类，我们爬取网页后需要将进行解析，并将解析后的数据进行存储分析。为了便于数据的迁移存储，我们可以将数据封装为一个 Item 类，然后在对 Item 类进行操作，这样可以避免很多不必要的错误。</p>
+<h4 id="middlewarespy">middlewares.py</h4>
+<p>中间层文件， Scrapy 自带的 middleware 可以分为 spider middleware 和 downloader middleware 两类, 我们也可以自定义 middleware 类。我们爬取网页的网络请求和响应都会经过 middleware 进行处理, 因此可以在这里做一些个性化的操作，比如设置用户代理，设置代理 IP 等。</p>
+<h4 id="piplinespy">piplines.py</h4>
+<p>用来处理保存数据的模块，我们爬取网页后解析生成的 Item 类会被传递到这里进行存储解析等操作。 Scrapy 提供了许多有用的 Pipeline 类来处理数据，我们也可以自定义 Pipeline 类进行处理。</p>
+<h4 id="settings">settings</h4>
+<p>Scrapy 项目的配置文件，对整个项目进行设置。比如设置请求和响应的中间层，指定操作数据的 Pipeline 类等。</p>
+<hr>
+<p>介绍完了各个模块之后让我们在看一下刚才创建的爬虫文件，其源代码如下:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Python" data-lang="Python"><span style="color:#f92672">import</span> scrapy
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">StackSpider</span>(scrapy<span style="color:#f92672">.</span>Spider):
+    name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;stack&#34;</span>
+    allowed_domains <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#34;http://stackoverflow.com/&#34;</span>]
+
+    start_urls <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;https://www.baidu.com/&#39;</span>]
+
+    <span style="color:#75715e"># 默认的解析方法，可以自己定义其他解析方法解析对应的请求</span>
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">parse</span>(self, response):
+
+        html <span style="color:#f92672">=</span> response<span style="color:#f92672">.</span>text
+        <span style="color:#66d9ef">print</span>(html)
+        <span style="color:#66d9ef">pass</span>
+
+    <span style="color:#75715e"># 指定起始请求，生成一个 scrapy.Request() 请求对象</span>
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">start_requests</span>(self):
+        <span style="color:#66d9ef">yield</span> scrapy<span style="color:#f92672">.</span>Request(url<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;http://stackoverflow.com/&#39;</span>, callback<span style="color:#f92672">=</span>self<span style="color:#f92672">.</span>parse)
+</code></pre></div><p>可以看到我们指定的爬虫名和起始 url 都在里面。默认生成的代码是没有 start_requests 方法的，我们在命令中添加的起始网址会被声明为 start_urls 中的元素。Scrapy 将 start_urls 中的 url 作为起始路径进行爬取。除此之外我们可以重写 Scrapy 提供的 start_requests() 方法来发送 scrapy.Request 请求自行设定。</p>
+<p>如代码中所示，我们自定义了  start_requests 方法生成了一个 scrapy.Request 请求，并指定了请求 url 和回调函数，callback 默认值是调用 parse 方法，我们也可以自定义其他解析方法来针对不同的网页爬取请求做解析。</p>
+<p>之后就是执行爬虫进行爬取了，其命令 为 scrapy crawl + 爬虫名，如下：</p>
+<pre><code>scrapy crawl stack
+
+</code></pre><p>爬取成功后会将 response 对象传递到我们指定的解析方法中进行解析，这样一个爬虫就创建运行成功了。如代码所示，我们获取了 response.text 属性，会返回其页面的 HTML 代码。</p>
+<p>通过网页解析的技术我们可以获取页面中任何我们需要的数据，关于解析的技术将在下一篇文章中讲解，现在简要讲解下 Scrapy 的架构以及执行流程，结合前面各个模块的讲解帮助大家对 Scrapy 有个宏观的印象，便于后面的学习。</p>
+<h3 id="二-scrapy-爬虫执行流程概述">二. Scrapy 爬虫执行流程概述</h3>
+<p>Scrapy 架构图如下：</p>
+<p><img src="/img/scrapy_process.png" alt="Scrapy 架构图"></p>
+<p>从上面的架构图中可以看到我们熟悉的几个模块，包括 Spiders、Item、middleware、pipeline 模块。另外还多了 ENGIN 引擎、SCHEDULER 和 DOWNLOADER 下载模块。</p>
+<p>下面结合图中的各个流程做简要讲解：</p>
+<ol>
+<li>Spider 爬虫部分发送请求，通过 spidermiddleware 中间层处理后发送给 ENGINE 引擎模块</li>
+<li>引擎模块将请求发送给 SCHEDULER 模块进行调度</li>
+<li>SCHEDULER 模块将可以执行的请求调度给引擎模块</li>
+<li>引擎模块将请求发送给 DOWNLOADER 下载模块进行下载，期间会经过 download middleware 进行处理</li>
+<li>下载模块将爬取好的网页响应经过 downloadermiddleware 中间层处理后传递给引擎模块</li>
+<li>引擎模块将响应传递给 Spider 爬虫模块</li>
+<li>在爬虫模块我们自定义解析方式对响应解析完成后生成 Item 对象或者新的 Request对象,经过 spiddermiddleware 发送给引擎模块</li>
+<li>如果是 Item 对象传递给 item 和 pipeline 来进行对应的处理; 如果是 Request 对象则继续调度下载，重复之前的步骤。</li>
+</ol>
+<p>上面就是整个 Scrapy 的执行流程了，了解了大致的流程后，后面就是对各个流程中的知识点进行学习了，包括网页的解析，请求响应的中间层处理，item 与 pipeline 对数据的处理以及可能遇到的问题以及解决方案，将在后面的文章中逐个讲解，梳理内容，巩固所学，也希望对需要的同学有所帮助。</p>
+		</div>
+		<footer class="post__footer">
+			
+<div class="post__tags tags clearfix">
+	<svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/scrapy/" rel="tag">Scrapy</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a>
+		</li>
+	</ul>
+</div>
+		</footer>
+	</article>
+</main>
+
+<div class="authorbox clearfix">
+	<figure class="authorbox__avatar">
+		<img alt="邹英杰 avatar" src="/img/avatar.png" class="avatar" height="90" width="90">
+	</figure>
+	<div class="authorbox__header">
+		<span class="authorbox__name">About 邹英杰</span>
+	</div>
+	<div class="authorbox__description">
+		John Doe&rsquo;s true identity is unknown. Maybe he is a successful blogger or writer. Nobody knows it.
+	</div>
+</div>
+
+<nav class="pager flex">
+	<div class="pager__item pager__item--next">
+		<a class="pager__link" href="/posts/scrapy-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B02-xpath-%E4%B8%8E-css-%E8%A7%A3%E6%9E%90%E4%BB%A5%E5%8F%8A%E8%A7%A3%E6%9E%90%E7%BD%91%E9%A1%B5%E7%A4%BA%E4%BE%8B/" rel="next">
+			<span class="pager__subtitle">Next&thinsp;»</span>
+			<p class="pager__title">Scrapy 入门笔记(2) xpath 与 css 解析以及解析网页示例</p>
+		</a>
+	</div>
+</nav>
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2021 John Doe.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+<script src="/js/custom.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
+</body>
+</html>

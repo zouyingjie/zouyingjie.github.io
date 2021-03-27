@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>LeetCode-95、96. Unique Binary Search Trees-简记 - 邹英杰的个人博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="">
+		<meta property="og:title" content="LeetCode-95、96. Unique Binary Search Trees-简记" />
+<meta property="og:description" content="LeetCode 平衡二叉树刷题训练。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/leetcode-9596.-unique-binary-search-trees-%E7%AE%80%E8%AE%B0/" />
+<meta property="article:published_time" content="2019-07-30T00:00:00+00:00" />
+<meta property="article:modified_time" content="2019-07-30T00:00:00+00:00" />
+
+		<meta itemprop="name" content="LeetCode-95、96. Unique Binary Search Trees-简记">
+<meta itemprop="description" content="LeetCode 平衡二叉树刷题训练。">
+<meta itemprop="datePublished" content="2019-07-30T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2019-07-30T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="651">
+
+
+
+<meta itemprop="keywords" content="LeetCode,动态规划," />
+		<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="LeetCode-95、96. Unique Binary Search Trees-简记"/>
+<meta name="twitter:description" content="LeetCode 平衡二叉树刷题训练。"/>
+
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo logo--mixed">
+		<a class="logo__link" href="/" title="邹英杰的个人博客" rel="home">
+			<div class="logo__item logo__imagebox">
+					<img class="logo__img" src="/img/zouyingjie.jpg">
+				</div><div class="logo__item logo__text">
+					<div class="logo__title">邹英杰的个人博客</div>
+					<div class="logo__tagline">Be a good man</div>
+				</div>
+		</a>
+	</div>
+		<div class="divider"></div>
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">LeetCode-95、96. Unique Binary Search Trees-简记</h1>
+			<div class="post__meta meta"><div class="meta__item-author meta__item">
+	<svg class="meta__icon icon icon-author" width="16" height="16" viewBox="0 0 12 16"><path d="M6 1c2.2 0 3.5 2 3.5 4.5C9.5 7 8.9 8.2 8 9c2.9.8 4 2.5 4 5v1H0v-1c0-2.5 1.1-4.2 4-5-.9-.8-1.5-2-1.5-3.5C2.5 3 3.8 1 6 1z"/></svg><span class="meta__text">邹英杰</span>
+</div>
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class="meta__text" datetime="2019-07-30T00:00:00Z">2019-07-30</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2l1 2h8v11h-16v-13z"/></svg><span class="meta__text"><a class="meta__link" href="/categories/leetcode/" rel="category">LeetCode</a>
+	</span>
+</div></div>
+		</header>
+<div class="post__toc toc">
+	<div class="toc__title">Page content</div>
+	<div class="toc__menu">
+		<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#一-第-96-题unique-binary-search-trees">一. 第 96 题：Unique Binary Search Trees</a></li>
+        <li><a href="#二-第-95-题unique-binary-search-trees-ii">二. 第 95 题：Unique Binary Search Trees II</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+	</div>
+</div><div class="content post__content clearfix">
+			<p>LeetCode 平衡二叉树刷题训练。</p>
+<h3 id="一-第-96-题unique-binary-search-trees">一. 第 96 题：Unique Binary Search Trees</h3>
+<p>LeetCode 第 <a href="https://leetcode.com/problems/unique-binary-search-trees/">96. Unique Binary Search Trees</a>，题目概要如下：</p>
+<blockquote>
+<p>Given n, how many structurally unique BST&rsquo;s (binary search trees) that store values 1 &hellip; n?</p>
+</blockquote>
+<blockquote>
+<p>Example:</p>
+</blockquote>
+<blockquote>
+<p>Input: 3
+Output: 5
+Explanation:
+Given n = 3, there are a total of 5 unique BST&rsquo;s:</p>
+</blockquote>
+<pre><code>   1         3     3      2      1
+    \       /     /      / \      \
+     3     2     1      1   3      2
+    /     /       \                 \
+   2     1         2                 3
+</code></pre><p>简单来说就是给一个正整数 N，计算从 1 到 N 可以构造出多少个平衡二叉树。首先回顾下平衡二叉树的特点：</p>
+<ul>
+<li>树中的任意一个节点，其所有左子节点的值小于该节点的值，所有右子节点的值均大于该节点。</li>
+</ul>
+<p>对于数字 N，从 1 到 N 任何一个数字都可以作为根节点，假设当前根节点的值为 <code>i（1 &lt;= i &lt;= N）</code>，那么我们假设有方法 <code>F(i, N)</code> 表示数字为 N，根节点为 i 时构建出的 BST 数量，那么总数量就是</p>
+<pre><code>G(N) = F(1，N) + F(2, N) + F(3, N) + ... + F(N, N)
+</code></pre><p>根据 BST 的特点，当选择 i 为根节点时，那么其左边的数只能为左子树节点，右边即为右子树的节点，假设 <code>i=3 N=7</code>，如图：</p>
+<p><img src="https://zouyingjie-blog.oss-cn-beijing.aliyuncs.com/WX20190730-161131%402x.png" alt="">。</p>
+<p>对于 <code>F(3,7)</code>，其左子树的组成节点为 [1,2]，其能构成的 BST 数量即为 G(2)，右子树的组成节点为 [4,5,6,7]，其可以组成的 BST 数量等同于 [1,2,3,4] 可以组成的节点，即为G(4)。对于 <code>F(3,7)</code> 计算出的 BST 数量等于 <code>左子树数量 * 右子树数量</code>，也就是 <code>G(2) * G(4)</code>，可以得到公式如下</p>
+<pre><code>F(3, 7) = G(2) * G(4) 
+</code></pre><p>进而可以推导出</p>
+<pre><code>F(i, N) = G(i-1) * G(N - i)
+=&gt;
+F(1，N) = G(0) * G(N-1)
+F(2, N) = G(1) * G(N-2)
+F(N, N) = G(N-1) * G(0)
+</code></pre><p>另外有特殊情况，当 <code>N = 0</code> 或者 <code>N = 1</code>，此时只能构建 1 棵 BST，即：</p>
+<pre><code>G(0) = G(1) = 1
+</code></pre><p>综上，到此为止我们推导出了三个公式：</p>
+<pre><code>G(N) = F(1，N) + F(2, N) + F(3, N) + ... + F(N, N)
+
+F(i, N) = G(i-1) * G(N - i)
+
+G(0) = G(1) = 1
+</code></pre><p>基于上面三个公式可以推导出：</p>
+<pre><code>G(n) = G(0) * G(n-1) + G(1) * G(n-2) + ... + G(n-1) * G(0)
+</code></pre><p>鉴于已经知道了  <code>G(0)=G(1)=1</code>，因此 G(2)、G(3) &hellip; G(N) 也就可以顺利计算出来了。实现代码如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Java" data-lang="Java"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> <span style="color:#f92672">{</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">numTrees</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> n<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+
+        <span style="color:#75715e">// 1. 用数组表示每个位置处的 BST 个数
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">int</span><span style="color:#f92672">[]</span> G <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">int</span><span style="color:#f92672">[</span>n<span style="color:#f92672">+</span>1<span style="color:#f92672">];</span>
+        <span style="color:#75715e">// 2. n 为 0 和 1 时均为 1
+</span><span style="color:#75715e"></span>        G<span style="color:#f92672">[</span>0<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> G<span style="color:#f92672">[</span>1<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> 1<span style="color:#f92672">;</span>
+
+        <span style="color:#75715e">// 3. 遍历 2 到 N，计算可以得到的 BST 总和
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span>2<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;=</span> n<span style="color:#f92672">;</span> i <span style="color:#f92672">++)</span> <span style="color:#f92672">{</span>
+            <span style="color:#75715e">// 公式计算：G(n) = G(0) * G(n-1) + G(1) * G(n-2) + ... + G(n-1) * G(0)
+</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> j <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span> j <span style="color:#f92672">&lt;</span> i<span style="color:#f92672">;</span> j <span style="color:#f92672">++)</span> <span style="color:#f92672">{</span>
+                G<span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> <span style="color:#f92672">+=</span> G<span style="color:#f92672">[</span>j<span style="color:#f92672">]</span> <span style="color:#f92672">*</span> G<span style="color:#f92672">[</span>i<span style="color:#f92672">-</span>j<span style="color:#f92672">-</span>1<span style="color:#f92672">];</span>
+            <span style="color:#f92672">}</span>
+
+        <span style="color:#f92672">}</span>
+
+        <span style="color:#66d9ef">return</span> G<span style="color:#f92672">[</span>n<span style="color:#f92672">];</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>另外看 discuss 部分这道题其实是满足 <a href="https://zh.wikipedia.org/wiki/%E5%8D%A1%E5%A1%94%E5%85%B0%E6%95%B0">卡塔兰数</a>，可以直接通过公式计算，代码如下:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Java" data-lang="Java"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> <span style="color:#f92672">{</span>
+
+    <span style="color:#75715e">// 计算过程可以出现溢出，因此将数据类型改为了 long
+</span><span style="color:#75715e"></span>   <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">long</span> <span style="color:#a6e22e">numTrees</span><span style="color:#f92672">(</span><span style="color:#66d9ef">long</span> n<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+
+       <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>n <span style="color:#f92672">==</span> 1<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+           <span style="color:#66d9ef">return</span> 1<span style="color:#f92672">;</span>
+       <span style="color:#f92672">}</span>  <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+           <span style="color:#66d9ef">return</span> numTrees<span style="color:#f92672">(</span>n <span style="color:#f92672">-</span> 1<span style="color:#f92672">)</span> <span style="color:#f92672">*</span> 2 <span style="color:#f92672">*</span> <span style="color:#f92672">(</span>2 <span style="color:#f92672">*</span> n <span style="color:#f92672">-</span> 1<span style="color:#f92672">)</span> <span style="color:#f92672">/</span> <span style="color:#f92672">(</span>n <span style="color:#f92672">+</span> 1<span style="color:#f92672">);</span>
+       <span style="color:#f92672">}</span>
+   <span style="color:#f92672">}</span>
+
+<span style="color:#f92672">}</span>
+</code></pre></div><p>上面代码也是可以提交通过的，不过自己还是没有搞懂原理，流下了智商被碾压的泪水。</p>
+<h3 id="二-第-95-题unique-binary-search-trees-ii">二. 第 95 题：Unique Binary Search Trees II</h3>
+<p>第 96 题是求可以组成的 BST 数量，而 95 题则要求计算出所有的 BST。按照上面的思路，对于数字 N，[1, N] 任意一个数字都可以作为根节点，然后构建出所有的 BST，那么我们只需要搞明白计算出一个数字所有的 BST 求法，然后遍历 [1,N] 就可以得出所有的 BST。每个节点都有可选值区间，对于根节点是 [1,N]，那么遍历起点 start 为 1，终点 end 为 N，那么当遍历到 i 时，对于左子节点可选项是是 [start, i-1]，对于右子节点可选项是 [i+1, end]。</p>
+<p>这里以 <code>i=3,N=7</code> 为例，当 3 为根节点时，其左子节点的可选项为 [1,2]，右子节点可选项为 [4,5,6,7]，那么其可能的的结构一共有 8 种。而对于左右子节点，又可以采用相同的方式计算以各个数字为根节点时其左右子树的组成。因此对于数字 N，求解步骤如下：</p>
+<ul>
+<li>遍历节点的选项区间</li>
+<li>计算每个数字对应的左右字节点可选项，构建 BST 节点</li>
+<li>对于左右子节点，继续遍历其可选区间。递归求解</li>
+</ul>
+<p>代码如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Java" data-lang="Java"> List<span style="color:#f92672">&lt;</span>TreeNode<span style="color:#f92672">&gt;</span> leftNodes<span style="color:#f92672">,</span> rightnodes<span style="color:#f92672">;</span>
+
+<span style="color:#75715e">// 遍历区间
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> start<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;=</span> end<span style="color:#f92672">;</span> i <span style="color:#f92672">++)</span> <span style="color:#f92672">{</span>
+    <span style="color:#75715e">// 计算 i 对应的的左子节点选项
+</span><span style="color:#75715e"></span>    leftNodes <span style="color:#f92672">=</span> helper<span style="color:#f92672">(</span>start<span style="color:#f92672">,</span> i <span style="color:#f92672">-</span> 1<span style="color:#f92672">);</span>
+    <span style="color:#75715e">// 计算 i 的右子节点选项
+</span><span style="color:#75715e"></span>    rightnodes <span style="color:#f92672">=</span> helper<span style="color:#f92672">(</span>i <span style="color:#f92672">+</span> 1<span style="color:#f92672">,</span> end<span style="color:#f92672">);</span>
+
+    <span style="color:#75715e">// 双层遍历构建所有可能节点
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>TreeNode leftNode<span style="color:#f92672">:</span> leftNodes<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>TreeNode rightNode<span style="color:#f92672">:</span> rightnodes<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            TreeNode root <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> TreeNode<span style="color:#f92672">(</span>i<span style="color:#f92672">);</span>
+            root<span style="color:#f92672">.</span><span style="color:#a6e22e">left</span> <span style="color:#f92672">=</span> leftNode<span style="color:#f92672">;</span>
+            root<span style="color:#f92672">.</span><span style="color:#a6e22e">right</span> <span style="color:#f92672">=</span> rightNode<span style="color:#f92672">;</span>
+            nodes<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>root<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+
+</code></pre></div><p>上面就是整个递归的关键运算代码，而递归一定要有结束条件，</p>
+<ul>
+<li>start &gt; end：说明已经遍历完成了，此时不会再有可构造的节点，所以节点为 null</li>
+<li>start = end：已经遍历到最后，此时只有一种可能，就是节点值为 start，并且不会再有递归。</li>
+</ul>
+<p>代码表示如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Java" data-lang="Java">List<span style="color:#f92672">&lt;</span>TreeNode<span style="color:#f92672">&gt;</span> nodes <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ArrayList<span style="color:#f92672">&lt;&gt;();</span>
+
+<span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>start <span style="color:#f92672">&gt;</span> end<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    nodes<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">null</span><span style="color:#f92672">);</span>
+    <span style="color:#66d9ef">return</span> nodes<span style="color:#f92672">;</span>
+<span style="color:#f92672">}</span>
+
+<span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>start <span style="color:#f92672">==</span> end<span style="color:#f92672">){</span>
+    nodes<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> TreeNode<span style="color:#f92672">(</span>start<span style="color:#f92672">));</span>
+    <span style="color:#66d9ef">return</span> nodes<span style="color:#f92672">;</span>
+<span style="color:#f92672">}</span>
+
+</code></pre></div><p>这样递归操作和终止条件都有了，完整实现代码如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Java" data-lang="Java"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> <span style="color:#f92672">{</span>
+
+    <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>TreeNode<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">generateTrees</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> n<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>n <span style="color:#f92672">==</span> 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> ArrayList<span style="color:#f92672">();</span>
+        <span style="color:#f92672">}</span>
+        <span style="color:#66d9ef">return</span> helper<span style="color:#f92672">(</span>1<span style="color:#f92672">,</span> n<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">private</span> List<span style="color:#f92672">&lt;</span>TreeNode<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">helper</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> start<span style="color:#f92672">,</span> <span style="color:#66d9ef">int</span> end<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        List<span style="color:#f92672">&lt;</span>TreeNode<span style="color:#f92672">&gt;</span> nodes <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ArrayList<span style="color:#f92672">&lt;&gt;();</span>
+
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>start <span style="color:#f92672">&gt;</span> end<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            nodes<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">null</span><span style="color:#f92672">);</span>
+            <span style="color:#66d9ef">return</span> nodes<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+
+        <span style="color:#75715e">// 这里多一次 start == end 的判断，可以减少下面两次 helper 的调用
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>start <span style="color:#f92672">==</span> end<span style="color:#f92672">){</span>
+            nodes<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> TreeNode<span style="color:#f92672">(</span>start<span style="color:#f92672">));</span>
+            <span style="color:#66d9ef">return</span> nodes<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+
+        List<span style="color:#f92672">&lt;</span>TreeNode<span style="color:#f92672">&gt;</span> leftNodes<span style="color:#f92672">,</span> rightnodes<span style="color:#f92672">;</span>
+        <span style="color:#75715e">// 遍历区间
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> start<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;=</span> end<span style="color:#f92672">;</span> i <span style="color:#f92672">++)</span> <span style="color:#f92672">{</span>
+            <span style="color:#75715e">// 计算 i 对应的的左子节点选项
+</span><span style="color:#75715e"></span>            leftNodes <span style="color:#f92672">=</span> helper<span style="color:#f92672">(</span>start<span style="color:#f92672">,</span> i <span style="color:#f92672">-</span> 1<span style="color:#f92672">);</span>
+            <span style="color:#75715e">// 计算 i 的右子节点选项
+</span><span style="color:#75715e"></span>             rightnodes <span style="color:#f92672">=</span> helper<span style="color:#f92672">(</span>i <span style="color:#f92672">+</span> 1<span style="color:#f92672">,</span> end<span style="color:#f92672">);</span>
+
+            <span style="color:#75715e">// 双层遍历构建 BST
+</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>TreeNode leftNode<span style="color:#f92672">:</span> leftNodes<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>TreeNode rightNode<span style="color:#f92672">:</span> rightnodes<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                    TreeNode root <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> TreeNode<span style="color:#f92672">(</span>i<span style="color:#f92672">);</span>
+                    root<span style="color:#f92672">.</span><span style="color:#a6e22e">left</span> <span style="color:#f92672">=</span> leftNode<span style="color:#f92672">;</span>
+                    root<span style="color:#f92672">.</span><span style="color:#a6e22e">right</span> <span style="color:#f92672">=</span> rightNode<span style="color:#f92672">;</span>
+                    nodes<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>root<span style="color:#f92672">);</span>
+                <span style="color:#f92672">}</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+        <span style="color:#66d9ef">return</span> nodes<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+
+</code></pre></div>
+		</div>
+		<footer class="post__footer">
+			
+<div class="post__tags tags clearfix">
+	<svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/leetcode/" rel="tag">LeetCode</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" rel="tag">动态规划</a>
+		</li>
+	</ul>
+</div>
+		</footer>
+	</article>
+</main>
+
+<div class="authorbox clearfix">
+	<figure class="authorbox__avatar">
+		<img alt="邹英杰 avatar" src="/img/avatar.png" class="avatar" height="90" width="90">
+	</figure>
+	<div class="authorbox__header">
+		<span class="authorbox__name">About 邹英杰</span>
+	</div>
+	<div class="authorbox__description">
+		John Doe&rsquo;s true identity is unknown. Maybe he is a successful blogger or writer. Nobody knows it.
+	</div>
+</div>
+
+<nav class="pager flex">
+	<div class="pager__item pager__item--prev">
+		<a class="pager__link" href="/posts/java-%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E5%8C%BA%E4%BB%A5%E5%8F%8A%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9E%83%E5%9C%BE%E7%AD%96%E7%95%A5/" rel="prev">
+			<span class="pager__subtitle">«&thinsp;Previous</span>
+			<p class="pager__title">Java 虚拟机的内存分区以及内存分配与垃圾策略</p>
+		</a>
+	</div>
+	<div class="pager__item pager__item--next">
+		<a class="pager__link" href="/posts/arts%E5%91%A8%E5%B9%B4%E8%AE%B0/" rel="next">
+			<span class="pager__subtitle">Next&thinsp;»</span>
+			<p class="pager__title">ARTS 周年记</p>
+		</a>
+	</div>
+</nav>
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2021 John Doe.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+<script src="/js/custom.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
+</body>
+</html>

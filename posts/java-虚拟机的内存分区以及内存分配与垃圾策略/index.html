@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Java 虚拟机的内存分区以及内存分配与垃圾策略 - 邹英杰的个人博客</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="">
+		<meta property="og:title" content="Java 虚拟机的内存分区以及内存分配与垃圾策略" />
+<meta property="og:description" content="《深入理解 Java 虚拟机》第二、三章学习笔记" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/java-%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E5%8C%BA%E4%BB%A5%E5%8F%8A%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9E%83%E5%9C%BE%E7%AD%96%E7%95%A5/" />
+<meta property="article:published_time" content="2019-07-29T00:00:00+00:00" />
+<meta property="article:modified_time" content="2019-07-29T00:00:00+00:00" />
+
+		<meta itemprop="name" content="Java 虚拟机的内存分区以及内存分配与垃圾策略">
+<meta itemprop="description" content="《深入理解 Java 虚拟机》第二、三章学习笔记">
+<meta itemprop="datePublished" content="2019-07-29T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2019-07-29T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="298">
+
+
+
+<meta itemprop="keywords" content="Java," />
+		<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Java 虚拟机的内存分区以及内存分配与垃圾策略"/>
+<meta name="twitter:description" content="《深入理解 Java 虚拟机》第二、三章学习笔记"/>
+
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo logo--mixed">
+		<a class="logo__link" href="/" title="邹英杰的个人博客" rel="home">
+			<div class="logo__item logo__imagebox">
+					<img class="logo__img" src="/img/zouyingjie.jpg">
+				</div><div class="logo__item logo__text">
+					<div class="logo__title">邹英杰的个人博客</div>
+					<div class="logo__tagline">Be a good man</div>
+				</div>
+		</a>
+	</div>
+		<div class="divider"></div>
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Java 虚拟机的内存分区以及内存分配与垃圾策略</h1>
+			<div class="post__meta meta"><div class="meta__item-author meta__item">
+	<svg class="meta__icon icon icon-author" width="16" height="16" viewBox="0 0 12 16"><path d="M6 1c2.2 0 3.5 2 3.5 4.5C9.5 7 8.9 8.2 8 9c2.9.8 4 2.5 4 5v1H0v-1c0-2.5 1.1-4.2 4-5-.9-.8-1.5-2-1.5-3.5C2.5 3 3.8 1 6 1z"/></svg><span class="meta__text">邹英杰</span>
+</div>
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg><time class="meta__text" datetime="2019-07-29T00:00:00Z">2019-07-29</time></div><div class="meta__item-categories meta__item"><svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2l1 2h8v11h-16v-13z"/></svg><span class="meta__text"><a class="meta__link" href="/categories/java/" rel="category">Java</a>
+	</span>
+</div></div>
+		</header>
+<div class="post__toc toc">
+	<div class="toc__title">Page content</div>
+	<div class="toc__menu">
+		<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#一-java-运行时内存分区">一. Java 运行时内存分区</a></li>
+        <li><a href="#二-hotspot-对象简记">二. HotSpot 对象简记</a></li>
+        <li><a href="#三-何时回收-对象回收判断依据">三. 何时回收-对象回收判断依据</a></li>
+        <li><a href="#四-怎么回收-垃圾回收算法简记">四. 怎么回收-垃圾回收算法简记</a></li>
+        <li><a href="#五-java-内存分配策略">五. Java 内存分配策略</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+	</div>
+</div><div class="content post__content clearfix">
+			<p>《深入理解 Java 虚拟机》第二、三章学习笔记</p>
+<hr>
+<h3 id="一-java-运行时内存分区">一. Java 运行时内存分区</h3>
+<p>Java 虚拟机的运行时的内存分区表结构如图所示：</p>
+<p><img src="https://zouyingjie-blog.oss-cn-beijing.aliyuncs.com/jvm-architecture.png" alt="图片来自网络"></p>
+<p>可以看到 Runtime Data Area 区域包含了五个模块。</p>
+<h4 id="1-程序计数器pc-register">1. 程序计数器（PC Register）</h4>
+<p>这里和 CPU 中的程序计数器功能类似，是用来记录当前线程所执行的字节码的行号表示器，简单来说就是告诉虚拟机当前线程程序执行到哪里了，接下来该执行哪一条命令。</p>
+<p>程序计数器有下面几个特点：</p>
+<ul>
+<li>线程独立。每个线程都有一个独立的程序计数器，各个线程之间的程序计数器互不影响。</li>
+<li>空间很小。PC Register 是一块很小的内存，内存调优时程序计数器占用的内存甚至可以忽略不计。</li>
+</ul>
+<blockquote>
+<p>在任何一个确定的时刻，一个处理器都只会执行一条线程。因此为了线程切换后能恢复到正确的执行位置，每条线程都需要有一个独立的程序计数器，各条线程之间计数器互不影响，独立存储，我们称这类内存区域为“线程私有”的内存。</p>
+</blockquote>
+<h4 id="2-java-虚拟机栈jvm-stacks与本地方法栈native-method-stacks">2. Java 虚拟机栈（JVM Stacks）与本地方法栈（Native Method Stacks）</h4>
+<p>Java 虚拟机栈也是线程私有的，其生命周期与线程相同，描述的是 Java 方法执行的内存模型：</p>
+<blockquote>
+<p>每个方法在执行的同时创建一个栈帧，用于存储局部变量表，操作数栈，动态链接，方法出口等信息。每个方法从调用到执行完成的过程，就对应着一个栈帧在虚拟机栈中入栈到弹栈的过程。</p>
+</blockquote>
+<p>我们常说的栈其实指的是局部变量表，其存放编译期各种可知的基本类型和对象引用，简单说就是存放了一个方法中所有的局部变量。该区域可以发生两种错误：</p>
+<ul>
+<li>线程栈请求的深度大于 JVM 所允许的深度，抛出 <code>StackOverflowError</code>。</li>
+<li>无法扩展导致内存不足时，会抛出 <code>OutOfMemoryError</code> 异常。</li>
+</ul>
+<p>本地方法栈作用和 Java 虚拟机栈类似，区别在于 JVM Stacks 为虚拟机执行 Java 方法服务，而本地虚拟机栈则为虚拟机执行本地方法服务。HotSpot 虚拟机中直接将两者合二为一。</p>
+<h4 id="3-java-堆heap">3. Java 堆（Heap）</h4>
+<p>堆应该是我们最经常接触到的内存区域了，有下面几个特点：</p>
+<ul>
+<li>其唯一目的就是存储对象实例。</li>
+<li>被所有线程所共享，但内存分配时可能划分出多个线程私有的分配缓冲区（Thread Local Allocation Buffer，TLAB）。</li>
+<li>是垃圾回收的主要区域。根据分代回收算法，可以将堆内存空间分为新生代和老年代。新生代还可以细致分为 Eden 空间、From Survivor、To Survivor。</li>
+<li>物理上可以不连续，只要逻辑上连续即可。可以通过 -Xms 和 -Xmx 控制堆内存的大小。</li>
+<li>内存不足时会报 <code>OutOfMemoryError</code> 异常。</li>
+</ul>
+<h4 id="4-方法区method-area与运行时常量池">4. 方法区（Method Area）与运行时常量池</h4>
+<p>方法区用来存储被虚拟机加载的类信息、常量、静态变量、即时编译后的代码等数据。该区域也是被线程共享的。当内存不足时会抛出 <code>OutOfMemoryError</code> 异常。</p>
+<p>运行时常量池（Runtime Constant Pool）是方法区的一部分，用来存放编译器生成的各种字面量和符号引用，简单来说就是存放类的各种常量。其和 Class 文件常量池的区别是其具备动态性，运行期间可以将新的常量方法池中，比如 String 类的 <code>intern()</code> 方法。当常量池无法在申请到内存时抛出 <code>OutOfMemoryError</code> 异常。</p>
+<h5 id="5-直接内存">5. 直接内存</h5>
+<p>某些库可能会直接分配堆外内存进行操作，本机直接内存并不是 JVM 运行时数据区的一部分，其内存分配不受 Java 堆大小的限制，但如果动态扩展时其内存区域总和大于物理内存的限制，则会出现 <code>OutOfMemoryError</code> 异常。</p>
+<h5 id="6-总结">6. 总结</h5>
+<p>上面就是 JVM 运行时数据区的分区情况，从一个 Java 类执行的角度来看：一个类先要被加载，其类元信息会被存入方法区，常量被存入常量池，程序计数器记录指示接下来要执行的方法，方法开始执行时入栈，栈中存储了方法的各种局部变量，如果遇到需要创建对象，则在堆中创建一个新的对象，方法执行结束后弹栈，局部变量和堆中的对象则等待被垃圾回收机制清理。</p>
+<p><em><strong>可以抛出 OutOfMemoryError 异常区域</strong></em></p>
+<ul>
+<li>堆</li>
+<li>Java 虚拟机栈与本地方法栈</li>
+<li>方法区</li>
+<li>运行时常量池</li>
+<li>直接内存</li>
+</ul>
+<p><em><strong>可以抛出 StackOverflowError 异常区域</strong></em></p>
+<ul>
+<li>Java 虚拟机栈与本地方法栈</li>
+</ul>
+<h3 id="二-hotspot-对象简记">二. HotSpot 对象简记</h3>
+<h4 id="1-对象创建过程">1. 对象创建过程</h4>
+<p>HotSpot 虚拟机通过 new 创建对象的过程如下：</p>
+<ul>
+<li>检查常量池是否有类的符号引用，并确认对应的类知否已加载，没有的话执行类加载过程。</li>
+<li>类加载完成后为新生对象分配内存</li>
+<li>将分配到的内存空间初始化零值</li>
+<li>虚拟机对对象进行必要的设置，例如对象是哪个类的实例、对象的哈希码、如何找到类的元信息等</li>
+</ul>
+<p>上面四步完成后对于 JVM 而言一个对象就创建好了，接下来就是调用 <code>&lt;init&gt;</code> 方法，在代码层面按照程序员的代码执行初始化过程了。</p>
+<h4 id="2-对象内存存储">2. 对象内存存储</h4>
+<p>可以从对象的信息组成来学习对象的内存存储，对于一个对象实例，其主要有三部分信息组成：</p>
+<ul>
+<li>所属类的元信息</li>
+<li>属于实例自身的运行时的信息，包括哈希码、GC 分代年龄、锁状态标志、线程持有的锁等</li>
+<li>实例自身的数据，比如成员变量等</li>
+</ul>
+<p>为了存储上面这些信息，对象在内存中的布局有 3 块区域：</p>
+<ul>
+<li>对象头（Header）：一部分用来存储实例的运行时信息；另一部分是类型指针，指向其类的元数据，虚拟机通过这个指针确定对象属于哪个类。如果是数组的话还必须有一块内存记录数组长度。</li>
+<li>实例数据（Instance Data）：对象自身的数据，即程序中定义、继承的各种字段。</li>
+<li>对齐填充（Paddding）：HotSpot 要求对象的大小必须是 8 字节的整数倍，当不够时需要通过对齐填充来补全。</li>
+</ul>
+<h4 id="3-对象访问">3. 对象访问</h4>
+<p>对象访问有两种方式：</p>
+<p><em><strong>句柄访问</strong></em></p>
+<p>上面已经知道一个对象的引用在 Java 虚拟机栈的局部变量表中，如果是句柄访问，表示该引用指向一个句柄，句柄中有对象实例的指针，然后通过句柄的指针访问到实际的对象。JVM 需要为句柄开辟内存空间&mdash;句柄池。句柄的好处是解耦引用和实例，当实例地址发生变化被移动时，只需要修改句柄即可，不需要修改引用。</p>
+<p><img src="https://zouyingjie-blog.oss-cn-beijing.aliyuncs.com/%E5%8F%A5%E6%9F%84.png" alt=""></p>
+<p><em><strong>直接指针</strong></em></p>
+<p>直接指针就是引用直接指向对象，好处是访问速度更快，因为节省了一次访问句柄进行指针定位的开销。HotSpot 主要采用直接指针的方式进行对象访问。</p>
+<p><img src="https://zouyingjie-blog.oss-cn-beijing.aliyuncs.com/%E7%9B%B4%E6%8E%A5%E6%8C%87%E9%92%88.png" alt=""></p>
+<hr>
+<p>关于 Java 虚拟机的内存策略主要有三方面的问题：</p>
+<ul>
+<li>哪些对象应该被回收</li>
+<li>何时回收</li>
+<li>怎么回收</li>
+</ul>
+<h3 id="三-何时回收-对象回收判断依据">三. 何时回收-对象回收判断依据</h3>
+<h4 id="1-java-引用类型">1. Java 引用类型</h4>
+<ul>
+<li>强引用：日常所见引用都是强引用，相当于免死金牌，被强引用所引用的对象不会被垃圾回收。</li>
+<li>软引用：内存不足时当炮灰的，当内存紧张开始垃圾回收时会被清理。</li>
+<li>弱引用：一遇到垃圾回收就会被清理，典型的电视剧中活不过一集的角色，</li>
+<li>虚引用：不会对垃圾回收有任何影响，但是死的时候会吼一嗓子（在回收时收到系统通知）</li>
+</ul>
+<h4 id="2-对象回收依据">2. 对象回收依据</h4>
+<h5 id="1普通对象的回收依据">【1】普通对象的回收依据</h5>
+<p>普通对象指的是在堆内存中存储的对象，判断其是否需要回收的方法一般有两种：</p>
+<ul>
+<li>
+<p>引用计数器：最常见的实现，对象每多一个地方引用它时，计数器值就加 1，引用失效就减 1，优点是实现简单、判定效率高。但是无法解决循环引用问题。</p>
+</li>
+<li>
+<p>可达性分析：通过引用链分析，如果某个对象不可达则表示该对象不可用，可以被回收。在 JVM 中可达性分析会存在两步：首先是可达性分析，对于标记不可达的对象会在执行一次筛选，就是判断其是否有必要执行一次 <code>finalize()</code> 方法，如果需要那么会执行该方法，此时可以在这里做操作使得对象重新可达，从而避免被回收，如果没有尝试恢复，那么对象最终会被标记然后等待回收。流程图如下：</p>
+</li>
+</ul>
+<p><img src="https://zouyingjie-blog.oss-cn-beijing.aliyuncs.com/WX20190731-083317%402x.png" alt=""></p>
+<p>不过在最新的 Java 规范中 <code>finalize()</code> 已经明确标记为不可使用了，因此对于被标记需要清除的对象，一般是没有办法恢复的。</p>
+<h5 id="2方法区对象回收">【2】方法区对象回收</h5>
+<p>方法区存储了类的元信息和运行时常量池，回收规则如下：</p>
+<ul>
+<li>常量没有引用则被清理</li>
+</ul>
+<p>无用的类判断依据如下，只有满足全部条件时类信息才会被垃圾回收器清理：</p>
+<ul>
+<li>所有实例被清除</li>
+<li>加载该类的 ClassLoader 已被回收</li>
+<li>该类对应的  Class 对象没有任何地方被引用，无法通过反射访问该类的任何方法</li>
+</ul>
+<h3 id="四-怎么回收-垃圾回收算法简记">四. 怎么回收-垃圾回收算法简记</h3>
+<p>这里不探究各类算法细节，只简要总结算法思想，总体而言，垃圾回收算法有下面几种方式：</p>
+<h4 id="1标记-清除算法">1.标记-清除算法</h4>
+<p>顾名思义，就是通过两步：<code>标记</code>和<code>清除</code>。先标记出所有需要回收的对象，然后统一回收所有被标记的对象。该算法思想非常简单，但是有两个问题：</p>
+<ul>
+<li>标记和清除效率都不高</li>
+<li>会造成内存碎片，导致需要为对象分配大内存时可能找不到合适的空间，此时会触发另一次垃圾回收。</li>
+</ul>
+<p>下面的算法都是为了优化 <code>标记-清除算法</code> 的问题而来的。</p>
+<h4 id="2-复制算法">2. 复制算法</h4>
+<p>将内存分为两块，每次只用一半，垃圾回收时，将使用的一半中不需要被清理对象统一复制到另一半，然后将当前使用的一半内存统一清理。因为是对整个半区进行清理，所以不需要考虑内存碎片问题。代价是内存的使用率只有 50%，造成了严重的资源浪费。</p>
+<p>虚拟机中的新生代垃圾回收使用的是复制算法，主要是因为大部分对象都是朝生夕死，因此实际复制的对象很少，因此需要空置的内存空间也很小，不至于浪费一半的内存。HotSpot 中将新生代分为了一个 Eden 空间和两个 Survivor 空间，Eden 与 一个 Survivor 的空间比为 <code>8：1</code>，其中一个 Survivor 空间始终闲置。每次回收时先将 Eden 和 使用中的 Survivor 空间的对象复制到闲置的 Survivor 空间中，然后将 Eden 空间和 Survivor 空间统一清理。这样整体上最多只有 10% 的内存被浪费。</p>
+<h4 id="3-标记整--理算法">3. 标记整- 理算法</h4>
+<p>复制算法适用于存活对象不会很多的新生代空间，对于对象存活率较高的老年代不太适合，对象过多会影响复制效率，并且始终会有一定的内存浪费。</p>
+<p>对于老年代使用的算法是 <code>标记-整理算法</code>，就是先将对象标记，然后将不需要被清理的对象整理移动到一端，然后将端边界以外的空间清理掉。
+复制算法可能要浪费一定的内存空间。标记整理是标记后先让对象往一端移动，然后清理另一端。</p>
+<h4 id="4-分代收集">4. 分代收集</h4>
+<p>根据内存区域对象的不同特点合理采用上述提到的垃圾回收机制。比如 JVM 将内存分代新生代和老年代。新生代采用复制算法，老年代采用标记-清除或者标记整理算法。</p>
+<h3 id="五-java-内存分配策略">五. Java 内存分配策略</h3>
+<p>这里的分配策略主要指的是在<code>堆(Heap)</code>上的分配，规则如下：</p>
+<ul>
+<li>优先在 Eden 分配</li>
+<li>大对象直接进入老年代，最典型的是很长的字符串和数组。-XX:PretenureSizeThreshold 设置阈值。这样可以避免新生代清理时发生大量复制。</li>
+<li>长期存活的对象进入老年代。年龄计数器，从 Eden 进入 Survivor，年龄为 1，没熬过一次 GC 年龄加 1，15 后晋升到老年代，。-XX:MaxTenuringThreshold 设置。</li>
+<li>动态年龄判断：如果 Survivor 空间中相同年龄所有对象大小的总和大于 Survivor 总空间的一般，年龄 &gt;= 该年龄的对象可以直接进入老年代。</li>
+<li>空间分配担保：新生代 GC 前，检查老年代最大可用连续空间是否大于新生代空间之和。如果大于，则 MinorGC 安全。</li>
+</ul>
+<p>以上是 《深入理解 Java 虚拟机》二、三章部分的简要总结。</p>
+		</div>
+		<footer class="post__footer">
+			
+<div class="post__tags tags clearfix">
+	<svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/java/" rel="tag">Java</a>
+		</li>
+	</ul>
+</div>
+		</footer>
+	</article>
+</main>
+
+<div class="authorbox clearfix">
+	<figure class="authorbox__avatar">
+		<img alt="邹英杰 avatar" src="/img/avatar.png" class="avatar" height="90" width="90">
+	</figure>
+	<div class="authorbox__header">
+		<span class="authorbox__name">About 邹英杰</span>
+	</div>
+	<div class="authorbox__description">
+		John Doe&rsquo;s true identity is unknown. Maybe he is a successful blogger or writer. Nobody knows it.
+	</div>
+</div>
+
+<nav class="pager flex">
+	<div class="pager__item pager__item--prev">
+		<a class="pager__link" href="/posts/leetcode-337.-house-robber-iii-%E7%AE%80%E8%AE%B0/" rel="prev">
+			<span class="pager__subtitle">«&thinsp;Previous</span>
+			<p class="pager__title">LeetCode-337. House Robber III-简记</p>
+		</a>
+	</div>
+	<div class="pager__item pager__item--next">
+		<a class="pager__link" href="/posts/leetcode-9596.-unique-binary-search-trees-%E7%AE%80%E8%AE%B0/" rel="next">
+			<span class="pager__subtitle">Next&thinsp;»</span>
+			<p class="pager__title">LeetCode-95、96. Unique Binary Search Trees-简记</p>
+		</a>
+	</div>
+</nav>
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2021 John Doe.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+<script src="/js/custom.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
+</body>
+</html>
