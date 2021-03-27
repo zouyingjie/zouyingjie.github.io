@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>技术杂记 on 邹英杰的个人博客</title>
-    <link>/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%AE%B0/</link>
-    <description>Recent content in 技术杂记 on 邹英杰的个人博客</description>
+    <title>技术杂记 on AhriJ`s Blog</title>
+    <link>https://example.com/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%AE%B0/</link>
+    <description>Recent content in 技术杂记 on AhriJ`s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
+    <language>zh-cn</language>
     <lastBuildDate>Thu, 02 Apr 2020 12:29:16 +0800</lastBuildDate>
     
-	<atom:link href="/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%AE%B0/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://example.com/categories/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%AE%B0/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>AWS NAT Gateway 使用简记</title>
-      <link>/posts/aws-nat-gateway-%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/</link>
+      <link>https://example.com/2020/aws-nat-gateway-%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/</link>
       <pubDate>Thu, 02 Apr 2020 12:29:16 +0800</pubDate>
       
-      <guid>/posts/aws-nat-gateway-%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/</guid>
+      <guid>https://example.com/2020/aws-nat-gateway-%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/</guid>
       <description></description>
     </item>
     

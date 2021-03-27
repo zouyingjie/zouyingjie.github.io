@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noodp"/>
+    <meta name="author" content="邹英杰">
+    <meta name="description" content="邹英杰的个人博客">
+    
+    
+    <link rel="prev" href="https://example.com/2017/scrapy-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B04-%E4%BD%BF%E7%94%A8-pipeline-%E4%BF%9D%E5%AD%98%E6%95%B0%E6%8D%AE/" />
+    <link rel="next" href="https://example.com/2018/%E5%9F%BA%E4%BA%8Eelk%E4%B8%8Eelaticalert%E6%90%AD%E5%BB%BA%E7%B3%BB%E7%BB%9F%E7%9B%91%E6%8E%A7%E6%8A%A5%E8%AD%A6/" />
+    <link rel="canonical" href="https://example.com/2018/elk%E7%AC%94%E8%AE%B0elk%E7%9A%84%E5%AE%89%E8%A3%85%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AAelk%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90%E5%B9%B3%E5%8F%B0/" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <title>
+        
+        
+            【ELK笔记】ELK的安装，快速搭建一个ELK日志分析平台 | AhriJ`s Blog
+        
+    </title>
+    <meta name="title" content="【ELK笔记】ELK的安装，快速搭建一个ELK日志分析平台 | AhriJ`s Blog">
+    
+<link rel="stylesheet" href="/css/main.min.css">
+
+
+    
+    
+ 
+
+<script type="application/ld+json">
+{
+    "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/example.com"
+    },
+    "articleSection" : "posts",
+    "name" : "【ELK笔记】ELK的安装，快速搭建一个ELK日志分析平台",
+    "headline" : "【ELK笔记】ELK的安装，快速搭建一个ELK日志分析平台",
+    "description" : "",
+    "inLanguage" : "zh-cn",
+    "author" : "邹英杰",
+    "creator" : "邹英杰",
+    "publisher": "邹英杰",
+    "accountablePerson" : "邹英杰",
+    "copyrightHolder" : "邹英杰",
+    "copyrightYear" : "2018",
+    "datePublished": "2018-03-19 20:38:40 \x2b0000 UTC",
+    "dateModified" : "2018-03-19 20:38:40 \x2b0000 UTC",
+    "url" : "https:\/\/example.com\/2018\/elk%E7%AC%94%E8%AE%B0elk%E7%9A%84%E5%AE%89%E8%A3%85%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AAelk%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90%E5%B9%B3%E5%8F%B0\/",
+    "wordCount" : "1414",
+    "keywords" : [ "ELK", "AhriJ`s Blog"]
+}
+</script>
+
+  </head>
+    <body class="">
+        <div class="wrapper">
+            <nav class="navbar">
+    
+        <progress class="content_progress" max="0" value="0"></progress>
+    
+    <div class="container">
+        
+            <div class="navbar-header header-back2home-logo">
+                <span class="logo_mark" >>$</span>
+                <a href="https://example.com">
+                    <span class="logo_text" >cd /home/</span>
+                    <span class="logo_cursor" ></span>
+                </a>
+            </div>
+        
+        <div class="navbar-right">
+                
+                <span class="menu">
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="/about/" title="">About</a>
+                
+                <span class="divide"></span>
+                <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-dark-mode"></i></a>
+                </span>
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+    
+        <progress class="content_progress" max="0" value="0"></progress>
+    
+     <div class="container">
+        <div class="navbar">
+            <div class="navbar-header header-logo">
+                    <a href="https://example.com">AhriJ`s Blog</a>
+            </div>
+            <div class="navbar-right">
+                <div><a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-dark-mode"></i></a></div>
+                <div class="menu-toggle">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                <nav class="mb-md">
+                    
+                    
+                        <a class="menu-item" href="/posts/" title="">
+                            <h3>Blog</h3>
+                            <div class="menu-active"></div>
+                        </a>
+                    
+                        <a class="menu-item" href="/categories/" title="">
+                            <h3>Categories</h3>
+                            <div class="menu-active"></div>
+                        </a>
+                    
+                        <a class="menu-item" href="/tags/" title="">
+                            <h3>Tags</h3>
+                            <div class="menu-active"></div>
+                        </a>
+                    
+                        <a class="menu-item" href="/about/" title="">
+                            <h3>About</h3>
+                            <div class="menu-active"></div>
+                        </a>
+                    
+                </nav>
+        </div>
+    </div>
+</nav>
+            <main class="main">
+                <div class="container">
+                    
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">【ELK笔记】ELK的安装，快速搭建一个ELK日志分析平台</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="https://example.com" rel="author">邹英杰</a> with ♥
+                <span class="post-time">
+                on <time datetime=2018-03-19 itemprop="datePublished">March 19, 2018</time>
+                </span>
+                in
+                
+                <i class="iconfont icon-folder"></i>
+                <span class="post-category">
+                        
+                        
+                        
+                          <a href="https://example.com/categories/elk/"> ELK, </a>
+                        
+                        
+                </span>
+                <span class="post-word-count">1414 words</span>
+        </div>
+    </header>
+
+    <div class="post-content">
+        
+
+        
+        
+            
+        
+
+        
+        
+        
+        
+        
+
+        
+        
+        
+
+        <p>ELK 是 ElasticSearch、 LogStash、 Kibana 三个开源工具的简称，现在还包括 Beats，其分工如下:</p>
+<ul>
+<li>LogStash/Beats: 负责数据的收集与处理</li>
+<li>ElasticSearch: 一个开源的分布式搜索引擎，负责数据的存储、检索和分析</li>
+<li>Kibana: 提供了可视化的界面。负责数据的可视化操作</li>
+</ul>
+<p>基于 ELK Stack 可以构建日志分析平台、数据分析搜索平台等非常有用的项目。</p>
+<p>作为学习笔记的第一篇，简单介绍下 ELK 各个软件的安装与简单配置，快速的搭建一个日志的查询平台</p>
+<h3 id="一-elasticsearch-的安装与运行">一. ElasticSearch 的安装与运行</h3>
+<p>ES 是一个基于 Lucene 的使用 Java 开发的开源搜索引擎，因此其运行是基于 JVM 的，因此在安装之前需要保证已经安装了 Java 环境。ES 要求使用 Java8 或者更高版本的 Java 环境。</p>
+<p>确定机器已经安装了 Java 环境后，就可以安装 ES 了。官网提供了压缩包可以直接下载，</p>
+<pre><code># 下载压缩包
+wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.2.2.tar.gz
+# 解压
+tar -xzf elasticsearch-6.2.2.tar.gz
+# 进入文件
+cd elasticsearch-6.2.2/
+</code></pre><p>下载解压完成后进入目录，启动命令在 bin 目录下，直接运行命令就可以启动了</p>
+<pre><code>bin/elasticsearch
+</code></pre><p>ElasticSearch 的默认启动端口是 9200。手动访问出现如下信息说明启动成功。</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWctYmxvZy5jc2RuLm5ldC8yMDE4MDMxOTExMjk0NjkzNz93YXRlcm1hcmsvMi90ZXh0L0x5OWliRzluTG1OelpHNHVibVYwTDBGb2NtbGZTZz09L2ZvbnQvNWE2TDVMMlQvZm9udHNpemUvNDAwL2ZpbGwvSTBKQlFrRkNNQT09L2Rpc3NvbHZlLzcw" alt="这里写图片描述" loading="lazy" ></p>
+<h3 id="二-filebeats-与-logstash-的安装">二. FileBeats 与 LogStash 的安装</h3>
+<p>LogStash 可以用来对日志进行收集并进行过滤整理后输出到 ES 中，FileBeats 是一个更加轻量级的日志收集工具。
+现在最常用的方式是通过 FileBeats 收集目标日志，然后统一输出到 LogStash 做进一步的过滤，在由 LogStash 输出到 ES 中进行存储。</p>
+<h4 id="1-logstash-的安装运行">1. LogStash 的安装运行</h4>
+<p>官方提供了压缩包下载， <a href="https://www.elastic.co/downloads/logstash">https://www.elastic.co/downloads/logstash</a> 。 下载完成后解压即可。</p>
+<pre><code>tar zxvf logstash-6.2.2.tar.gz
+# 进入目录
+cd logstash-6.2.2
+</code></pre><p>LogStash 的运行需要指定一个配置文件，来指定数据的流向，我们在当前目录下创建一个 first.conf 文件，其内容如下:</p>
+<pre><code># 配置输入为 beats
+input {
+    beats {
+            port =&gt; &quot;5044&quot;
+
+    }
+
+}
+# 数据过滤
+filter {
+    grok {
+            match =&gt; { &quot;message&quot; =&gt; &quot;%{COMBINEDAPACHELOG}&quot; }
+
+    }
+    geoip {
+            source =&gt; &quot;clientip&quot;
+
+    }
+
+}
+# 输出到本机的 ES
+output {
+    elasticsearch {
+            hosts =&gt; [ &quot;localhost:9200&quot;  ]
+
+    }
+
+}
+</code></pre><p>上面配置了 LogStash 输出日志到 ES 中，具体字段在后面的笔记中会详细介绍，这里先用起来再说。
+配置完成后就可以通过如下方式启动 LogStash 了</p>
+<pre><code>bin/logstash -f first.conf --config.reload.automatic
+</code></pre><p>可以看到命令行会打印出如下信息， 可以看到 LogStash 默认端口为 5044:</p>
+<pre><code>[2018-03-08T23:12:44,087][WARN ][logstash.config.source.multilocal] Ignoring the 'pipelines.yml' file because modules or command line options are specified
+[2018-03-08T23:12:44,925][INFO ][logstash.runner          ] Starting Logstash {&quot;logstash.version&quot;=&gt;&quot;6.2.2&quot;}
+[2018-03-08T23:12:45,623][INFO ][logstash.agent           ] Successfully started Logstash API endpoint {:port=&gt;9600}
+[2018-03-08T23:12:49,960][INFO ][logstash.pipeline        ] Starting pipeline {:pipeline_id=&gt;&quot;main&quot;, &quot;pipeline.workers&quot;=&gt;4, &quot;pipeline.batch.size&quot;=&gt;125, &quot;pipeline.batch.delay&quot;=&gt;50}
+[2018-03-08T23:12:50,882][INFO ][logstash.outputs.elasticsearch] Elasticsearch pool URLs updated {:changes=&gt;{:removed=&gt;[], :added=&gt;[http://localhost:9200/]}}
+[2018-03-08T23:12:50,894][INFO ][logstash.outputs.elasticsearch] Running health check to see if an Elasticsearch connection is working {:healthcheck_url=&gt;http://localhost:9200/, :path=&gt;&quot;/&quot;}
+[2018-03-08T23:12:51,303][WARN ][logstash.outputs.elasticsearch] Restored connection to ES instance {:url=&gt;&quot;http://localhost:9200/&quot;}
+[2018-03-08T23:12:51,595][INFO ][logstash.outputs.elasticsearch] ES Output version determined {:es_version=&gt;nil}
+[2018-03-08T23:12:51,604][WARN ][logstash.outputs.elasticsearch] Detected a 6.x and above cluster: the `type` event field won't be used to determine the document _type {:es_version=&gt;6}
+[2018-03-08T23:12:51,641][INFO ][logstash.outputs.elasticsearch] Using mapping template from {:path=&gt;nil}
+[2018-03-08T23:12:51,676][INFO ][logstash.outputs.elasticsearch] Attempting to install template {:manage_template=&gt;{&quot;template&quot;=&gt;&quot;logstash-*&quot;, &quot;version&quot;=&gt;60001, &quot;settings&quot;=&gt;{&quot;index.refresh_interval&quot;=&gt;&quot;5s&quot;}, &quot;mappings&quot;=&gt;{&quot;_default_&quot;=&gt;{&quot;dynamic_templates&quot;=&gt;[{&quot;message_field&quot;=&gt;{&quot;path_match&quot;=&gt;&quot;message&quot;, &quot;match_mapping_type&quot;=&gt;&quot;string&quot;, &quot;mapping&quot;=&gt;{&quot;type&quot;=&gt;&quot;text&quot;, &quot;norms&quot;=&gt;false}}}, {&quot;string_fields&quot;=&gt;{&quot;match&quot;=&gt;&quot;*&quot;, &quot;match_mapping_type&quot;=&gt;&quot;string&quot;, &quot;mapping&quot;=&gt;{&quot;type&quot;=&gt;&quot;text&quot;, &quot;norms&quot;=&gt;false, &quot;fields&quot;=&gt;{&quot;keyword&quot;=&gt;{&quot;type&quot;=&gt;&quot;keyword&quot;, &quot;ignore_above&quot;=&gt;256}}}}}], &quot;properties&quot;=&gt;{&quot;@timestamp&quot;=&gt;{&quot;type&quot;=&gt;&quot;date&quot;}, &quot;@version&quot;=&gt;{&quot;type&quot;=&gt;&quot;keyword&quot;}, &quot;geoip&quot;=&gt;{&quot;dynamic&quot;=&gt;true, &quot;properties&quot;=&gt;{&quot;ip&quot;=&gt;{&quot;type&quot;=&gt;&quot;ip&quot;}, &quot;location&quot;=&gt;{&quot;type&quot;=&gt;&quot;geo_point&quot;}, &quot;latitude&quot;=&gt;{&quot;type&quot;=&gt;&quot;half_float&quot;}, &quot;longitude&quot;=&gt;{&quot;type&quot;=&gt;&quot;half_float&quot;}}}}}}}}
+[2018-03-08T23:12:51,773][INFO ][logstash.outputs.elasticsearch] New Elasticsearch output {:class=&gt;&quot;LogStash::Outputs::ElasticSearch&quot;, :hosts=&gt;[&quot;//localhost:9200&quot;]}
+[2018-03-08T23:12:52,176][INFO ][logstash.filters.geoip   ] Using geoip database {:path=&gt;&quot;/Users/zouyingjie/soft/study/ELK/logstash-6.2.2/vendor/bundle/jruby/2.3.0/gems/logstash-filter-geoip-5.0.3-java/vendor/GeoLite2-City.mmdb&quot;}
+[2018-03-08T23:12:53,026][INFO ][logstash.inputs.beats    ] Beats inputs: Starting input listener {:address=&gt;&quot;0.0.0.0:5044&quot;}
+[2018-03-08T23:12:53,195][INFO ][logstash.pipeline        ] Pipeline started succesfully {:pipeline_id=&gt;&quot;main&quot;, :thread=&gt;&quot;#&lt;Thread:0x66461e40 run&gt;&quot;}
+[2018-03-08T23:12:53,290][INFO ][org.logstash.beats.Server] Starting server on port: 5044
+[2018-03-08T23:12:53,401][INFO ][logstash.agent           ] Pipelines running {:count=&gt;1, :pipelines=&gt;[&quot;main&quot;]}
+
+</code></pre><h4 id="2-安装运行-filebeats">2. 安装运行 FileBeats</h4>
+<p>FileBeats 也提供了下载包，地址为 <a href="https://www.elastic.co/downloads/beats/filebeat">https://www.elastic.co/downloads/beats/filebeat</a> 。找到系统对应的包下载后解压即可。</p>
+<pre><code>tar zxvf filebeat-6.2.2-darwin-x86_64.tar.gz
+cd filebeat-6.2.2-darwin-x86_64
+</code></pre><p>进入目录编辑 filebeat.yml 找到对应的配置项，配置如下</p>
+<pre><code>- type: log
+   # Change to true to enable this prospector configuration.
+    enabled: True
+
+    # Paths that should be crawled and fetched. Glob based paths.
+    # 读取 Nginx 的日志
+    paths:
+      - /usr/local/nginx/logs/*.log
+
+#----------------------------- Logstash output --------------------------------
+# 输出到本机的 LogStash
+output.logstash:
+  # The Logstash hosts
+  hosts: [&quot;localhost:5044&quot;]
+</code></pre><p>配置完成后执行如下命令，启动 FileBeat 即可</p>
+<pre><code># FileBeat 需要以 root 身份启动，因此先更改配置文件的权限
+sudo chown root filebeat.yml
+sudo ./filebeat -e -c filebeat.yml -d &quot;publish&quot;
+</code></pre><h3 id="三-kibana-的安装运行">三. Kibana 的安装运行</h3>
+<p>Kibana 也提供了对应的安装包下载，链接为 <a href="https://www.elastic.co/downloads/kibana">https://www.elastic.co/downloads/kibana</a> , Mac、Linux、Win 都有对应的安装包，直接下载解压即可</p>
+<pre><code>tar zxvf kibana-6.2.2-darwin-x86_64.tar.gz
+cd kibana-6.2.2-darwin-x86_64
+# 直接启动即可
+bin/kibana
+</code></pre><p>Kibana 默认链接了本机的 9200 端口，其绑定的端口为 5601，启动成功后直接访问 127.0.0.1:5601 端口即可,界面如下。我因为安装了 x-pack 插件因此显示的项可能会多一些，这个暂时忽略.</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWctYmxvZy5jc2RuLm5ldC8yMDE4MDMxOTExMzEyMjg0MD93YXRlcm1hcmsvMi90ZXh0L0x5OWliRzluTG1OelpHNHVibVYwTDBGb2NtbGZTZz09L2ZvbnQvNWE2TDVMMlQvZm9udHNpemUvNDAwL2ZpbGwvSTBKQlFrRkNNQT09L2Rpc3NvbHZlLzcw" alt="这里写图片描述" loading="lazy" ></p>
+<p>点击右上方的 Discover. 界面会提示创建索引模式，通过这个来检索 ES 中的索引，可以看到已经有一个 Logstash 的索引了，输入名称进行完全匹配，</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWctYmxvZy5jc2RuLm5ldC8yMDE4MDMxOTExMzEzOTQ2ND93YXRlcm1hcmsvMi90ZXh0L0x5OWliRzluTG1OelpHNHVibVYwTDBGb2NtbGZTZz09L2ZvbnQvNWE2TDVMMlQvZm9udHNpemUvNDAwL2ZpbGwvSTBKQlFrRkNNQT09L2Rpc3NvbHZlLzcw" alt="这里写图片描述" loading="lazy" ></p>
+<p>这里选定一个时间戳，使用默认的 timestamp 即可，设置完成后我们可以根据时间范围筛选数据。</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWctYmxvZy5jc2RuLm5ldC8yMDE4MDMxOTExMzIwNzE0OD93YXRlcm1hcmsvMi90ZXh0L0x5OWliRzluTG1OelpHNHVibVYwTDBGb2NtbGZTZz09L2ZvbnQvNWE2TDVMMlQvZm9udHNpemUvNDAwL2ZpbGwvSTBKQlFrRkNNQT09L2Rpc3NvbHZlLzcw" alt="这里写图片描述" loading="lazy" ></p>
+<p>设置完成后创建后显示如下</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWctYmxvZy5jc2RuLm5ldC8yMDE4MDMxOTExMzI0Nzg2OD93YXRlcm1hcmsvMi90ZXh0L0x5OWliRzluTG1OelpHNHVibVYwTDBGb2NtbGZTZz09L2ZvbnQvNWE2TDVMMlQvZm9udHNpemUvNDAwL2ZpbGwvSTBKQlFrRkNNQT09L2Rpc3NvbHZlLzcw" alt="这里写图片描述" loading="lazy" ></p>
+<p>这时在点击 Discover 就可以看到我们创建的索引了，此时输入 UnicodeEncodeError 已经返回了匹配到的日志信息。
+<img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWctYmxvZy5jc2RuLm5ldC8yMDE4MDMxOTExMzIyNjQzNT93YXRlcm1hcmsvMi90ZXh0L0x5OWliRzluTG1OelpHNHVibVYwTDBGb2NtbGZTZz09L2ZvbnQvNWE2TDVMMlQvZm9udHNpemUvNDAwL2ZpbGwvSTBKQlFrRkNNQT09L2Rpc3NvbHZlLzcw" alt="这里写图片描述" loading="lazy" ></p>
+<p>至此就完成了简单的日志分析平台的搭建。OK，关于安装就介绍到这里，后面正式开始对整个 ELK Stack 的学习。</p>
+    </div>
+
+    <div class="post-copyright">
+            
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>邹英杰 </span>
+                </p>
+            
+
+            
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=https://example.com/2018/elk%E7%AC%94%E8%AE%B0elk%E7%9A%84%E5%AE%89%E8%A3%85%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AAelk%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90%E5%B9%B3%E5%8F%B0/>https://example.com/2018/elk%E7%AC%94%E8%AE%B0elk%E7%9A%84%E5%AE%89%E8%A3%85%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AAelk%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90%E5%B9%B3%E5%8F%B0/</span>
+            </p>
+            
+            
+            <p class="copyright-item lincese">
+                本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可
+            </p>
+            
+    </div>
+
+
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-tag"></i>Tag(s):
+            
+            <span class="tag"><a href="https://example.com/tags/elk/">
+                    #ELK</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> ·
+                <span><a href="https://example.com">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://example.com/2017/scrapy-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B04-%E4%BD%BF%E7%94%A8-pipeline-%E4%BF%9D%E5%AD%98%E6%95%B0%E6%8D%AE/" class="prev" rel="prev" title="Scrapy 入门笔记(4) 使用 Pipeline 保存数据"><i class="iconfont icon-left"></i>&nbsp;Scrapy 入门笔记(4) 使用 Pipeline 保存数据</a>
+        
+        
+        <a href="https://example.com/2018/%E5%9F%BA%E4%BA%8Eelk%E4%B8%8Eelaticalert%E6%90%AD%E5%BB%BA%E7%B3%BB%E7%BB%9F%E7%9B%91%E6%8E%A7%E6%8A%A5%E8%AD%A6/" class="next" rel="next" title="基于ELK与ElaticAlert搭建系统监控报警">基于ELK与ElaticAlert搭建系统监控报警&nbsp;<i class="iconfont icon-right"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+        
+            
+                <div id="gitalk-container"></div>
+<link rel="stylesheet" href="https://cdn.bootcss.com/gitalk/1.5.2/gitalk.css">
+<script src="https://cdn.bootcss.com/gitalk/1.5.2/gitalk.min.js"></script>
+<script>
+    const gitalk = new Gitalk({
+
+        clientID: '644ea43e1177645f4f35',
+        clientSecret: '40a7db92fa7b2f61bf9f93956a7db0a6ac84ad1f',
+        repo: 'https:\/\/github.com\/zouyingjie\/blog',
+        owner: 'zouyingjie',
+        admin: ['zouyingjie'],
+        id: location.pathname, 
+        distractionFreeMode: false 
+    });
+    (function () {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.';
+            return;
+        }
+        gitalk.render('gitalk-container');
+    })();
+</script>
+
+            
+        
+    </div>
+</article>
+                </div>
+            </main>
+            <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2017 - 2021</span>
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i>
+         </span>
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://example.com">邹英杰</a> | </span>
+         
+
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/Mogeko/Mogege" target="_blank" rel="external nofollow">Mogege</a></span>
+    </div>
+</footer>
+
+
+
+
+
+
+<script defer src="/js/vendor_main.min.js"></script>
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/pangu@4.0.7/dist/browser/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script> pangu.spacingPage();</script>
+
+
+
+
+
+        </div>
+    </body>
+</html>

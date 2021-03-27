@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noodp"/>
+    <meta name="author" content="邹英杰">
+    <meta name="description" content="邹英杰的个人博客">
+    
+    
+    <link rel="prev" href="https://example.com/2020/leetcode-%E8%A7%A3%E9%A2%98%E6%8A%A5%E5%91%8A-328.%E5%A5%87%E5%81%B6%E9%93%BE%E8%A1%A8/" />
+    <link rel="next" href="https://example.com/2020/kubernetes-150-%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%BB%83%E4%B9%A0%E4%B8%8A/" />
+    <link rel="canonical" href="https://example.com/2020/kubernetes-150-%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%BB%83%E4%B9%A0%E4%B8%AD/" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <title>
+        
+        
+            Kubernetes 150 个操作练习（中） | AhriJ`s Blog
+        
+    </title>
+    <meta name="title" content="Kubernetes 150 个操作练习（中） | AhriJ`s Blog">
+    
+<link rel="stylesheet" href="/css/main.min.css">
+
+
+    
+    
+ 
+
+<script type="application/ld+json">
+{
+    "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/example.com"
+    },
+    "articleSection" : "posts",
+    "name" : "Kubernetes 150 个操作练习（中）",
+    "headline" : "Kubernetes 150 个操作练习（中）",
+    "description" : "",
+    "inLanguage" : "zh-cn",
+    "author" : "邹英杰",
+    "creator" : "邹英杰",
+    "publisher": "邹英杰",
+    "accountablePerson" : "邹英杰",
+    "copyrightHolder" : "邹英杰",
+    "copyrightYear" : "2020",
+    "datePublished": "2020-04-23 15:50:53 \x2b0800 CST",
+    "dateModified" : "2020-04-23 15:50:53 \x2b0800 CST",
+    "url" : "https:\/\/example.com\/2020\/kubernetes-150-%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%BB%83%E4%B9%A0%E4%B8%AD\/",
+    "wordCount" : "3554",
+    "keywords" : [ "Kubernetes", "AhriJ`s Blog"]
+}
+</script>
+
+  </head>
+    <body class="">
+        <div class="wrapper">
+            <nav class="navbar">
+    
+        <progress class="content_progress" max="0" value="0"></progress>
+    
+    <div class="container">
+        
+            <div class="navbar-header header-back2home-logo">
+                <span class="logo_mark" >>$</span>
+                <a href="https://example.com">
+                    <span class="logo_text" >cd /home/</span>
+                    <span class="logo_cursor" ></span>
+                </a>
+            </div>
+        
+        <div class="navbar-right">
+                
+                <span class="menu">
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="/about/" title="">About</a>
+                
+                <span class="divide"></span>
+                <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-dark-mode"></i></a>
+                </span>
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+    
+        <progress class="content_progress" max="0" value="0"></progress>
+    
+     <div class="container">
+        <div class="navbar">
+            <div class="navbar-header header-logo">
+                    <a href="https://example.com">AhriJ`s Blog</a>
+            </div>
+            <div class="navbar-right">
+                <div><a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-dark-mode"></i></a></div>
+                <div class="menu-toggle">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                <nav class="mb-md">
+                    
+                    
+                        <a class="menu-item" href="/posts/" title="">
+                            <h3>Blog</h3>
+                            <div class="menu-active"></div>
+                        </a>
+                    
+                        <a class="menu-item" href="/categories/" title="">
+                            <h3>Categories</h3>
+                            <div class="menu-active"></div>
+                        </a>
+                    
+                        <a class="menu-item" href="/tags/" title="">
+                            <h3>Tags</h3>
+                            <div class="menu-active"></div>
+                        </a>
+                    
+                        <a class="menu-item" href="/about/" title="">
+                            <h3>About</h3>
+                            <div class="menu-active"></div>
+                        </a>
+                    
+                </nav>
+        </div>
+    </div>
+</nav>
+            <main class="main">
+                <div class="container">
+                    
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">Kubernetes 150 个操作练习（中）</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="https://example.com" rel="author">邹英杰</a> with ♥
+                <span class="post-time">
+                on <time datetime=2020-04-23 itemprop="datePublished">April 23, 2020</time>
+                </span>
+                in
+                
+                <span class="post-word-count">3554 words</span>
+        </div>
+    </header>
+
+    <div class="post-content">
+        
+
+        
+        
+
+        
+        
+        
+        
+        
+
+        
+        
+        
+
+        <p>原文链接：<a href="https://medium.com/bb-tutorials-and-thoughts/practice-enough-with-these-questions-for-the-ckad-exam-2f42d1228552">Practice Enough With These 150 Questions for the CKAD Exam</a>。</p>
+<p>看了 Medium 上的一篇文章记录了 150 个 Kubernetes 的练习，自己练习了一遍，在原文基础上加了一些自己实践过程中的的提示，希望对需要熟悉 K8S 操作的同学有所帮助。</p>
+<h2 id="三pod-设计篇">三.Pod 设计篇</h2>
+<p>这是原文中的第三部分，主要关于 Pod 操作的，主要有下面一些内容：</p>
+<ul>
+<li>关于 标签 Label、选择器 selector 和 注解 Annotations 的使用</li>
+<li>了解 Deployment 如何进行滚动升级和回滚</li>
+<li>理解 Job 和 CronJobs</li>
+</ul>
+<h4 id="36-查看-pod展示标签信息">36. 查看 Pod，展示标签信息</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl get pods --show-labels
+NAME                         READY   STATUS      RESTARTS   AGE   LABELS
+busybox                      0/3     Completed   <span style="color:#ae81ff">0</span>          17h   run<span style="color:#f92672">=</span>busybox
+</code></pre></div><h4 id="37-创建吴五个-nginx-的-pod两个带-envprod-标签三个带-envdev-标签">37. 创建吴五个 Nginx 的 Pod，两个带 env=prod 标签，三个带 env=dev 标签</h4>
+<pre><code>$ kubectl run nginx-dev1 --image=nginx --restart=Never --labels=env=dev
+kubectl run nginx-dev2 --image=nginx --restart=Never --labels=env=dev
+kubectl run nginx-dev3 --image=nginx --restart=Never --labels=env=dev
+kubectl run nginx-prod1 --image=nginx --restart=Never --labels=env=prod
+kubectl run nginx-prod2 --image=nginx --restart=Never --labels=env=prod
+pod/nginx-dev1 created
+pod/nginx-dev2 created
+pod/nginx-dev3 created
+pod/nginx-prod1 created
+pod/nginx-prod2 created
+</code></pre><h4 id="38-检查上面-pod-的创建情况">38. 检查上面 Pod 的创建情况</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl get pods --show-labels
+NAME                         READY   STATUS      RESTARTS   AGE   LABELS
+nginx-dev1                   1/1     Running     <span style="color:#ae81ff">0</span>          87s   env<span style="color:#f92672">=</span>dev
+nginx-dev2                   1/1     Running     <span style="color:#ae81ff">0</span>          87s   env<span style="color:#f92672">=</span>dev
+nginx-dev3                   1/1     Running     <span style="color:#ae81ff">0</span>          87s   env<span style="color:#f92672">=</span>dev
+nginx-prod1                  1/1     Running     <span style="color:#ae81ff">0</span>          87s   env<span style="color:#f92672">=</span>prod
+nginx-prod2                  1/1     Running     <span style="color:#ae81ff">0</span>          87s   env<span style="color:#f92672">=</span>prod
+
+</code></pre></div><h4 id="39-查看带有标签-envdev-的-pod">39. 查看带有标签 env=dev 的 Pod</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl get pods -l env<span style="color:#f92672">=</span>dev
+NAME         READY   STATUS    RESTARTS   AGE
+nginx-dev1   1/1     Running   <span style="color:#ae81ff">0</span>          3m6s
+nginx-dev2   1/1     Running   <span style="color:#ae81ff">0</span>          3m6s
+nginx-dev3   1/1     Running   <span style="color:#ae81ff">0</span>          3m6s
+
+</code></pre></div><h4 id="40-查看带有标签-envdev-的-pod-并展示其标签">40. 查看带有标签 env=dev 的 Pod 并展示其标签</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl get pods -l env<span style="color:#f92672">=</span>dev --show-labels
+NAME         READY   STATUS    RESTARTS   AGE     LABELS
+nginx-dev1   1/1     Running   <span style="color:#ae81ff">0</span>          3m42s   env<span style="color:#f92672">=</span>dev
+nginx-dev2   1/1     Running   <span style="color:#ae81ff">0</span>          3m42s   env<span style="color:#f92672">=</span>dev
+nginx-dev3   1/1     Running   <span style="color:#ae81ff">0</span>          3m42s   env<span style="color:#f92672">=</span>dev
+</code></pre></div><h4 id="41--查看带有标签-envprod-的-pod">41.  查看带有标签 env=prod 的 Pod</h4>
+<pre><code>$ kubectl get pods -l env=prod
+NAME          READY   STATUS    RESTARTS   AGE
+nginx-prod1   1/1     Running   0          6m21s
+nginx-prod2   1/1     Running   0          6m21s
+</code></pre><h4 id="42-查看带有标签-envprod-的-pod-并展示其标签">42. 查看带有标签 env=prod 的 Pod 并展示其标签</h4>
+<pre><code>$ kubectl get pods -l env=prod --show-labels
+NAME          READY   STATUS    RESTARTS   AGE     LABELS
+nginx-prod1   1/1     Running   0          6m53s   env=prod
+nginx-prod2   1/1     Running   0          6m53s   env=prod
+</code></pre><h4 id="43-查看-pod并显示器-env-标签">43. 查看 Pod，并显示器 env 标签</h4>
+<p>这时没有对应标签的 Pod 展示标签值为空</p>
+<pre><code>$ kubectl get pods -L env
+NAME                         READY   STATUS      RESTARTS   AGE    ENV
+
+my-app-v1-c9b7f9985-xnwkt    1/1     Running     0          11d
+my-app-v2-77fc8c9499-9nxv2   1/1     Running     0          11d
+nginx                        1/1     Running     0          18h
+nginx-dev1                   1/1     Running     0          7m7s   dev
+nginx-dev2                   1/1     Running     0          7m7s   dev
+nginx-dev3                   1/1     Running     0          7m7s   dev
+nginx-prod1                  1/1     Running     0          7m7s   prod
+nginx-prod2                  1/1     Running     0          7m7s   prod
+</code></pre><h4 id="44-查看标签为-env-且值为-prod-或者-dev-的-pod">44. 查看标签为 env 且值为 prod 或者 dev 的 Pod</h4>
+<pre><code>$ kubectl get pods -l 'env in (dev,prod)'
+NAME          READY   STATUS    RESTARTS   AGE
+nginx-dev1    1/1     Running   0          9m3s
+nginx-dev2    1/1     Running   0          9m3s
+nginx-dev3    1/1     Running   0          9m3s
+nginx-prod1   1/1     Running   0          9m3s
+nginx-prod2   1/1     Running   0          9m3s
+</code></pre><h4 id="45-查看标签为-env-且值为-prod-或者-dev-的-pod并展示其标签">45. 查看标签为 env 且值为 prod 或者 dev 的 Pod，并展示其标签</h4>
+<pre><code>$ kubectl get pods -l 'env in (dev,prod)' --show-labels
+NAME          READY   STATUS    RESTARTS   AGE     LABELS
+nginx-dev1    1/1     Running   0          9m21s   env=dev
+nginx-dev2    1/1     Running   0          9m21s   env=dev
+nginx-dev3    1/1     Running   0          9m21s   env=dev
+nginx-prod1   1/1     Running   0          9m21s   env=prod
+nginx-prod2   1/1     Running   0          9m21s   env=prod
+</code></pre><h4 id="46修改某个-pod-的标签为-envuat查看修改结果">46，修改某个 Pod 的标签为 env=uat，查看修改结果</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl label pod nginx-dev3 env<span style="color:#f92672">=</span>uat --overwrite
+pod/nginx-dev3 labeled
+
+$ kubectl get pods --show-labels
+NAME                         READY   STATUS      RESTARTS   AGE   LABELS
+nginx-dev1                   1/1     Running     <span style="color:#ae81ff">0</span>          11m   env<span style="color:#f92672">=</span>dev
+nginx-dev2                   1/1     Running     <span style="color:#ae81ff">0</span>          11m   env<span style="color:#f92672">=</span>dev
+nginx-dev3                   1/1     Running     <span style="color:#ae81ff">0</span>          11m   env<span style="color:#f92672">=</span>uat
+nginx-prod1                  1/1     Running     <span style="color:#ae81ff">0</span>          11m   env<span style="color:#f92672">=</span>prod
+nginx-prod2                  1/1     Running     <span style="color:#ae81ff">0</span>          11m   env<span style="color:#f92672">=</span>prod
+</code></pre></div><h4 id="47-删除-pod-的标签并查看修改结果">47. 删除 Pod 的标签并查看修改结果</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl label pod nginx-dev<span style="color:#f92672">{</span>1..3<span style="color:#f92672">}</span> env-
+pod/nginx-dev1 labeled
+pod/nginx-dev2 labeled
+pod/nginx-dev3 labeled
+
+<span style="color:#75715e"># ubuntu @ VM-0-4-ubuntu in ~ [9:33:08]</span>
+$ kubectl label pod nginx-prod<span style="color:#f92672">{</span>1..2<span style="color:#f92672">}</span> env-
+pod/nginx-prod1 labeled
+pod/nginx-prod2 labeled
+
+
+$ kubectl get po --show-labels
+NAME                         READY   STATUS      RESTARTS   AGE   LABELS
+nginx-dev1                   1/1     Running     <span style="color:#ae81ff">0</span>          13m   &lt;none&gt;
+nginx-dev2                   1/1     Running     <span style="color:#ae81ff">0</span>          13m   &lt;none&gt;
+nginx-dev3                   1/1     Running     <span style="color:#ae81ff">0</span>          13m   &lt;none&gt;
+nginx-prod1                  1/1     Running     <span style="color:#ae81ff">0</span>          13m   &lt;none&gt;
+nginx-prod2                  1/1     Running     <span style="color:#ae81ff">0</span>          13m   &lt;none&gt;
+</code></pre></div><h4 id="48-给多个-pod-添加-appnginx-标签并查看结果">48. 给多个 Pod 添加 app=nginx 标签并查看结果</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl label pod nginx-dev<span style="color:#f92672">{</span>1..3<span style="color:#f92672">}</span> app<span style="color:#f92672">=</span>nginx
+pod/nginx-dev1 labeled
+pod/nginx-dev2 labeled
+pod/nginx-dev3 labeled
+
+<span style="color:#75715e"># ubuntu @ VM-0-4-ubuntu in ~ [9:34:29]</span>
+$ kubectl label pod nginx-prod<span style="color:#f92672">{</span>1..2<span style="color:#f92672">}</span> app<span style="color:#f92672">=</span>nginx
+pod/nginx-prod1 labeled
+pod/nginx-prod2 labeled
+
+<span style="color:#75715e"># ubuntu @ VM-0-4-ubuntu in ~ [9:34:34]</span>
+$ kubectl get po --show-labels
+NAME                         READY   STATUS      RESTARTS   AGE   LABELS
+nginx-dev1                   1/1     Running     <span style="color:#ae81ff">0</span>          14m   app<span style="color:#f92672">=</span>nginx
+nginx-dev2                   1/1     Running     <span style="color:#ae81ff">0</span>          14m   app<span style="color:#f92672">=</span>nginx
+nginx-dev3                   1/1     Running     <span style="color:#ae81ff">0</span>          14m   app<span style="color:#f92672">=</span>nginx
+nginx-prod1                  1/1     Running     <span style="color:#ae81ff">0</span>          14m   app<span style="color:#f92672">=</span>nginx
+nginx-prod2                  1/1     Running     <span style="color:#ae81ff">0</span>          14m   app<span style="color:#f92672">=</span>nginx
+</code></pre></div><h4 id="49-获取所有-node-节点并展示其信息">49。 获取所有 node 节点并展示其信息</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl get nodes --show-labels
+NAME            STATUS   ROLES    AGE   VERSION   LABELS
+vm-0-2-ubuntu   Ready    &lt;none&gt;   19d   v1.18.0   beta.kubernetes.io/arch<span style="color:#f92672">=</span>amd64,beta.kubernetes.io/os<span style="color:#f92672">=</span>linux,kubernetes.io/arch<span style="color:#f92672">=</span>amd64,kubernetes.io/hostname<span style="color:#f92672">=</span>vm-0-2-ubuntu,kubernetes.io/os<span style="color:#f92672">=</span>linux
+vm-0-4-ubuntu   Ready    master   19d   v1.18.0   beta.kubernetes.io/arch<span style="color:#f92672">=</span>amd64,beta.kubernetes.io/os<span style="color:#f92672">=</span>linux,kubernetes.io/arch<span style="color:#f92672">=</span>amd64,kubernetes.io/hostname<span style="color:#f92672">=</span>vm-0-4-ubuntu,kubernetes.io/os<span style="color:#f92672">=</span>linux,node-role.kubernetes.io/master<span style="color:#f92672">=</span>
+</code></pre></div><h4 id="50-为-node-打-nodenamenginxnode-标签">50. 为 Node 打 nodeName=nginxNode 标签</h4>
+<pre><code>$ kubectl label node vm-0-2-ubuntu nodeName=nginxnode
+node/vm-0-2-ubuntu labeled
+
+</code></pre><h4 id="51-创建-pod打标签-runnginx使用-nodeselector-将-pod-部署到带有-nodenamenginxnode-的节点">51. 创建 Pod，打标签 run=nginx，使用 nodeSelector 将 Pod 部署到带有 nodeName=nginxnode 的节点</h4>
+<ul>
+<li>创建用的 yaml 文件</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">apiVersion</span>: v1
+<span style="color:#66d9ef">kind</span>: Pod
+<span style="color:#66d9ef">metadata</span>:
+  <span style="color:#66d9ef">creationTimestamp</span>: <span style="color:#66d9ef">null</span>
+  <span style="color:#75715e"># 达标欧倩</span>
+  <span style="color:#66d9ef">labels</span>:
+    <span style="color:#66d9ef">run</span>: nginx
+  <span style="color:#66d9ef">name</span>: nginx
+<span style="color:#66d9ef">spec</span>:
+  <span style="color:#75715e"># 选择节点，</span>
+  <span style="color:#66d9ef">nodeSelector</span>:
+    <span style="color:#66d9ef">nodeName</span>: nginxnode
+  <span style="color:#66d9ef">containers</span>:
+  - <span style="color:#66d9ef">image</span>: nginx
+    <span style="color:#66d9ef">name</span>: nginx
+    <span style="color:#66d9ef">resources</span>: {}
+  <span style="color:#66d9ef">dnsPolicy</span>: ClusterFirst
+  <span style="color:#66d9ef">restartPolicy</span>: Never
+<span style="color:#66d9ef">status</span>: {}
+</code></pre></div><ul>
+<li>创建 Pod</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">kubectl create -f pod.yaml
+</code></pre></div><h4 id="52-查看-pod-的-node-selector">52. 查看 Pod 的 Node-Selector</h4>
+<pre><code>$ kubectl describe po nginx | grep Node-Selectors
+Node-Selectors:  nodeName=nginxnode
+
+</code></pre><h4 id="53查看刚创建的-nginx-pod-的标签">53.查看刚创建的 Nginx Pod 的标签</h4>
+<pre><code>$ kubectl describe po nginx | grep Labels
+Labels:       run=nginx
+</code></pre><h4 id="54-为-pod-添加注解-namewebapp">54. 为 Pod 添加注解 name=webapp</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl annotate pod nginx-dev<span style="color:#f92672">{</span>1..3<span style="color:#f92672">}</span> name<span style="color:#f92672">=</span>webapp
+pod/nginx-dev1 annotated
+pod/nginx-dev2 annotated
+pod/nginx-dev3 annotated
+
+$ kubectl annotate pod nginx-prod<span style="color:#f92672">{</span>1..2<span style="color:#f92672">}</span> name<span style="color:#f92672">=</span>webapp
+pod/nginx-prod1 annotated
+pod/nginx-prod2 annotated
+</code></pre></div><h4 id="55-查看-pod-的注解">55. 查看 Pod 的注解</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl describe po nginx-dev<span style="color:#f92672">{</span>1..3<span style="color:#f92672">}</span> | grep -i annotations
+Annotations:  name: webapp
+Annotations:  name: webapp
+Annotations:  name: webapp
+
+
+$ kubectl describe po nginx-prod<span style="color:#f92672">{</span>1..2<span style="color:#f92672">}</span> | grep -i annotations
+Annotations: name: webapp
+Annotations: name: webapp
+
+</code></pre></div><h4 id="56-移除-pod-的注解查看结果">56. 移除 Pod 的注解，查看结果</h4>
+<pre><code># ubuntu @ VM-0-4-ubuntu in ~ [9:52:15]
+$ kubectl annotate pod nginx-dev{1..3} name-
+pod/nginx-dev1 annotated
+pod/nginx-dev2 annotated
+pod/nginx-dev3 annotated
+
+# ubuntu @ VM-0-4-ubuntu in ~ [9:53:34]
+$ kubectl annotate pod nginx-prod{1..2} name-
+pod/nginx-prod1 annotated
+pod/nginx-prod2 annotated
+
+$ kubectl describe po nginx-dev{1..3} | grep -i annotations
+</code></pre><h4 id="57-删除所有-pod">57. 删除所有 Pod</h4>
+<pre><code>kubectl delete po --all
+</code></pre><h4 id="58-创建有-5-个-nginx-副本的名为-webapp-的-deployment">58. 创建有 5 个 Nginx 副本的名为 webapp 的 Deployment</h4>
+<ul>
+<li>yaml 文件</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">apiVersion</span>: apps/v1
+<span style="color:#66d9ef">kind</span>: Deployment
+<span style="color:#66d9ef">metadata</span>:
+  <span style="color:#66d9ef">creationTimestamp</span>: <span style="color:#66d9ef">null</span>
+  <span style="color:#66d9ef">labels</span>:
+    <span style="color:#66d9ef">app</span>: webapp
+  <span style="color:#66d9ef">name</span>: webapp
+<span style="color:#66d9ef">spec</span>:
+  <span style="color:#66d9ef">replicas</span>: <span style="color:#ae81ff">5</span>
+  <span style="color:#66d9ef">selector</span>:
+    <span style="color:#66d9ef">matchLabels</span>:
+      <span style="color:#66d9ef">app</span>: webapp
+  <span style="color:#66d9ef">strategy</span>: {}
+  <span style="color:#66d9ef">template</span>:
+    <span style="color:#66d9ef">metadata</span>:
+      <span style="color:#66d9ef">creationTimestamp</span>: <span style="color:#66d9ef">null</span>
+      <span style="color:#66d9ef">labels</span>:
+        <span style="color:#66d9ef">app</span>: webapp
+    <span style="color:#66d9ef">spec</span>:
+      <span style="color:#66d9ef">containers</span>:
+      - <span style="color:#66d9ef">image</span>: nginx
+        <span style="color:#66d9ef">name</span>: nginx
+        <span style="color:#66d9ef">resources</span>: {}
+<span style="color:#66d9ef">status</span>: {}
+</code></pre></div><ul>
+<li>创建 Deployment</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl create -f webapp.yaml
+deployment.apps/webapp created
+</code></pre></div><h4 id="59-查看上面创建的-deployment">59. 查看上面创建的 Deployment</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl get deploy webapp --show-labels
+NAME     READY   UP-TO-DATE   AVAILABLE   AGE    LABELS
+webapp   5/5     <span style="color:#ae81ff">5</span>            <span style="color:#ae81ff">5</span>           113s   app<span style="color:#f92672">=</span>webapp
+</code></pre></div><h4 id="60-获取刚创建的-deployment-的-yaml-文件">60. 获取刚创建的 Deployment 的 yaml 文件</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl get deploy webapp -o yaml
+</code></pre></div><h4 id="61-查看-deployment-的所有-pod">61. 查看 Deployment 的所有 Pod</h4>
+<pre><code>$ kubectl get deploy webapp --show-labels
+NAME     READY   UP-TO-DATE   AVAILABLE   AGE     LABELS
+webapp   5/5     5            5           3m13s   app=webapp
+
+# ubuntu @ VM-0-4-ubuntu in ~ [10:12:16]
+$ kubectl get pods -l app=webapp
+NAME                      READY   STATUS    RESTARTS   AGE
+webapp-59d9889648-b74bs   1/1     Running   0          3m17s
+webapp-59d9889648-dk2w6   1/1     Running   0          3m17s
+webapp-59d9889648-mm5v8   1/1     Running   0          3m17s
+webapp-59d9889648-q4w5d   1/1     Running   0          3m16s
+webapp-59d9889648-wq9vc   1/1     Running   0          3m16s
+
+</code></pre><h4 id="62-水平扩展-webapp-deployment-的-pod-数量到-20-个">62. 水平扩展 webapp Deployment 的 Pod 数量到 20 个</h4>
+<pre><code>$ kubectl scale deploy webapp --replicas=20
+deployment.apps/webapp scaled
+
+$ kubectl get po -l app=webapp
+NAME                      READY   STATUS    RESTARTS   AGE
+webapp-59d9889648-2bzwh   1/1     Running   0          49s
+webapp-59d9889648-6mgxk   1/1     Running   0          49s
+webapp-59d9889648-8mk7c   1/1     Running   0          49s
+webapp-59d9889648-b74bs   1/1     Running   0          5m35s
+webapp-59d9889648-c5kwq   1/1     Running   0          49s
+webapp-59d9889648-d98t6   1/1     Running   0          49s
+webapp-59d9889648-dk2w6   1/1     Running   0          5m35s
+webapp-59d9889648-fkdnk   1/1     Running   0          49s
+webapp-59d9889648-lvqgj   1/1     Running   0          49s
+webapp-59d9889648-mm5v8   1/1     Running   0          5m35s
+webapp-59d9889648-mvtxb   1/1     Running   0          49s
+webapp-59d9889648-pkmt6   1/1     Running   0          49s
+webapp-59d9889648-q4w5d   1/1     Running   0          5m34s
+webapp-59d9889648-qq245   1/1     Running   0          49s
+webapp-59d9889648-skrbq   1/1     Running   0          49s
+webapp-59d9889648-vgpdt   1/1     Running   0          49s
+webapp-59d9889648-vncbd   1/1     Running   0          49s
+webapp-59d9889648-wp48w   1/1     Running   0          49s
+webapp-59d9889648-wq9vc   1/1     Running   0          5m34s
+webapp-59d9889648-xc8g6   1/1     Running   0          49s
+
+</code></pre><h4 id="63-查看-deployment-的部署状态">63. 查看 Deployment 的部署状态</h4>
+<pre><code>$ kubectl rollout status deploy webapp
+deployment &quot;webapp&quot; successfully rolled out
+</code></pre><h4 id="64-查看-webapp-deployment-的-replicaset">64. 查看 webapp Deployment 的 replicaset</h4>
+<pre><code>$ kubectl get rs -l app=webapp
+NAME                DESIRED   CURRENT   READY   AGE
+webapp-59d9889648   20        20        20      6m45s
+
+</code></pre><h4 id="65-获取-webapp-deployment-下-pod-和-replicaset-的-yaml-文件">65. 获取 webapp Deployment 下 Pod 和 ReplicaSet 的 yaml 文件</h4>
+<pre><code>kubectl get rs -l app=webapp -o yaml
+kubectl get po -l app=webapp -o yaml
+</code></pre><h4 id="66-删除-webapp-deployment-并查看-pod-的删除情况">66. 删除 webapp Deployment 并查看 Pod 的删除情况</h4>
+<pre><code>kubectl delete deploy webapp
+kubectl get po -l app=webapp -w
+</code></pre><h4 id="67-创建-webapp-deployment指定镜像版本和端口">67. 创建 webapp Deployment，指定镜像版本和端口</h4>
+<ul>
+<li>yaml 文件</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">apiVersion</span>: apps/v1
+<span style="color:#66d9ef">kind</span>: Deployment
+<span style="color:#66d9ef">metadata</span>:
+  <span style="color:#66d9ef">creationTimestamp</span>: <span style="color:#66d9ef">null</span>
+  <span style="color:#66d9ef">labels</span>:
+    <span style="color:#66d9ef">app</span>: webapp
+  <span style="color:#66d9ef">name</span>: webapp
+<span style="color:#66d9ef">spec</span>:
+  <span style="color:#66d9ef">replicas</span>: <span style="color:#ae81ff">1</span>
+  <span style="color:#66d9ef">selector</span>:
+    <span style="color:#66d9ef">matchLabels</span>:
+      <span style="color:#66d9ef">app</span>: webapp
+  <span style="color:#66d9ef">strategy</span>: {}
+  <span style="color:#66d9ef">template</span>:
+    <span style="color:#66d9ef">metadata</span>:
+      <span style="color:#66d9ef">creationTimestamp</span>: <span style="color:#66d9ef">null</span>
+      <span style="color:#66d9ef">labels</span>:
+        <span style="color:#66d9ef">app</span>: webapp
+    <span style="color:#66d9ef">spec</span>:
+      <span style="color:#66d9ef">containers</span>:
+      - <span style="color:#66d9ef">image</span>: nginx:<span style="color:#ae81ff">1.17.1</span>
+        <span style="color:#66d9ef">name</span>: nginx
+        <span style="color:#66d9ef">ports</span>:
+        - <span style="color:#66d9ef">containerPort</span>: <span style="color:#ae81ff">80</span>
+        <span style="color:#66d9ef">resources</span>: {}
+<span style="color:#66d9ef">status</span>: {}
+</code></pre></div><ul>
+<li>创建 Deployment</li>
+</ul>
+<pre><code>$ kubectl create -f webapp.yaml
+deployment.apps/webapp created
+</code></pre><h4 id="68-更新-deployment-的镜像版本并查看">68. 更新 Deployment 的镜像版本并查看</h4>
+<pre><code>$ kubectl set image deploy/webapp nginx=nginx:1.17.4
+deployment.apps/webapp image updated
+
+# ubuntu @ VM-0-4-ubuntu in ~ [10:34:56]
+$ kubectl describe deploy webapp | grep Image
+    Image:        nginx:1.17.4
+</code></pre><h4 id="69-检查更新历史并查看-deploymentreplicasetpod-的信息">69. 检查更新历史并查看 Deployment、ReplicaSet、Pod 的信息</h4>
+<pre><code>$ kubectl rollout history deploy webapp
+deployment.apps/webapp
+REVISION  CHANGE-CAUSE
+1         &lt;none&gt;
+2         &lt;none&gt;
+
+
+$ kubectl get deploy webapp --show-labels
+NAME     READY   UP-TO-DATE   AVAILABLE   AGE    LABELS
+webapp   1/1     1            1           103s   app=webapp
+
+$ kubectl get rs -l app=webapp
+NAME                DESIRED   CURRENT   READY   AGE
+webapp-67f449866c   0         0         0       108s
+webapp-6894d66768   1         1         1       59s
+
+$ kubectl get po -l app=webapp
+NAME                      READY   STATUS    RESTARTS   AGE
+webapp-6894d66768-pvrvv   1/1     Running   0          63s
+</code></pre><h4 id="70-撤销对-deployment-镜像版本的更改检查回滚结果">70. 撤销对 Deployment 镜像版本的更改，检查回滚结果</h4>
+<pre><code>$ kubectl rollout undo deploy webapp
+deployment.apps/webapp rolled back
+
+
+$ kubectl describe deploy webapp | grep Image
+    Image:        nginx:1.17.1
+</code></pre><h4 id="71-设置镜像版本-1161-并检查升级记录">71. 设置镜像版本☞ 1.16.1 并检查升级记录</h4>
+<pre><code>$ kubectl set image deploy/webapp nginx=nginx:1.16.1
+deployment.apps/webapp image updated
+
+# ubuntu @ VM-0-4-ubuntu in ~ [10:38:10]
+$ kubectl describe deploy webapp | grep Image
+    Image:        nginx:1.16.1
+
+# ubuntu @ VM-0-4-ubuntu in ~ [10:38:14]
+$ kubectl rollout history deploy webapp
+deployment.apps/webapp
+REVISION  CHANGE-CAUSE
+2         &lt;none&gt;
+3         &lt;none&gt;
+4         &lt;none&gt;
+
+</code></pre><h4 id="72-将-deployment-中镜像版本更新至之前的-1171-版本">72. 将 Deployment 中镜像版本更新至之前的 1.17.1 版本</h4>
+<pre><code>$ kubectl rollout undo deploy webapp --to-revision=3
+deployment.apps/webapp rolled back
+
+$ kubectl describe deploy webapp | grep Image
+    Image:        nginx:1.17.1
+
+$ kubectl rollout status deploy webapp
+deployment &quot;webapp&quot; successfully rolled out
+</code></pre><h4 id="73-将-deployment-中镜像版本更新至错误的版本-1100-并检查相关信息">73. 将 Deployment 中镜像版本更新至错误的版本 1.100 并检查相关信息</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl set image deploy/webapp nginx<span style="color:#f92672">=</span>nginx:1.100
+deployment.apps/webapp image updated
+
+
+$ kubectl rollout status deploy webapp
+Waiting <span style="color:#66d9ef">for</span> deployment <span style="color:#e6db74">&#34;webapp&#34;</span> rollout to finish: <span style="color:#ae81ff">1</span> old replicas are pending termination...
+
+
+$ kubectl get pods
+NAME                         READY   STATUS             RESTARTS   AGE
+
+webapp-67f449866c-87cgc      1/1     Running            <span style="color:#ae81ff">0</span>          108s
+webapp-6b684475c5-qs2wq      0/1     ImagePullBackOff   <span style="color:#ae81ff">0</span>          22s
+
+</code></pre></div><h4 id="74-撤销之前的错误操作并确认-deployment-pod-已恢复正常">74. 撤销之前的错误操作并确认 Deployment 、Pod 已恢复正常</h4>
+<pre><code>$ kubectl rollout undo deploy webapp
+deployment.apps/webapp rolled back
+
+# ubuntu @ VM-0-4-ubuntu in ~ [10:42:58]
+$ kubectl rollout status deploy webapp
+deployment &quot;webapp&quot; successfully rolled out
+
+# ubuntu @ VM-0-4-ubuntu in ~ [10:43:03]
+$ kubectl get pods
+NAME                         READY   STATUS    RESTARTS   AGE
+kubia-59d857b444-sfvxc       1/1     Running   0          36m
+kubia-59d857b444-v72jc       1/1     Running   0          36m
+kubia-59d857b444-zflsz       1/1     Running   0          36m
+my-app-v1-c9b7f9985-qrwx6    1/1     Running   0          36m
+my-app-v2-77fc8c9499-9wjcp   1/1     Running   0          36m
+webapp-67f449866c-87cgc      1/1     Running   0          3m39s
+</code></pre><h4 id="75-查看指定版本的更新记录">75. 查看指定版本的更新记录</h4>
+<pre><code>$ kubectl rollout history deploy webapp --revision=7
+deployment.apps/webapp with revision #7
+Pod Template:
+  Labels:	app=webapp
+	pod-template-hash=67f449866c
+  Containers:
+   nginx:
+    Image:	nginx:1.17.1
+    Port:	80/TCP
+    Host Port:	0/TCP
+    Environment:	&lt;none&gt;
+    Mounts:	&lt;none&gt;
+</code></pre><h4 id="76-暂停-deployment-的部署">76. 暂停 Deployment 的部署</h4>
+<pre><code>$ kubectl rollout pause deploy webapp
+deployment.apps/webapp paused
+</code></pre><h4 id="77-更新-nginx-至最新版本查看更新历史">77. 更新 Nginx 至最新版本，查看更新历史</h4>
+<p>因为已经暂停了，所以不会有任何的变化。</p>
+<pre><code>$ kubectl set image deploy/webapp nginx=nginx:latest
+
+$ kubectl rollout history deploy webapp
+deployment.apps/webapp
+REVISION  CHANGE-CAUSE
+2         &lt;none&gt;
+4         &lt;none&gt;
+6         &lt;none&gt;
+7         &lt;none&gt;
+</code></pre><h4 id="78-恢复-deployment-的部署">78. 恢复 Deployment 的部署</h4>
+<pre><code>kubectl rollout resume deploy webapp
+</code></pre><h4 id="79-检查滚动历史并确认其新版本">79. 检查滚动历史并确认其新版本</h4>
+<pre><code>$ kubectl rollout history deploy webapp
+deployment.apps/webapp
+REVISION  CHANGE-CAUSE
+2         &lt;none&gt;
+4         &lt;none&gt;
+6         &lt;none&gt;
+7         &lt;none&gt;
+8         &lt;none&gt;
+
+
+# ubuntu @ VM-0-4-ubuntu in ~ [10:54:15]
+$ kubectl rollout history deploy webapp --revision=8
+deployment.apps/webapp with revision #8
+Pod Template:
+  Labels:	app=webapp
+	pod-template-hash=5f5bf685db
+  Containers:
+   nginx:
+    Image:	nginx:latest
+    Port:	80/TCP
+    Host Port:	0/TCP
+    Environment:	&lt;none&gt;
+    Mounts:	&lt;none&gt;
+  Volumes:	&lt;none&gt;
+</code></pre><h4 id="80-为-deployment-设置自动伸缩最小数值为-10最大数为-20-以及cpu-使用率为-85验证-hpa-和-副本的创建">80. 为 Deployment 设置自动伸缩，最小数值为 10，最大数为 20 以及CPU 使用率为 85%，验证 hpa 和 副本的创建</h4>
+<p>可以看到 Pod 数量从 1 变为 10。</p>
+<pre><code>$ kubectl autoscale deploy webapp --min=10 --max=20 --cpu-percent=85
+horizontalpodautoscaler.autoscaling/webapp autoscaled
+
+# ubuntu @ VM-0-4-ubuntu in ~ [10:57:13]
+$ kubectl get hpa
+NAME     REFERENCE           TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
+webapp   Deployment/webapp   &lt;unknown&gt;/85%   10        20        0          6s
+
+
+$ kubectl get pod -l app=webapp
+NAME                      READY   STATUS    RESTARTS   AGE
+webapp-5f5bf685db-dqh8t   1/1     Running   0          5m17s
+
+
+$ kubectl get pod -l app=webapp
+NAME                      READY   STATUS    RESTARTS   AGE
+webapp-5f5bf685db-2q5ld   1/1     Running   0          6s
+webapp-5f5bf685db-545d4   1/1     Running   0          6s
+webapp-5f5bf685db-6h9bl   1/1     Running   0          6s
+webapp-5f5bf685db-7dzjm   1/1     Running   0          6s
+webapp-5f5bf685db-8rl6x   1/1     Running   0          6s
+webapp-5f5bf685db-dqh8t   1/1     Running   0          5m26s
+webapp-5f5bf685db-fk2hm   1/1     Running   0          6s
+webapp-5f5bf685db-hmvhx   1/1     Running   0          6s
+webapp-5f5bf685db-j27lg   1/1     Running   0          6s
+webapp-5f5bf685db-w88ns   1/1     Running   0          6s
+</code></pre><ul>
+<li>hpa 指的是 [Horizontal Pod Autoscaler])(<a href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/">https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/</a>)。</li>
+</ul>
+<h4 id="81-删除刚创建的-deployment-和-hpa">81. 删除刚创建的 Deployment 和 hpa</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl delete deploy webapp
+deployment.apps <span style="color:#e6db74">&#34;webapp&#34;</span> deleted
+
+<span style="color:#75715e"># ubuntu @ VM-0-4-ubuntu in ~ [11:02:08]</span>
+$ kubectl delete hpa webapp
+horizontalpodautoscaler.autoscaling <span style="color:#e6db74">&#34;webapp&#34;</span> deleted
+
+</code></pre></div><h4 id="82-创建一个带有-node-镜像的-job并打印节点版本">82. 创建一个带有 node 镜像的 Job，并打印节点版本</h4>
+<pre><code>kubectl create job nodeversion --image=node -- node -v
+
+$ kubectl get job -w
+NAME          COMPLETIONS   DURATION   AGE
+nodeversion   0/1           10s        10s
+
+$ kubectl get pod
+NAME                         READY   STATUS              RESTARTS   AGE
+nodeversion-b4rvl            0/1     ContainerCreating   0          37s
+</code></pre><h4 id="83-查看上面创建的-pod-的日志">83. 查看上面创建的 Pod 的日志</h4>
+<pre><code>$ kubectl logs nodeversion-b4rvl
+v14.0.0
+</code></pre><h4 id="84-基于-job-打印-yaml-文件">84. 基于 Job 打印 yaml 文件</h4>
+<pre><code>kubectl create job hello-job --image=busybox --dry-run=client -o yaml -- echo &quot;Hello I am from job&quot;
+</code></pre><ul>
+<li>yaml 文件</li>
+</ul>
+<pre><code>apiVersion: batch/v1
+kind: Job
+metadata:
+  creationTimestamp: null
+  name: hello-job
+spec:
+  template:
+    metadata:
+      creationTimestamp: null
+    spec:
+      containers:
+      - command:
+        - echo
+        - Hello I am from job
+        image: busybox
+        name: hello-job
+        resources: {}
+      restartPolicy: Never
+status: {}
+
+</code></pre><h4 id="85-基于上面输出的信息创建-job">85. 基于上面输出的信息创建 Job</h4>
+<pre><code>kubectl create -f hello-job.yaml
+</code></pre><h4 id="86-查看-job-与-pod打印其日志">86. 查看 Job 与 Pod，打印其日志</h4>
+<pre><code>$ kubectl get job
+NAME          COMPLETIONS   DURATION   AGE
+hello-job     1/1           6s         40s
+
+$ kubectl get po
+NAME                         READY   STATUS      RESTARTS   AGE
+hello-job-z2kms              0/1     Completed   0          45s
+
+$ kubectl logs hello-job-z2kms
+Hello I am from job
+
+</code></pre><h4 id="87-删除刚创建-job">87. 删除刚创建 Job</h4>
+<pre><code>$ kubectl delete job hello-job
+job.batch &quot;hello-job&quot; deleted
+
+</code></pre><h4 id="88-再次创建-job并将任务执行数设置为-10">88. 再次创建 Job，并将任务执行数设置为 10</h4>
+<pre><code>apiVersion: batch/v1
+kind: Job
+metadata:
+  creationTimestamp: null
+  name: hello-job
+spec:
+  # 将执行数设置为 10
+  completions: 10
+  template:
+    metadata:
+      creationTimestamp: null
+    spec:
+      containers:
+      - command:
+        - echo
+        - Hello I am from job
+        image: busybox
+        name: hello-job
+        resources: {}
+      restartPolicy: Never
+status: {}
+</code></pre><h4 id="89-查看新创建的-job">89. 查看新创建的 Job</h4>
+<pre><code>$ kubectl get job -w
+NAME          COMPLETIONS   DURATION   AGE
+hello-job     0/10          5s         5s
+hello-job     1/10          7s         7s
+hello-job     2/10          13s        13s
+hello-job     3/10          19s        19s
+hello-job     4/10          25s        25s
+hello-job     5/10          31s        31s
+hello-job     6/10          38s        38s
+hello-job     7/10          44s        44s
+hello-job     8/10          50s        50s
+hello-job     9/10          56s        56s
+hello-job     10/10         62s        62s
+
+$ kubectl get po
+NAME                         READY   STATUS      RESTARTS   AGE
+hello-job-6mmp9              0/1     Completed   0          68s
+hello-job-8s28x              0/1     Completed   0          43s
+hello-job-dwvpf              0/1     Completed   0          49s
+hello-job-gf5wz              0/1     Completed   0          37s
+hello-job-hcb96              0/1     Completed   0          80s
+hello-job-nqmvk              0/1     Completed   0          31s
+hello-job-pczkz              0/1     Completed   0          74s
+hello-job-pkf2d              0/1     Completed   0          87s
+hello-job-tsj5n              0/1     Completed   0          62s
+hello-job-z5cnx              0/1     Completed   0          56s
+
+kubectl delete job hello-job
+</code></pre><h4 id="90-再次创建-job-并设置并行执行数为-10">90. 再次创建 Job 并设置并行执行数为 10</h4>
+<ul>
+<li>yaml 文件</li>
+</ul>
+<pre><code>apiVersion: batch/v1
+kind: Job
+metadata:
+  creationTimestamp: null
+  name: hello-job
+spec:
+  # 设置并行数
+  parallelism: 10
+  template:
+    metadata:
+      creationTimestamp: null
+    spec:
+      containers:
+      - command:
+        - echo
+        - Hello I am from job
+        image: busybox
+        name: hello-job
+        resources: {}
+      restartPolicy: Never
+status: {}
+</code></pre><ul>
+<li>创建 Job</li>
+</ul>
+<pre><code>$ kubectl create -f hello-job.yaml
+job.batch/hello-job created
+</code></pre><h4 id="91-查看-job-的执行与-pod-情况完成后删除-job">91. 查看 job 的执行与 pod 情况，完成后删除 job</h4>
+<pre><code>$ kubectl get job -w
+NAME          COMPLETIONS   DURATION   AGE
+hello-job     0/1 of 10     1s         1s
+hello-job     1/1 of 10     8s         8s
+hello-job     2/1 of 10     8s         8s
+hello-job     3/1 of 10     12s        12s
+hello-job     4/1 of 10     16s        16s
+hello-job     5/1 of 10     19s        19s
+hello-job     6/1 of 10     23s        23s
+hello-job     7/1 of 10     28s        28s
+hello-job     8/1 of 10     31s        31s
+hello-job     9/1 of 10     35s        35s
+hello-job     10/1 of 10    39s        39s
+
+$ kubectl get po
+NAME                         READY   STATUS      RESTARTS   AGE
+hello-job-2jsql              0/1     Completed   0          54s
+hello-job-7j5z5              0/1     Completed   0          54s
+hello-job-89xcz              0/1     Completed   0          54s
+hello-job-cjqgh              0/1     Completed   0          54s
+hello-job-dm4gd              0/1     Completed   0          54s
+hello-job-fn9gc              0/1     Completed   0          54s
+hello-job-qssm4              0/1     Completed   0          54s
+hello-job-rf926              0/1     Completed   0          54s
+hello-job-vww26              0/1     Completed   0          54s
+hello-job-z4fc7              0/1     Completed   0          54s
+
+kubectl delete job hello-job
+</code></pre><h4 id="92-创建一个-cronjob每分钟打印日期和-hello-from-kubernetes-cluster">92. 创建一个 CronJob，每分钟打印日期和 Hello from kubernetes cluster</h4>
+<pre><code>$ kubectl create cronjob date-job --image=busybox --schedule=&quot;*/1 * * * *&quot; -- bin/sh -c &quot;date; echo Hello from kubernetes cluster&quot;
+cronjob.batch/date-job created
+</code></pre><h4 id="93-获取-cronjob-的-yaml">93. 获取 CronJob 的 yaml</h4>
+<pre><code>kubectl get cj date-job -o yaml
+</code></pre><h4 id="94-查看-cronjob-组件信息和打印日志">94. 查看 CronJob 组件信息和打印日志</h4>
+<pre><code>$ kubectl get cj
+NAME       SCHEDULE      SUSPEND   ACTIVE   LAST SCHEDULE   AGE
+date-job   */1 * * * *   False     0        27s             116s
+
+$ kubectl get job
+NAME                  COMPLETIONS   DURATION   AGE
+date-job-1587871560   1/1           6s         12s
+
+$ kubectl get po
+NAME                         READY   STATUS      RESTARTS   AGE
+date-job-1587871560-ndj9v    0/1     Completed   0          90s
+
+$ kubectl logs date-job-1587871560-ndj9v
+Sun Apr 26 03:26:14 UTC 2020
+Hello from kubernetes cluster
+</code></pre><h4 id="95-删除-cronjob并确认与其关联的-job-和-pod-是否已删除">95. 删除 CronJob，并确认与其关联的 Job 和 Pod 是否已删除</h4>
+<pre><code>kubectl delete cj date-job
+
+// 确认关联的 Pod 和 job 是否已经删除
+kubectl get po
+kubectl get job
+</code></pre><p>以上就是 Pod Design 部分的练习，最后一篇介绍余下的 50 多个练习。</p>
+    </div>
+
+    <div class="post-copyright">
+            
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>邹英杰 </span>
+                </p>
+            
+
+            
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=https://example.com/2020/kubernetes-150-%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%BB%83%E4%B9%A0%E4%B8%AD/>https://example.com/2020/kubernetes-150-%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%BB%83%E4%B9%A0%E4%B8%AD/</span>
+            </p>
+            
+            
+            <p class="copyright-item lincese">
+                本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可
+            </p>
+            
+    </div>
+
+
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-tag"></i>Tag(s):
+            
+            <span class="tag"><a href="https://example.com/tags/kubernetes/">
+                    #Kubernetes</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> ·
+                <span><a href="https://example.com">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://example.com/2020/leetcode-%E8%A7%A3%E9%A2%98%E6%8A%A5%E5%91%8A-328.%E5%A5%87%E5%81%B6%E9%93%BE%E8%A1%A8/" class="prev" rel="prev" title="LeetCode 解题报告-328.奇偶链表"><i class="iconfont icon-left"></i>&nbsp;LeetCode 解题报告-328.奇偶链表</a>
+        
+        
+        <a href="https://example.com/2020/kubernetes-150-%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%BB%83%E4%B9%A0%E4%B8%8A/" class="next" rel="next" title="Kubernetes 150 个操作练习（上）">Kubernetes 150 个操作练习（上）&nbsp;<i class="iconfont icon-right"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+        
+            
+                <div id="gitalk-container"></div>
+<link rel="stylesheet" href="https://cdn.bootcss.com/gitalk/1.5.2/gitalk.css">
+<script src="https://cdn.bootcss.com/gitalk/1.5.2/gitalk.min.js"></script>
+<script>
+    const gitalk = new Gitalk({
+
+        clientID: '644ea43e1177645f4f35',
+        clientSecret: '40a7db92fa7b2f61bf9f93956a7db0a6ac84ad1f',
+        repo: 'https:\/\/github.com\/zouyingjie\/blog',
+        owner: 'zouyingjie',
+        admin: ['zouyingjie'],
+        id: location.pathname, 
+        distractionFreeMode: false 
+    });
+    (function () {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.';
+            return;
+        }
+        gitalk.render('gitalk-container');
+    })();
+</script>
+
+            
+        
+    </div>
+</article>
+                </div>
+            </main>
+            <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2017 - 2021</span>
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i>
+         </span>
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://example.com">邹英杰</a> | </span>
+         
+
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/Mogeko/Mogege" target="_blank" rel="external nofollow">Mogege</a></span>
+    </div>
+</footer>
+
+
+
+
+
+
+<script defer src="/js/vendor_main.min.js"></script>
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/pangu@4.0.7/dist/browser/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script> pangu.spacingPage();</script>
+
+
+
+
+
+        </div>
+    </body>
+</html>

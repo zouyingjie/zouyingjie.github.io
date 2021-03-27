@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noodp"/>
+    <meta name="author" content="邹英杰">
+    <meta name="description" content="邹英杰的个人博客">
+    
+    
+    <link rel="prev" href="https://example.com/2018/%E5%9F%BA%E4%BA%8Eelk%E4%B8%8Eelaticalert%E6%90%AD%E5%BB%BA%E7%B3%BB%E7%BB%9F%E7%9B%91%E6%8E%A7%E6%8A%A5%E8%AD%A6/" />
+    <link rel="next" href="https://example.com/2019/tcp-%E6%95%B0%E6%8D%AE%E6%94%B6%E5%8F%91%E8%BF%87%E7%A8%8B%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/" />
+    <link rel="canonical" href="https://example.com/2018/es-%E5%87%86%E5%AE%9E%E6%97%B6%E5%AD%98%E5%82%A8%E6%9C%BA%E5%88%B6%E4%B8%8E%E6%96%87%E6%A1%A3%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <title>
+        
+        
+            ES 准实时存储机制与文档的分布式存储过程 | AhriJ`s Blog
+        
+    </title>
+    <meta name="title" content="ES 准实时存储机制与文档的分布式存储过程 | AhriJ`s Blog">
+    
+<link rel="stylesheet" href="/css/main.min.css">
+
+
+    
+    
+ 
+
+<script type="application/ld+json">
+{
+    "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/example.com"
+    },
+    "articleSection" : "posts",
+    "name" : "ES 准实时存储机制与文档的分布式存储过程",
+    "headline" : "ES 准实时存储机制与文档的分布式存储过程",
+    "description" : "简要介绍倒排索引的创建过程与 ES 的 CRUD 机制",
+    "inLanguage" : "zh-cn",
+    "author" : "邹英杰",
+    "creator" : "邹英杰",
+    "publisher": "邹英杰",
+    "accountablePerson" : "邹英杰",
+    "copyrightHolder" : "邹英杰",
+    "copyrightYear" : "2018",
+    "datePublished": "2018-11-12 20:38:40 \x2b0000 UTC",
+    "dateModified" : "2018-11-12 20:38:40 \x2b0000 UTC",
+    "url" : "https:\/\/example.com\/2018\/es-%E5%87%86%E5%AE%9E%E6%97%B6%E5%AD%98%E5%82%A8%E6%9C%BA%E5%88%B6%E4%B8%8E%E6%96%87%E6%A1%A3%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B\/",
+    "wordCount" : "2543",
+    "keywords" : [ "ELK", "AhriJ`s Blog"]
+}
+</script>
+
+  </head>
+    <body class="">
+        <div class="wrapper">
+            <nav class="navbar">
+    
+        <progress class="content_progress" max="0" value="0"></progress>
+    
+    <div class="container">
+        
+            <div class="navbar-header header-back2home-logo">
+                <span class="logo_mark" >>$</span>
+                <a href="https://example.com">
+                    <span class="logo_text" >cd /home/</span>
+                    <span class="logo_cursor" ></span>
+                </a>
+            </div>
+        
+        <div class="navbar-right">
+                
+                <span class="menu">
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="/about/" title="">About</a>
+                
+                <span class="divide"></span>
+                <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-dark-mode"></i></a>
+                </span>
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+    
+        <progress class="content_progress" max="0" value="0"></progress>
+    
+     <div class="container">
+        <div class="navbar">
+            <div class="navbar-header header-logo">
+                    <a href="https://example.com">AhriJ`s Blog</a>
+            </div>
+            <div class="navbar-right">
+                <div><a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-dark-mode"></i></a></div>
+                <div class="menu-toggle">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                <nav class="mb-md">
+                    
+                    
+                        <a class="menu-item" href="/posts/" title="">
+                            <h3>Blog</h3>
+                            <div class="menu-active"></div>
+                        </a>
+                    
+                        <a class="menu-item" href="/categories/" title="">
+                            <h3>Categories</h3>
+                            <div class="menu-active"></div>
+                        </a>
+                    
+                        <a class="menu-item" href="/tags/" title="">
+                            <h3>Tags</h3>
+                            <div class="menu-active"></div>
+                        </a>
+                    
+                        <a class="menu-item" href="/about/" title="">
+                            <h3>About</h3>
+                            <div class="menu-active"></div>
+                        </a>
+                    
+                </nav>
+        </div>
+    </div>
+</nav>
+            <main class="main">
+                <div class="container">
+                    
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">ES 准实时存储机制与文档的分布式存储过程</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="https://example.com" rel="author">邹英杰</a> with ♥
+                <span class="post-time">
+                on <time datetime=2018-11-12 itemprop="datePublished">November 12, 2018</time>
+                </span>
+                in
+                
+                <i class="iconfont icon-folder"></i>
+                <span class="post-category">
+                        
+                        
+                        
+                          <a href="https://example.com/categories/elk/"> ELK, </a>
+                        
+                        
+                </span>
+                <span class="post-word-count">2543 words</span>
+        </div>
+    </header>
+
+    <div class="post-content">
+        
+
+        
+        
+
+        
+        
+        
+        
+        
+
+        
+        
+        
+
+        <p>ES 准实时查询原理与分布式读写过程。</p>
+<h3 id="一-lucene-index-与-es-shard">一. Lucene Index 与 ES Shard</h3>
+<p>我们知道 ES 底层利用的是 Lucene 的倒排索引实现搜索的，而倒排索引有个特点是: 一旦创建，不可更改。该特点可以带来如下好处:</p>
+<ul>
+<li>充分利用缓存</li>
+<li>不需要考虑并发写的锁机制带来的影响</li>
+<li>可以利用压缩节约空间</li>
+</ul>
+<p>但是当新的文档存储进来，需要构建新的倒排索引时，其需要先重新构建倒排索引文件，然后将之后的查询替换到新的倒排索引文件上，在将旧的文件替换掉。当索引文件较大时，整个过程性能消耗非常严重。</p>
+<p>为了解决该问题，Lucene 采用了 <em><strong><!-- raw HTML omitted -->每次写文件<!-- raw HTML omitted --></strong></em> 的机制，即每次倒排索引构建时，都新建一个文件，该文件称为 segment，多个 segment 组成一个 Lucene Index，其对应为 ES 的 shard，也就是说 ES 的 shard 分片是多个倒排索引文件 segment 的集合，而一个或多个 ES shard 分片构成了 ES Index。这个对应关系一定要区分好。</p>
+<h3 id="二-es-准实时查询实现原理">二. ES 准实时查询实现原理</h3>
+<p>ES 主要通过下面三个过程保证数据存储的可靠性以及搜索的实时性:</p>
+<ul>
+<li>refresh</li>
+<li>translog</li>
+<li>flush</li>
+</ul>
+<p>下面进行分别介绍。</p>
+<h4 id="1-refresh-操作">1. refresh 操作</h4>
+<p>ES 在存储文档时，会先将文档写入内存的一个缓冲队列中，然后在生成 segment。</p>
+<p><em><strong>refresh 就是将缓冲队列中的文档刷新到文件系统缓存，生成 segment 并提供查询的过程。</strong></em></p>
+<p>refresh 执行时会清空内存缓冲队列，将其中的文档都写入到 segment 中，为了提高查询的实时性，其利用文件系统缓存，先将 segment 存储到文件系统缓存中，之后就可以对外提供查询服务了，之后才将文件系统缓存中的 segment 真正的写入到磁盘中。</p>
+<h5 id="1-refresh-执行的时机">【1】 refresh 执行的时机</h5>
+<ul>
+<li>
+<p>1 . 系统默认每秒执行 1 次 refresh，所以新存入的数据最快可以 1 秒钟后就可以被检索到，这也是 ES 能够提供近实时搜索的原因。可以通过  <em><strong>index.setting.refresh_interval</strong></em> 参数设置。</p>
+</li>
+<li>
+<p>2 . 内存缓冲队列占满时执行 refresh。默认缓冲大小为 jvm heap 大小的 10%，可以通过 <em><strong>indices.memory.index_buffer_size</strong></em> 参数设置，注意这里的缓冲大小是由所有 shard 共享的。具体说明<a href="https://www.elastic.co/guide/en/elasticsearch/reference/6.4/indexing-buffer.html">参考文档</a></p>
+</li>
+<li>
+<p>3 . 执行 flush 时会触发 refresh 操作</p>
+</li>
+</ul>
+<h5 id="2refresh-设置建议">【2】refresh 设置建议</h5>
+<p>ES 默认每秒执行 refresh 操作，意味着每秒都生成一个 segment 文件。一般来说，很多应用不需要这么高的实时性，对于历史数据迁移这样的操作甚至可以关闭掉 refresh，同时过多的 segment 文件也会降低查询性能，因此如果不需要，可以通过调高 <em><strong>index.setting.refresh_interval</strong></em> 参数来降低 refresh 频率以节省性能。甚至某些操作比如导入历史数据时可以先关掉 refresh 操作，等完成后在开启或者手动 refresh。</p>
+<pre><code>PUT test_index/_settings
+{
+  &quot;index.refresh_interval&quot;: &quot;-1&quot;
+}
+</code></pre><p>另外 ES 也提供了单独的 refresh 让我们可以手动执行 refresh，以保证搜索的实时性。</p>
+<pre><code># refresh 单个索引
+POST /test_index/_refresh
+# refresh 多个索引
+POST /test_index_01, test_index_02/_refresh
+# refresh 索引索引
+POST /_refresh
+</code></pre><h4 id="2-translog">2. translog</h4>
+<p>上面提到 refresh 只是将倒排索引文件即 segment 写入到了文件系统缓存中，那么如果发了宕机，缓存中的数据没有及时写入磁盘就会造成数据丢失。ES 为了解决该问题提供了 translog 日志。</p>
+<p>ES 在将文档写入到内存缓冲时，会同时将文档写入 translog，之后会调用 fsync 将 translog 写入磁盘。可以通过参数 <em><strong>index.translog.sync_interval</strong></em> 控制写入间隔，默认 5s, 最小不能低于 100 ms。另外 ES 在启动时会通过 translog 进行数据恢复，会将 commit point 之后尚未写入磁盘的 translog 数据恢复，有点类似 MySQL 的重做日志。</p>
+<p>虽然默认设置 5s 可以避免频繁写入磁盘，提高了 ES 性能，但也会有丢失 5s 钟内的数据的风险，在实际操作中需要考虑谨慎权衡。</p>
+<h4 id="3-flush">3. flush</h4>
+<p>flush 是将文件缓存中的 segment 写入磁盘，并清空 translog 的过程，其具体操作步骤如下:</p>
+<ul>
+<li>将 translog 写入磁盘</li>
+<li>执行 1 次 refresh 操作，清空缓冲队列</li>
+<li>将内存中的 segment 刷新到磁盘，并更新 commit point</li>
+<li>删除旧的 translog</li>
+</ul>
+<p>由此可见 flush 的操作还是非常重的，因此不能允许 flush 频繁操作，具体发生时机有:</p>
+<ul>
+<li>间隔时间定时指定: 默认 30 min 执行一次，并且不允许修改</li>
+<li>translog 空间占满时，默认是 512 M，是索引级别的，可以通过 <em><strong>index.translog.flush_threshold_size</strong></em> 参数设置</li>
+</ul>
+<h3 id="三-segment-merge-倒排索引归并">三. segment merge (倒排索引归并)</h3>
+<p>现在我们知道，“最坏”情况下每秒会生成一个 segment 文件，随着时间增长，segment 文件的数据也会快速增加，每个文件都需要消耗资源，这会给服务器带来很大的压力，并且会影响 ES 查询性能。</p>
+<p>为了解决该问题，ES 引入了 <code>segment merge</code> 机制，主动将零散的 segment 合并为少量、较大的 segment，以保证 ES 的性能。</p>
+<h4 id="1segment-归并过程">【1】segment 归并过程</h4>
+<p>ES 通过独立的线程进行 segment merge 操作，不会影响到正常数据的读写。其简要过程是:</p>
+<ul>
+<li>1 . 搜索较小的 segment</li>
+<li>2 . 将较小的 segment 合并为较大的 segment</li>
+<li>3 . 更改 commit point，删除之前较小的 segment</li>
+</ul>
+<p>注意在 merge 过程中也会将 .del 文件删除，关于 .del 文件后面进行讲述。</p>
+<h4 id="2-segment-归并策略">【2】 segment 归并策略</h4>
+<ul>
+<li>index.merge.floor_segment: 默认 2 MB，小于该大小的优先被 merge</li>
+<li>默认一次最多归并 10 个 segment</li>
+<li>默认 force merge 时最多归并 30 个 segment</li>
+<li>默认大于 5 GB 的 segment 不进行 merge，optimize 除外</li>
+</ul>
+<p><em><strong>归并线程数</strong></em></p>
+<p>默认值为</p>
+<pre><code>Math.max(1, Math.min(4, Runtime.getRuntime().availableProcessors() / 2))
+</code></pre><p>即不会超过 4 个线程进行 segment merge，可以通过参数 <em><strong>index.merge.scheduler.max_thread_count</strong></em> 设置。</p>
+<h3 id="四-文档的分布式存储与查询">四. 文档的分布式存储与查询</h3>
+<p>聊完了上面 shard 层面的存储操作，接下来看 ES 层面如何进行数据的分布式存储与查询。</p>
+<h4 id="1-主分片的确认">1. 主分片的确认</h4>
+<p>我们知道一个索引是由多个分片组成的，那么当一个请求达到时，ES 如何判断要执行请求的分片在哪个节点呢？其通过如下算法获取:</p>
+<p><em><strong>ES 分片映射算法</strong></em></p>
+<pre><code>shard = hash(routing) % number_of_primary_shards
+</code></pre><ul>
+<li>routing: 路由值，默认是文档的 id 值</li>
+<li>number_of_primary_shards: 主分片数</li>
+</ul>
+<p>由此我们可以知道，ES 通过上面路由算法将文档均匀的分散存储到各个节点上，同时也说明了为什么 ES 的主分片数一旦设定不可修改的原因，因为其数据存储分片的确认依赖于主分片数，一旦修改那么之前的索引数据将完全不可读。</p>
+<h4 id="2-es-的分布式读写过程">2. ES 的分布式读写过程</h4>
+<p>了解了主分片的确定，现在看下 ES 数据的存储过程。</p>
+<p>假设有 node1、node2、node3 节点，数据的创建过程如下:</p>
+<ul>
+<li>node1 作为 master 或者路由节点，接收文档创建请求请求</li>
+<li>node1 根据文档 id 和分片映射算法找到数据要存储的主分片</li>
+<li>node1 将请求转发到对应的主分片所在节点</li>
+<li>主分片执行文档创建，并将请求转发到对应的副分片</li>
+<li>主分片接收到副分片创建完成通知后，将结果返回 node1</li>
+<li>node1 将创建结果返回给客户端</li>
+</ul>
+<p>查询过程与此类型:</p>
+<ul>
+<li>node1 接收到查询请求后，根据 routing 算法获取所有的的分片</li>
+<li>通过 cluster state 获取分片所在节点列表，然后轮询获取一个 shard</li>
+<li>将查询请求转发到选择到的分片，待分片返回数据后返回给客户端</li>
+</ul>
+<p>关于 ES 的查询机制后面在整理文章进行讲解，这里就不作深入分析了。</p>
+<h4 id="3-es-文档的改和删">3. ES 文档的改和删</h4>
+<p>ES 的倒排索引一旦创建是不能更改的，因此其修改本质上是先将旧的文档删除，在创建新的文档的过程。因此这里只简要介绍下删除的过程。</p>
+<p>我们知道 segment 文件是不可修改，其删除过程如何呢？其实是 ES 内部维护了一个 .del 的文件。当执行删除操作时，将删除文档的 id 记录到 .del 文件中去，然后在查询结果返回前，先查询一篇 .del 文件，将其中被删除文档的数据略去，不作返回。</p>
+<p>真正的删除是在 segment merge 的时候，归并是会对文档和 .del 文件进行删除。</p>
+    </div>
+
+    <div class="post-copyright">
+            
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>邹英杰 </span>
+                </p>
+            
+
+            
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=https://example.com/2018/es-%E5%87%86%E5%AE%9E%E6%97%B6%E5%AD%98%E5%82%A8%E6%9C%BA%E5%88%B6%E4%B8%8E%E6%96%87%E6%A1%A3%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/>https://example.com/2018/es-%E5%87%86%E5%AE%9E%E6%97%B6%E5%AD%98%E5%82%A8%E6%9C%BA%E5%88%B6%E4%B8%8E%E6%96%87%E6%A1%A3%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/</span>
+            </p>
+            
+            
+            <p class="copyright-item lincese">
+                本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可
+            </p>
+            
+    </div>
+
+
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-tag"></i>Tag(s):
+            
+            <span class="tag"><a href="https://example.com/tags/elk/">
+                    #ELK</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> ·
+                <span><a href="https://example.com">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://example.com/2018/%E5%9F%BA%E4%BA%8Eelk%E4%B8%8Eelaticalert%E6%90%AD%E5%BB%BA%E7%B3%BB%E7%BB%9F%E7%9B%91%E6%8E%A7%E6%8A%A5%E8%AD%A6/" class="prev" rel="prev" title="基于ELK与ElaticAlert搭建系统监控报警"><i class="iconfont icon-left"></i>&nbsp;基于ELK与ElaticAlert搭建系统监控报警</a>
+        
+        
+        <a href="https://example.com/2019/tcp-%E6%95%B0%E6%8D%AE%E6%94%B6%E5%8F%91%E8%BF%87%E7%A8%8B%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/" class="next" rel="next" title="TCP 数据收发过程抓包分析">TCP 数据收发过程抓包分析&nbsp;<i class="iconfont icon-right"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+        
+            
+                <div id="gitalk-container"></div>
+<link rel="stylesheet" href="https://cdn.bootcss.com/gitalk/1.5.2/gitalk.css">
+<script src="https://cdn.bootcss.com/gitalk/1.5.2/gitalk.min.js"></script>
+<script>
+    const gitalk = new Gitalk({
+
+        clientID: '644ea43e1177645f4f35',
+        clientSecret: '40a7db92fa7b2f61bf9f93956a7db0a6ac84ad1f',
+        repo: 'https:\/\/github.com\/zouyingjie\/blog',
+        owner: 'zouyingjie',
+        admin: ['zouyingjie'],
+        id: location.pathname, 
+        distractionFreeMode: false 
+    });
+    (function () {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.';
+            return;
+        }
+        gitalk.render('gitalk-container');
+    })();
+</script>
+
+            
+        
+    </div>
+</article>
+                </div>
+            </main>
+            <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2017 - 2021</span>
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i>
+         </span>
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://example.com">邹英杰</a> | </span>
+         
+
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/Mogeko/Mogege" target="_blank" rel="external nofollow">Mogege</a></span>
+    </div>
+</footer>
+
+
+
+
+
+
+<script defer src="/js/vendor_main.min.js"></script>
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/pangu@4.0.7/dist/browser/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script> pangu.spacingPage();</script>
+
+
+
+
+
+        </div>
+    </body>
+</html>

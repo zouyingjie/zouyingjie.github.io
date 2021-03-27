@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noodp"/>
+    <meta name="author" content="邹英杰">
+    <meta name="description" content="邹英杰的个人博客">
+    
+    
+    <link rel="prev" href="https://example.com/2019/tcp-%E6%95%B0%E6%8D%AE%E6%94%B6%E5%8F%91%E8%BF%87%E7%A8%8B%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/" />
+    <link rel="next" href="https://example.com/2019/leetcode-337.-house-robber-iii-%E7%AE%80%E8%AE%B0/" />
+    <link rel="canonical" href="https://example.com/2019/leetcode-198.-house-robber-%E7%AE%80%E8%AE%B0/" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <title>
+        
+        
+            LeetCode-198. House Robber-简记 | AhriJ`s Blog
+        
+    </title>
+    <meta name="title" content="LeetCode-198. House Robber-简记 | AhriJ`s Blog">
+    
+<link rel="stylesheet" href="/css/main.min.css">
+
+
+    
+    
+ 
+
+<script type="application/ld+json">
+{
+    "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/example.com"
+    },
+    "articleSection" : "posts",
+    "name" : "LeetCode-198. House Robber-简记",
+    "headline" : "LeetCode-198. House Robber-简记",
+    "description" : "\x3cp\x3eLeetCode 动态规划刷题训练。\x3c\/p\x3e",
+    "inLanguage" : "zh-cn",
+    "author" : "邹英杰",
+    "creator" : "邹英杰",
+    "publisher": "邹英杰",
+    "accountablePerson" : "邹英杰",
+    "copyrightHolder" : "邹英杰",
+    "copyrightYear" : "2019",
+    "datePublished": "2019-07-19 00:00:00 \x2b0000 UTC",
+    "dateModified" : "2019-07-19 00:00:00 \x2b0000 UTC",
+    "url" : "https:\/\/example.com\/2019\/leetcode-198.-house-robber-%E7%AE%80%E8%AE%B0\/",
+    "wordCount" : "1189",
+    "keywords" : [ "LeetCode","动态规划", "AhriJ`s Blog"]
+}
+</script>
+
+  </head>
+    <body class="">
+        <div class="wrapper">
+            <nav class="navbar">
+    
+        <progress class="content_progress" max="0" value="0"></progress>
+    
+    <div class="container">
+        
+            <div class="navbar-header header-back2home-logo">
+                <span class="logo_mark" >>$</span>
+                <a href="https://example.com">
+                    <span class="logo_text" >cd /home/</span>
+                    <span class="logo_cursor" ></span>
+                </a>
+            </div>
+        
+        <div class="navbar-right">
+                
+                <span class="menu">
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="/about/" title="">About</a>
+                
+                <span class="divide"></span>
+                <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-dark-mode"></i></a>
+                </span>
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+    
+        <progress class="content_progress" max="0" value="0"></progress>
+    
+     <div class="container">
+        <div class="navbar">
+            <div class="navbar-header header-logo">
+                    <a href="https://example.com">AhriJ`s Blog</a>
+            </div>
+            <div class="navbar-right">
+                <div><a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-dark-mode"></i></a></div>
+                <div class="menu-toggle">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                <nav class="mb-md">
+                    
+                    
+                        <a class="menu-item" href="/posts/" title="">
+                            <h3>Blog</h3>
+                            <div class="menu-active"></div>
+                        </a>
+                    
+                        <a class="menu-item" href="/categories/" title="">
+                            <h3>Categories</h3>
+                            <div class="menu-active"></div>
+                        </a>
+                    
+                        <a class="menu-item" href="/tags/" title="">
+                            <h3>Tags</h3>
+                            <div class="menu-active"></div>
+                        </a>
+                    
+                        <a class="menu-item" href="/about/" title="">
+                            <h3>About</h3>
+                            <div class="menu-active"></div>
+                        </a>
+                    
+                </nav>
+        </div>
+    </div>
+</nav>
+            <main class="main">
+                <div class="container">
+                    
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">LeetCode-198. House Robber-简记</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="https://example.com" rel="author">邹英杰</a> with ♥
+                <span class="post-time">
+                on <time datetime=2019-07-19 itemprop="datePublished">July 19, 2019</time>
+                </span>
+                in
+                
+                <i class="iconfont icon-folder"></i>
+                <span class="post-category">
+                        
+                        
+                        
+                          <a href="https://example.com/categories/leetcode/"> LeetCode, </a>
+                        
+                        
+                </span>
+                <span class="post-word-count">1189 words</span>
+        </div>
+    </header>
+
+    <div class="post-content">
+        
+
+        
+        
+
+        
+        
+        
+        
+        
+
+        
+        
+        
+
+        <p>LeetCode 动态规划刷题训练。</p>
+<p>LeetCode 第 <a href="https://leetcode.com/problems/house-robber/">198. House Robber（打家劫舍）</a>，题目概要如下：</p>
+<blockquote>
+<p>你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都藏有一定的现金，影响你偷窃的唯一制约因素就是相邻的房屋装有相互连通的防盗系统，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。</p>
+</blockquote>
+<blockquote>
+<p>给定一个代表每个房屋存放金额的非负整数数组，计算你在不触动警报装置的情况下，能够偷窃到的最高金额。</p>
+</blockquote>
+<blockquote>
+<p>示例 1:</p>
+</blockquote>
+<blockquote>
+<p>输入: [1,2,3,1]</p>
+</blockquote>
+<blockquote>
+<p>输出: 4</p>
+</blockquote>
+<blockquote>
+<p>解释: 偷窃 1 号房屋 (金额 = 1) ，然后偷窃 3 号房屋 (金额 = 3)。
+     偷窃到的最高金额 = 1 + 3 = 4 。</p>
+</blockquote>
+<p>动态规划相关的题目，一般来说有两个特点：</p>
+<ul>
+<li>当前步骤都是之前状态的叠加，因此一般可以通过递归来解决</li>
+<li>在当前步骤往往会面临一个 &ldquo;TO BE OR NOT TO BE&rdquo; 场景</li>
+</ul>
+<p>回到本题，劫匪在走到每个房间时，都面临过两个抉择：</p>
+<ul>
+<li>打劫</li>
+<li>不打劫</li>
+</ul>
+<p>用 <code>i</code> 表示当前房间的索引，因为不能同时打劫相邻的两个房间，那么在当前位置 <code>i</code> 处可以打劫到的最高金额就有两种情况：</p>
+<ul>
+<li>打劫到前一房间 <code>i-1</code> 所获得金额</li>
+<li>打劫到 <code>i-2</code> 处房间的最大金额 + 当前房间的所获金额</li>
+</ul>
+<p>用递归公式总结就是：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Java" data-lang="Java">max<span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> Math<span style="color:#f92672">.</span><span style="color:#a6e22e">max</span><span style="color:#f92672">(</span>max<span style="color:#f92672">[</span>i<span style="color:#f92672">-</span>1<span style="color:#f92672">],</span> max<span style="color:#f92672">[</span>i<span style="color:#f92672">-</span>2<span style="color:#f92672">]</span> <span style="color:#f92672">+</span> current<span style="color:#f92672">)</span>
+</code></pre></div><p>得到了递归公式，整体代码就很简单了，代码如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Java" data-lang="Java"><span style="color:#75715e">// 解法 1：递归求解
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span><span style="color:#f92672">[]</span> nums<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> result <span style="color:#f92672">=</span> Integer<span style="color:#f92672">.</span><span style="color:#a6e22e">MIN_VALUE</span><span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">rob</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span><span style="color:#f92672">[]</span> nums<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">nums</span> <span style="color:#f92672">=</span> nums<span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">int</span> len <span style="color:#f92672">=</span> nums<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">;</span>
+
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>len <span style="color:#f92672">==</span> 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> 0<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>len <span style="color:#f92672">==</span> 1<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> nums<span style="color:#f92672">[</span>0<span style="color:#f92672">];</span>
+        <span style="color:#f92672">}</span>
+
+        <span style="color:#66d9ef">return</span> Math<span style="color:#f92672">.</span><span style="color:#a6e22e">max</span><span style="color:#f92672">(</span>helper<span style="color:#f92672">(</span>len <span style="color:#f92672">-</span> 1<span style="color:#f92672">),</span> helper<span style="color:#f92672">(</span>len <span style="color:#f92672">-</span> 2<span style="color:#f92672">));</span>
+
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">helper</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> index<span style="color:#f92672">){</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>index <span style="color:#f92672">&lt;</span> 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> 0<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+        <span style="color:#66d9ef">return</span> Math<span style="color:#f92672">.</span><span style="color:#a6e22e">max</span><span style="color:#f92672">(</span>helper<span style="color:#f92672">(</span>index <span style="color:#f92672">-</span> 2<span style="color:#f92672">)</span> <span style="color:#f92672">+</span> nums<span style="color:#f92672">[</span>index<span style="color:#f92672">],</span> helper<span style="color:#f92672">(</span>index <span style="color:#f92672">-</span> 1<span style="color:#f92672">));</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>上面的代码逻辑是没有问题的，但是会存在重复计算的问题，导致超时。改进策略就是空间换时间，加一个 Map 记录每个位置处的最大收益值，改进后的代码如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Java" data-lang="Java"><span style="color:#75715e">// 解法 2：递归求解，缓存中间值
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> <span style="color:#f92672">{</span>
+    
+    <span style="color:#66d9ef">private</span> Map<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">,</span> Integer<span style="color:#f92672">&gt;</span> map <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> HashMap<span style="color:#f92672">&lt;&gt;();</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">rob</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span><span style="color:#f92672">[]</span> nums<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+
+        <span style="color:#66d9ef">int</span> len <span style="color:#f92672">=</span> nums<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">;</span>
+
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>len <span style="color:#f92672">==</span> 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> 0<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>len <span style="color:#f92672">==</span> 1<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> nums<span style="color:#f92672">[</span>0<span style="color:#f92672">];</span>
+        <span style="color:#f92672">}</span>
+
+        <span style="color:#66d9ef">return</span> Math<span style="color:#f92672">.</span><span style="color:#a6e22e">max</span><span style="color:#f92672">(</span>helper<span style="color:#f92672">(</span>len <span style="color:#f92672">-</span> 1<span style="color:#f92672">),</span> helper<span style="color:#f92672">(</span>len <span style="color:#f92672">-</span> 2<span style="color:#f92672">));</span>
+
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">helper</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> index<span style="color:#f92672">){</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>index <span style="color:#f92672">&lt;</span> 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> 0<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+        
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>map<span style="color:#f92672">.</span><span style="color:#a6e22e">containsKey</span><span style="color:#f92672">(</span>index<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">int</span> max <span style="color:#f92672">=</span> Math<span style="color:#f92672">.</span><span style="color:#a6e22e">max</span><span style="color:#f92672">(</span>helper<span style="color:#f92672">(</span>index <span style="color:#f92672">-</span> 2<span style="color:#f92672">)</span> <span style="color:#f92672">+</span> nums<span style="color:#f92672">[</span>index<span style="color:#f92672">],</span> helper<span style="color:#f92672">(</span>index <span style="color:#f92672">-</span> 1<span style="color:#f92672">));</span>
+            map<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>index<span style="color:#f92672">,</span> max<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+        <span style="color:#66d9ef">return</span> map<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>index<span style="color:#f92672">);</span>
+
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>通过空间换时间，算法整体的时间复杂度为 O(N)，空间复杂度为 O(N)，每个索引处都会计算一遍，另外会占用额外的 Map 空间。 上面算法还是有继续优化的空间的，因为使用了 Map 的原因，每次递归运算至少有 1 次 Map 的判断操作和 1 次读取操作，并且全部运算下来目测会有 N 次 put 操作。我们知道递归操作一般都可以转换为遍历操作，回到题目，如果我们先计算 <code>i</code> 和 <code>i+1</code> 处的值，那么计算 <code>i + 2</code> 处的值时就不用额外的判断操作了，优化后代码如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Java" data-lang="Java"><span style="color:#75715e">// 解法 3：正向迭代，缓存中间值
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> <span style="color:#f92672">{</span>
+    
+    <span style="color:#66d9ef">private</span> Map<span style="color:#f92672">&lt;</span>Integer<span style="color:#f92672">,</span> Integer<span style="color:#f92672">&gt;</span> map <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> HashMap<span style="color:#f92672">&lt;&gt;();</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">rob</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span><span style="color:#f92672">[]</span> nums<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+
+        <span style="color:#66d9ef">int</span> len <span style="color:#f92672">=</span> nums<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">;</span>
+
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>len <span style="color:#f92672">==</span> 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> 0<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>len <span style="color:#f92672">==</span> 1<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> nums<span style="color:#f92672">[</span>0<span style="color:#f92672">];</span>
+        <span style="color:#f92672">}</span>
+
+         <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>len <span style="color:#f92672">==</span> 2<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> Math<span style="color:#f92672">.</span><span style="color:#a6e22e">max</span><span style="color:#f92672">(</span>nums<span style="color:#f92672">[</span>0<span style="color:#f92672">],</span> nums<span style="color:#f92672">[</span>1<span style="color:#f92672">]);</span>
+        <span style="color:#f92672">}</span>
+
+        <span style="color:#75715e">// 先存储好打劫到 0 和 1 处的最大收益值
+</span><span style="color:#75715e"></span>        map<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>0<span style="color:#f92672">,</span> nums<span style="color:#f92672">[</span>0<span style="color:#f92672">]);</span>
+        map<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>1<span style="color:#f92672">,</span> Math<span style="color:#f92672">.</span><span style="color:#a6e22e">max</span><span style="color:#f92672">(</span>nums<span style="color:#f92672">[</span>0<span style="color:#f92672">],</span> nums<span style="color:#f92672">[</span>1<span style="color:#f92672">]));</span>
+
+        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 2<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;</span> len<span style="color:#f92672">;</span> i <span style="color:#f92672">++)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">int</span> max <span style="color:#f92672">=</span> Math<span style="color:#f92672">.</span><span style="color:#a6e22e">max</span><span style="color:#f92672">(</span>map<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>i<span style="color:#f92672">-</span>2<span style="color:#f92672">)+</span>nums<span style="color:#f92672">[</span>i<span style="color:#f92672">],</span> map<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>i<span style="color:#f92672">-</span>1<span style="color:#f92672">));</span>
+            map<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>i<span style="color:#f92672">,</span> max<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+
+        <span style="color:#66d9ef">return</span> map<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>len<span style="color:#f92672">-</span>1<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>上面使用的 Map 是用索引作为 key 的，我们可以用数组而不是 Map 进行临时数据的存储，这样可与进一步提高性能，使用数组实现的代码如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Java" data-lang="Java"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> <span style="color:#f92672">{</span>
+    
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">rob</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span><span style="color:#f92672">[]</span> nums<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+       
+        <span style="color:#66d9ef">int</span> len <span style="color:#f92672">=</span> nums<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">int</span> tmpNums<span style="color:#f92672">[]</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">int</span><span style="color:#f92672">[</span>len<span style="color:#f92672">];</span>
+
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>len <span style="color:#f92672">==</span> 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> 0<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>len <span style="color:#f92672">==</span> 1<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> nums<span style="color:#f92672">[</span>0<span style="color:#f92672">];</span>
+        <span style="color:#f92672">}</span>
+
+         <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>len <span style="color:#f92672">==</span> 2<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> Math<span style="color:#f92672">.</span><span style="color:#a6e22e">max</span><span style="color:#f92672">(</span>nums<span style="color:#f92672">[</span>0<span style="color:#f92672">],</span> nums<span style="color:#f92672">[</span>1<span style="color:#f92672">]);</span>
+        <span style="color:#f92672">}</span>
+        
+        tmpNums<span style="color:#f92672">[</span>0<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> nums<span style="color:#f92672">[</span>0<span style="color:#f92672">];</span>
+        tmpNums<span style="color:#f92672">[</span>1<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> Math<span style="color:#f92672">.</span><span style="color:#a6e22e">max</span><span style="color:#f92672">(</span>nums<span style="color:#f92672">[</span>0<span style="color:#f92672">],</span> nums<span style="color:#f92672">[</span>1<span style="color:#f92672">]);</span>
+      
+        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 2<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;</span> len<span style="color:#f92672">;</span> i <span style="color:#f92672">++)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">int</span> max <span style="color:#f92672">=</span> Math<span style="color:#f92672">.</span><span style="color:#a6e22e">max</span><span style="color:#f92672">(</span>tmpNums<span style="color:#f92672">[</span>i<span style="color:#f92672">-</span>2<span style="color:#f92672">]+</span>nums<span style="color:#f92672">[</span>i<span style="color:#f92672">],</span> tmpNums<span style="color:#f92672">[</span>i<span style="color:#f92672">-</span>1<span style="color:#f92672">]);</span>
+            tmpNums<span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> max<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+        
+        <span style="color:#66d9ef">return</span> tmpNums<span style="color:#f92672">[</span>len<span style="color:#f92672">-</span>1<span style="color:#f92672">];</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>关于本题目，其 discuss 模块有一篇总结非常赞，自己也是读了这篇总结之后整理的做题思路，非常值得一看：<a href="https://leetcode.com/problems/house-robber/discuss/156523/From-good-to-great.-How-to-approach-most-of-DP-problems.">discuss</a>。</p>
+    </div>
+
+    <div class="post-copyright">
+            
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>邹英杰 </span>
+                </p>
+            
+
+            
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=https://example.com/2019/leetcode-198.-house-robber-%E7%AE%80%E8%AE%B0/>https://example.com/2019/leetcode-198.-house-robber-%E7%AE%80%E8%AE%B0/</span>
+            </p>
+            
+            
+            <p class="copyright-item lincese">
+                本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可
+            </p>
+            
+    </div>
+
+
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-tag"></i>Tag(s):
+            
+            <span class="tag"><a href="https://example.com/tags/leetcode/">
+                    #LeetCode</a></span>
+            
+            <span class="tag"><a href="https://example.com/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">
+                    #动态规划</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> ·
+                <span><a href="https://example.com">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://example.com/2019/tcp-%E6%95%B0%E6%8D%AE%E6%94%B6%E5%8F%91%E8%BF%87%E7%A8%8B%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/" class="prev" rel="prev" title="TCP 数据收发过程抓包分析"><i class="iconfont icon-left"></i>&nbsp;TCP 数据收发过程抓包分析</a>
+        
+        
+        <a href="https://example.com/2019/leetcode-337.-house-robber-iii-%E7%AE%80%E8%AE%B0/" class="next" rel="next" title="LeetCode-337. House Robber III-简记">LeetCode-337. House Robber III-简记&nbsp;<i class="iconfont icon-right"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+        
+            
+                <div id="gitalk-container"></div>
+<link rel="stylesheet" href="https://cdn.bootcss.com/gitalk/1.5.2/gitalk.css">
+<script src="https://cdn.bootcss.com/gitalk/1.5.2/gitalk.min.js"></script>
+<script>
+    const gitalk = new Gitalk({
+
+        clientID: '644ea43e1177645f4f35',
+        clientSecret: '40a7db92fa7b2f61bf9f93956a7db0a6ac84ad1f',
+        repo: 'https:\/\/github.com\/zouyingjie\/blog',
+        owner: 'zouyingjie',
+        admin: ['zouyingjie'],
+        id: location.pathname, 
+        distractionFreeMode: false 
+    });
+    (function () {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.';
+            return;
+        }
+        gitalk.render('gitalk-container');
+    })();
+</script>
+
+            
+        
+    </div>
+</article>
+                </div>
+            </main>
+            <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2017 - 2021</span>
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i>
+         </span>
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://example.com">邹英杰</a> | </span>
+         
+
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/Mogeko/Mogege" target="_blank" rel="external nofollow">Mogege</a></span>
+    </div>
+</footer>
+
+
+
+
+
+
+<script defer src="/js/vendor_main.min.js"></script>
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/pangu@4.0.7/dist/browser/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script> pangu.spacingPage();</script>
+
+
+
+
+
+        </div>
+    </body>
+</html>
