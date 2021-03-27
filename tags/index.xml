@@ -2,129 +2,129 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on AhriJ`s Blog</title>
-    <link>https://example.com/tags/</link>
+    <link>https://zouyingjie.cn/tags/</link>
     <description>Recent content in Tags on AhriJ`s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Sun, 10 May 2020 19:31:28 +0800</lastBuildDate>
     
-	<atom:link href="https://example.com/tags/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://zouyingjie.cn/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Java</title>
-      <link>https://example.com/tags/java/</link>
+      <link>https://zouyingjie.cn/tags/java/</link>
       <pubDate>Sun, 10 May 2020 19:31:28 +0800</pubDate>
       
-      <guid>https://example.com/tags/java/</guid>
+      <guid>https://zouyingjie.cn/tags/java/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Kubernetes</title>
-      <link>https://example.com/tags/kubernetes/</link>
+      <link>https://zouyingjie.cn/tags/kubernetes/</link>
       <pubDate>Mon, 27 Apr 2020 15:50:53 +0800</pubDate>
       
-      <guid>https://example.com/tags/kubernetes/</guid>
+      <guid>https://zouyingjie.cn/tags/kubernetes/</guid>
       <description></description>
     </item>
     
     <item>
       <title>LeetCode</title>
-      <link>https://example.com/tags/leetcode/</link>
+      <link>https://zouyingjie.cn/tags/leetcode/</link>
       <pubDate>Mon, 20 Apr 2020 19:31:28 +0800</pubDate>
       
-      <guid>https://example.com/tags/leetcode/</guid>
+      <guid>https://zouyingjie.cn/tags/leetcode/</guid>
       <description></description>
     </item>
     
     <item>
       <title>算法</title>
-      <link>https://example.com/tags/%E7%AE%97%E6%B3%95/</link>
+      <link>https://zouyingjie.cn/tags/%E7%AE%97%E6%B3%95/</link>
       <pubDate>Mon, 20 Apr 2020 19:31:28 +0800</pubDate>
       
-      <guid>https://example.com/tags/%E7%AE%97%E6%B3%95/</guid>
+      <guid>https://zouyingjie.cn/tags/%E7%AE%97%E6%B3%95/</guid>
       <description></description>
     </item>
     
     <item>
       <title>技术杂记</title>
-      <link>https://example.com/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%AE%B0/</link>
+      <link>https://zouyingjie.cn/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%AE%B0/</link>
       <pubDate>Thu, 02 Apr 2020 12:29:16 +0800</pubDate>
       
-      <guid>https://example.com/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%AE%B0/</guid>
+      <guid>https://zouyingjie.cn/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%AE%B0/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Jenkins</title>
-      <link>https://example.com/tags/jenkins/</link>
+      <link>https://zouyingjie.cn/tags/jenkins/</link>
       <pubDate>Mon, 04 Nov 2019 15:50:53 +0800</pubDate>
       
-      <guid>https://example.com/tags/jenkins/</guid>
+      <guid>https://zouyingjie.cn/tags/jenkins/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Shell</title>
-      <link>https://example.com/tags/shell/</link>
+      <link>https://zouyingjie.cn/tags/shell/</link>
       <pubDate>Tue, 29 Oct 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://example.com/tags/shell/</guid>
+      <guid>https://zouyingjie.cn/tags/shell/</guid>
       <description></description>
     </item>
     
     <item>
       <title>个人随笔</title>
-      <link>https://example.com/tags/%E4%B8%AA%E4%BA%BA%E9%9A%8F%E7%AC%94/</link>
+      <link>https://zouyingjie.cn/tags/%E4%B8%AA%E4%BA%BA%E9%9A%8F%E7%AC%94/</link>
       <pubDate>Mon, 02 Sep 2019 22:22:47 +0800</pubDate>
       
-      <guid>https://example.com/tags/%E4%B8%AA%E4%BA%BA%E9%9A%8F%E7%AC%94/</guid>
+      <guid>https://zouyingjie.cn/tags/%E4%B8%AA%E4%BA%BA%E9%9A%8F%E7%AC%94/</guid>
       <description></description>
     </item>
     
     <item>
       <title>动态规划</title>
-      <link>https://example.com/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/</link>
+      <link>https://zouyingjie.cn/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/</link>
       <pubDate>Tue, 30 Jul 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://example.com/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/</guid>
+      <guid>https://zouyingjie.cn/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/</guid>
       <description></description>
     </item>
     
     <item>
       <title>ELK</title>
-      <link>https://example.com/tags/elk/</link>
+      <link>https://zouyingjie.cn/tags/elk/</link>
       <pubDate>Mon, 12 Nov 2018 20:38:40 +0000</pubDate>
       
-      <guid>https://example.com/tags/elk/</guid>
+      <guid>https://zouyingjie.cn/tags/elk/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Scrapy</title>
-      <link>https://example.com/tags/scrapy/</link>
+      <link>https://zouyingjie.cn/tags/scrapy/</link>
       <pubDate>Sat, 20 May 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://example.com/tags/scrapy/</guid>
+      <guid>https://zouyingjie.cn/tags/scrapy/</guid>
       <description></description>
     </item>
     
     <item>
       <title>爬虫</title>
-      <link>https://example.com/tags/%E7%88%AC%E8%99%AB/</link>
+      <link>https://zouyingjie.cn/tags/%E7%88%AC%E8%99%AB/</link>
       <pubDate>Sat, 20 May 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://example.com/tags/%E7%88%AC%E8%99%AB/</guid>
+      <guid>https://zouyingjie.cn/tags/%E7%88%AC%E8%99%AB/</guid>
       <description></description>
     </item>
     
     <item>
       <title>TCP/IP</title>
-      <link>https://example.com/tags/tcp/ip/</link>
+      <link>https://zouyingjie.cn/tags/tcp/ip/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://example.com/tags/tcp/ip/</guid>
+      <guid>https://zouyingjie.cn/tags/tcp/ip/</guid>
       <description></description>
     </item>
     

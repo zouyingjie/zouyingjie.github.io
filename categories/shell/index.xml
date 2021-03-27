@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Shell on AhriJ`s Blog</title>
-    <link>https://example.com/categories/shell/</link>
+    <link>https://zouyingjie.cn/categories/shell/</link>
     <description>Recent content in Shell on AhriJ`s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Tue, 29 Oct 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://example.com/categories/shell/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://zouyingjie.cn/categories/shell/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Sed 入门教程</title>
-      <link>https://example.com/2019/sed-introduction/</link>
+      <link>https://zouyingjie.cn/2019/sed-introduction/</link>
       <pubDate>Tue, 29 Oct 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://example.com/2019/sed-introduction/</guid>
+      <guid>https://zouyingjie.cn/2019/sed-introduction/</guid>
       <description></description>
     </item>
     
