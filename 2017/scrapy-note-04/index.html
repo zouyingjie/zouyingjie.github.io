@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noodp"/>
+    <meta name="author" content="邹英杰">
+    <meta name="description" content="邹英杰的个人博客">
+    
+    
+    <link rel="prev" href="https://zouyingjie.cn/2017/scrapy-note-03/" />
+    <link rel="next" href="https://zouyingjie.cn/2018/elk-quick-start/" />
+    <link rel="canonical" href="https://zouyingjie.cn/2017/scrapy-note-04/" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <title>
+        
+        
+            Scrapy 入门笔记(4) 使用 Pipeline 保存数据 | AhriJ`s Blog
+        
+    </title>
+    <meta name="title" content="Scrapy 入门笔记(4) 使用 Pipeline 保存数据 | AhriJ`s Blog">
+    
+<link rel="stylesheet" href="/css/main.min.css">
+
+
+    
+    
+ 
+
+<script type="application/ld+json">
+{
+    "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/zouyingjie.cn"
+    },
+    "articleSection" : "posts",
+    "name" : "Scrapy 入门笔记(4) 使用 Pipeline 保存数据",
+    "headline" : "Scrapy 入门笔记(4) 使用 Pipeline 保存数据",
+    "description" : "",
+    "inLanguage" : "zh-cn",
+    "author" : "邹英杰",
+    "creator" : "邹英杰",
+    "publisher": "邹英杰",
+    "accountablePerson" : "邹英杰",
+    "copyrightHolder" : "邹英杰",
+    "copyrightYear" : "2017",
+    "datePublished": "2017-05-20 00:00:00 \x2b0000 UTC",
+    "dateModified" : "2017-05-20 00:00:00 \x2b0000 UTC",
+    "url" : "https:\/\/zouyingjie.cn\/2017\/scrapy-note-04\/",
+    "wordCount" : "1868",
+    "keywords" : [ "Scrapy","爬虫", "AhriJ`s Blog"]
+}
+</script>
+
+  </head>
+    <body class="">
+        <div class="wrapper">
+            <nav class="navbar">
+    
+        <progress class="content_progress" max="0" value="0"></progress>
+    
+    <div class="container">
+        
+            <div class="navbar-header header-back2home-logo">
+                <span class="logo_mark" >>$</span>
+                <a href="https://zouyingjie.cn">
+                    <span class="logo_text" >cd /home/</span>
+                    <span class="logo_cursor" ></span>
+                </a>
+            </div>
+        
+        <div class="navbar-right">
+                
+                <span class="menu">
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="/about/" title="">About</a>
+                
+                <span class="divide"></span>
+                <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-dark-mode"></i></a>
+                </span>
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+    
+        <progress class="content_progress" max="0" value="0"></progress>
+    
+     <div class="container">
+        <div class="navbar">
+            <div class="navbar-header header-logo">
+                    <a href="https://zouyingjie.cn">AhriJ`s Blog</a>
+            </div>
+            <div class="navbar-right">
+                <div><a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-dark-mode"></i></a></div>
+                <div class="menu-toggle">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                <nav class="mb-md">
+                    
+                    
+                        <a class="menu-item" href="/posts/" title="">
+                            <h3>Blog</h3>
+                            <div class="menu-active"></div>
+                        </a>
+                    
+                        <a class="menu-item" href="/categories/" title="">
+                            <h3>Categories</h3>
+                            <div class="menu-active"></div>
+                        </a>
+                    
+                        <a class="menu-item" href="/tags/" title="">
+                            <h3>Tags</h3>
+                            <div class="menu-active"></div>
+                        </a>
+                    
+                        <a class="menu-item" href="/about/" title="">
+                            <h3>About</h3>
+                            <div class="menu-active"></div>
+                        </a>
+                    
+                </nav>
+        </div>
+    </div>
+</nav>
+            <main class="main">
+                <div class="container">
+                    
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">Scrapy 入门笔记(4) 使用 Pipeline 保存数据</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="https://zouyingjie.cn" rel="author">邹英杰</a> with ♥
+                <span class="post-time">
+                on <time datetime=2017-05-20 itemprop="datePublished">May 20, 2017</time>
+                </span>
+                in
+                
+                <i class="iconfont icon-folder"></i>
+                <span class="post-category">
+                        
+                        
+                        
+                          <a href="https://zouyingjie.cn/categories/scrapy/"> Scrapy, </a>
+                        
+                        
+                        
+                        
+                          <a href="https://zouyingjie.cn/categories/%E7%88%AC%E8%99%AB/"> 爬虫, </a>
+                        
+                        
+                </span>
+                <span class="post-word-count">1868 words</span>
+        </div>
+    </header>
+
+    <div class="post-content">
+        
+
+        
+        
+            
+        
+
+        
+        
+        
+        
+        
+
+        
+        
+        
+
+        <p>本篇主要讲解 pipeline 保存数据模块的使用，包括将数据存储为 Json 文件，存储到 MySQL 数据库以及保存图片</p>
+<p><img src="/img/cat_05.jpg" alt=""></p>
+<hr>
+<!-- raw HTML omitted -->
+<p>Scrapy 提供了 pipeline 模块来执行保存数据的操作。在创建的 Scrapy 项目中自动创建了一个 pipeline.py 文件，同时创建了一个默认的 Pipeline 类。我们可以根据需要自定义 Pipeline 类，然后在 settings.py 文件中进行配置即可，如下</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Python" data-lang="Python"><span style="color:#75715e"># 指定用来处理数据的 Pipeline 类，后面的数字代表执行顺序,取值范围是  0-1000 range.</span>
+<span style="color:#75715e"># 数值小的 Pipeline 类优先执行</span>
+ITEM_PIPELINES <span style="color:#f92672">=</span> {
+   <span style="color:#e6db74">&#39;StackoverFlowSpider.pipelines.StackoverflowspiderPipeline&#39;</span>: <span style="color:#ae81ff">2</span>,
+}
+</code></pre></div><p>接下来我们自定义 Pipeline 类来对将 Item 转为 Json 文件进行存储。</p>
+<p>Pipeline 类会在 process_item 方法中处理数据，然后在结束时调用 close_spider 方法，因此我们
+需要自定义这两个方法做相应的处理。</p>
+<h4 id="两点提示"><em><strong>两点提示</strong></em></h4>
+<ul>
+<li>在 process_item() 方法处理完成后要返回 item 供后面的 Pipeline 类继续操作</li>
+<li>记得在 close_spider() 中释放资源</li>
+</ul>
+<h4 id="1-自定义-pipeline-存储-json-数据">1. 自定义 Pipeline 存储 Json 数据</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Python" data-lang="Python">
+<span style="color:#f92672">import</span> json
+<span style="color:#f92672">import</span> codecs
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">StackJsonPipeline</span>:
+
+    <span style="color:#75715e"># 初始化时指定要操作的文件</span>
+    <span style="color:#66d9ef">def</span> __init__(self):
+        self<span style="color:#f92672">.</span>file <span style="color:#f92672">=</span> codecs<span style="color:#f92672">.</span>open(<span style="color:#e6db74">&#39;questions.json&#39;</span>, <span style="color:#e6db74">&#39;w&#39;</span>, encoding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;utf-8&#39;</span>)
+
+    <span style="color:#75715e"># 存储数据，将 Item 实例作为 json 数据写入到文件中</span>
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">process_item</span>(self, item, spider):
+        lines <span style="color:#f92672">=</span> json<span style="color:#f92672">.</span>dumps(dict(item), ensure_ascii<span style="color:#f92672">=</span>False) <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#39;</span>
+        self<span style="color:#f92672">.</span>file<span style="color:#f92672">.</span>write(lines)
+        <span style="color:#66d9ef">return</span> item
+    <span style="color:#75715e"># 处理结束后关闭 文件 IO 流</span>
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">close_spider</span>(self, spider):
+        self<span style="color:#f92672">.</span>file<span style="color:#f92672">.</span>close()
+
+</code></pre></div><h4 id="2-使用-scrapy-提供的-exporter-存储-json-数据">2. 使用 Scrapy 提供的 exporter 存储 Json 数据</h4>
+<p>Scrapy 为我们提供了一个 JsonItemExporter 类来进行 Json 数据的存储，非常方便，下面是使用该类
+进行存储的自定义 Pipeline 类示例。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Python" data-lang="Python"><span style="color:#f92672">from</span> scrapy.exporters <span style="color:#f92672">import</span> JsonItemExporter
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">JsonExporterPipeline</span>:
+    <span style="color:#75715e"># 调用 scrapy 提供的 json exporter 导出 json 文件</span>
+    <span style="color:#66d9ef">def</span> __init__(self):
+        self<span style="color:#f92672">.</span>file <span style="color:#f92672">=</span> open(<span style="color:#e6db74">&#39;questions_exporter.json&#39;</span>, <span style="color:#e6db74">&#39;wb&#39;</span>)
+        <span style="color:#75715e"># 初始化 exporter 实例，执行输出的文件和编码</span>
+        self<span style="color:#f92672">.</span>exporter <span style="color:#f92672">=</span> JsonItemExporter(self<span style="color:#f92672">.</span>file,encoding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;utf-8&#39;</span>,ensure_ascii<span style="color:#f92672">=</span>False)
+        <span style="color:#75715e"># 开启倒数</span>
+        self<span style="color:#f92672">.</span>exporter<span style="color:#f92672">.</span>start_exporting()
+
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">close_spider</span>(self, spider):
+        self<span style="color:#f92672">.</span>exporter<span style="color:#f92672">.</span>finish_exporting()
+        self<span style="color:#f92672">.</span>file<span style="color:#f92672">.</span>close()
+
+    <span style="color:#75715e"># 将 Item 实例导出到 json 文件</span>
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">process_item</span>(self, item, spider):
+        self<span style="color:#f92672">.</span>exporter<span style="color:#f92672">.</span>export_item(item)
+        <span style="color:#66d9ef">return</span> item
+
+</code></pre></div><p>上面就是两个使用自定义 Pipeline 类生成 Json 数据的示例，有一点需要强调的是，我们使用 exporter 生成的
+其实是一个数组， 下面是我使用上面两个类生成的两个文件截图，第一个生成的是许多个 Json 数据，后者是一个由
+Json 数据组成的数组：</p>
+<ul>
+<li>第一个文件使用 json 模块生成的文件</li>
+</ul>
+<p><img src="/img/scrapy_04_01.png" alt="使用 json 模块存储" loading="lazy" ></p>
+<ul>
+<li>使用 scrapy.exporters.JsonItemExporter 生成的文件</li>
+</ul>
+<p><img src="/img/scrapy_04_02.png" alt="使用 exporter 存储" loading="lazy" ></p>
+<h4 id="3-将数据保存到-mysql-数据库">3. 将数据保存到 MySQL 数据库</h4>
+<p>下面是一个将我们的数据保存到 MySQL 数据库的 Pipeline 类</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Python" data-lang="Python"><span style="color:#75715e"># 这里我们使用 mysql-connector-python 驱动，可以使用 pip 进行安装</span>
+<span style="color:#f92672">import</span> mysql.connector
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MysqlPipeline</span>:
+    <span style="color:#66d9ef">def</span> __init__(self):
+        self<span style="color:#f92672">.</span>conn <span style="color:#f92672">=</span> mysql<span style="color:#f92672">.</span>connector<span style="color:#f92672">.</span>connect(user<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;root&#39;</span>, password<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;root&#39;</span>, database<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;stack_db&#39;</span>, )
+        self<span style="color:#f92672">.</span>cursor <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>conn<span style="color:#f92672">.</span>cursor()
+
+
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">process_item</span>(self, item, spider):
+
+        title <span style="color:#f92672">=</span> item<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#39;question_title&#39;</span>)
+        votes <span style="color:#f92672">=</span> item<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#39;question_votes&#39;</span>)
+        answers <span style="color:#f92672">=</span> item<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#39;question_answers&#39;</span>)
+        views <span style="color:#f92672">=</span> item<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#39;question_views&#39;</span>)
+        tags <span style="color:#f92672">=</span> item<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#39;tags&#39;</span>)
+        insert_sql <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;&#34;
+</span><span style="color:#e6db74">            insert into stack_questions(title, votes, answers, views,tags)
+</span><span style="color:#e6db74">            VALUES (</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">, </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">, </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">, </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">,</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">);
+</span><span style="color:#e6db74">        &#34;&#34;&#34;</span>
+        self<span style="color:#f92672">.</span>cursor<span style="color:#f92672">.</span>execute(insert_sql, (title, votes, answers, views, tags))
+        self<span style="color:#f92672">.</span>conn<span style="color:#f92672">.</span>commit()
+        <span style="color:#66d9ef">return</span> item
+
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">close_spider</span>(self, spider):
+        self<span style="color:#f92672">.</span>cursor<span style="color:#f92672">.</span>close()
+        self<span style="color:#f92672">.</span>conn<span style="color:#f92672">.</span>close()
+</code></pre></div><p>将 MysqlPipeline 配置在 settings 文件中后就可以将爬取到的数据存储到 MySQL 数据库了，这里方便起见直接将 SQL 语句写在了
+process_item() 方法中，实际开发中最好将 SQL 语句封装进方法，然后再封装其专门的 Item 类中，这样我们的处理方法就可以根据传递
+过来的不同 Item 调用不同的 SQL 语句，可以极大的提高程序的扩展性和我们爬虫代码的可重用性。</p>
+<h4 id="4-实现-mysql-存储的异步操作">4. 实现 MySQL 存储的异步操作</h4>
+<p>上面的 Pipeline 类虽然可以将数据写在 MySQL 数据中，但是在 Scrapy 对数据的处理是同步执行的，当爬取数据量很大的时候，会出现插入数据的速度跟不上网页的爬取解析速度，造成阻塞，为了解决这个问题需要将 MySQL 的数据存储异步化。Python 中提供了 Twisted 框架来实现异步操作，该框架提供了一个连接池，通过连接池可以实现数据插入 MySQL 的异步化。</p>
+<p>下面是集合 Twisted 框架实现的 Pipeline 类，可以完成 MySQL 的异步化操作：</p>
+<p>这里使用的是 pymysql 模块，在初始化 Pipeline 的时候，通过参数创建数据库连接池 dbpool,
+然后在 process_item 方法中来对连接池进行配置，执行其执行方法和数据。这里我们没有写出上面例子中出现的 SQL 语句，而是将其封装到了具体的 Item类中，这样我们的 Pipeline 类可以处理各种不同的数据。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Python" data-lang="Python"><span style="color:#f92672">import</span> pymysql
+<span style="color:#f92672">from</span> twisted.enterprise <span style="color:#f92672">import</span> adbapi
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MysqlTwistedPipline</span>(object):
+   <span style="color:#66d9ef">def</span> __init__(self, ):
+       dbparms <span style="color:#f92672">=</span> dict(
+           host<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;localhost&#39;</span>,
+           db<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;stack_db&#39;</span>,
+           user<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;root&#39;</span>,
+           passwd<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;root&#39;</span>,
+           charset<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;utf8&#39;</span>,
+           cursorclass<span style="color:#f92672">=</span>pymysql<span style="color:#f92672">.</span>cursors<span style="color:#f92672">.</span>DictCursor, <span style="color:#75715e"># 指定 curosr 类型</span>
+           use_unicode<span style="color:#f92672">=</span>True,
+       )
+       <span style="color:#75715e"># 指定擦做数据库的模块名和数据库参数参数</span>
+       self<span style="color:#f92672">.</span>dbpool <span style="color:#f92672">=</span> adbapi<span style="color:#f92672">.</span>ConnectionPool(<span style="color:#e6db74">&#34;pymysql&#34;</span>, <span style="color:#f92672">**</span>dbparms)
+
+   <span style="color:#75715e"># 使用twisted将mysql插入变成异步执行</span>
+   <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">process_item</span>(self, item, spider):
+       <span style="color:#75715e"># 指定操作方法和操作的数据</span>
+       query <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>dbpool<span style="color:#f92672">.</span>runInteraction(self<span style="color:#f92672">.</span>do_insert, item)
+       <span style="color:#75715e"># 指定异常处理方法</span>
+       query<span style="color:#f92672">.</span>addErrback(self<span style="color:#f92672">.</span>handle_error, item, spider) <span style="color:#75715e">#处理异常</span>
+
+   <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">handle_error</span>(self, failure, item, spider):
+       <span style="color:#75715e">#处理异步插入的异常</span>
+       <span style="color:#66d9ef">print</span> (failure)
+
+   <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">do_insert</span>(self, cursor, item):
+       <span style="color:#75715e">#执行具体的插入</span>
+       <span style="color:#75715e">#根据不同的item 构建不同的sql语句并插入到mysql中</span>
+       insert_sql, params <span style="color:#f92672">=</span> item<span style="color:#f92672">.</span>get_insert_sql()
+       cursor<span style="color:#f92672">.</span>execute(insert_sql, params)
+
+</code></pre></div><p>QuestionItem 中的 get_insert_sql() 方法代码如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Python" data-lang="Python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_insert_sql</span>(self):
+     insert_sql <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;&#34;
+</span><span style="color:#e6db74">                insert into stack_questions(title, votes, answers, views,tags)
+</span><span style="color:#e6db74">                VALUES (</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">, </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">, </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">, </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">,</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">);
+</span><span style="color:#e6db74">            &#34;&#34;&#34;</span>
+     params <span style="color:#f92672">=</span> (self[<span style="color:#e6db74">&#34;question_title&#34;</span>], self[<span style="color:#e6db74">&#34;question_votes&#34;</span>], self[<span style="color:#e6db74">&#34;question_answers&#34;</span>], self[<span style="color:#e6db74">&#34;question_views&#34;</span>],self[<span style="color:#e6db74">&#34;tags&#34;</span>])
+     <span style="color:#66d9ef">return</span> insert_sql,params
+
+</code></pre></div><h4 id="5-使用-scrapy-自带的-imagespipeline-保存图片">5. 使用 Scrapy 自带的 ImagesPipeline 保存图片</h4>
+<p>上面基本都是我们自定义的 Pipeline 类来操作数据的，现在简要介绍一下 Scrapy 提供的一个 Pipeline 类 &mdash; ImagesPipeline。
+通过执行该类然后进行配置，可以在爬取的同时自动将图片数据保存到本地，下面简要介绍其用法：</p>
+<ul>
+<li>配置 settings 文件</li>
+</ul>
+<p>在 ITEM_PIPELINES 中配置</p>
+<pre><code>ITEM_PIPELINES = {
+  'scrapy.pipelines.images.ImagesPipeline': 1,
+}
+</code></pre><ul>
+<li>配置保存的字段和本地路径</li>
+</ul>
+<p>因为我们的数据都是封装在 Item 类里面的，因此配置完 ImagesPipeline 类后要做的就是让该类知道应该保存哪个字段的数据以及保存到何处。
+需要在 settings 中配置如下变量：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Python" data-lang="Python"><span style="color:#75715e"># 要保存的字段，即在 Item 类中的字段名为 image_url</span>
+IMAGES_URLS_FIELD <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;image_url&#39;</span>
+
+<span style="color:#f92672">import</span> os
+<span style="color:#75715e"># 配置数据保存路径，为当前工程目录下的 images 目录中</span>
+project_dir <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>abspath(os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>dirname(__file__))
+IMAGES_STORE <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>join(project_dir, <span style="color:#e6db74">&#39;images&#39;</span>)
+
+<span style="color:#75715e"># 设置图片的最大最小值</span>
+<span style="color:#75715e"># IMAGES_MIN_HEIGHT = 100</span>
+<span style="color:#75715e"># IMAGES_MIN_WIDTH = 100</span>
+</code></pre></div><ul>
+<li>在传递参数时传递数组</li>
+</ul>
+<p>ImagesPipeline 要求传递数据必须是以数据形式的，否则会报错</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Python" data-lang="Python">item_loader<span style="color:#f92672">.</span>add_value(<span style="color:#e6db74">&#34;image_url&#34;</span>, [image_url])
+</code></pre></div><p>经过上面三步再次爬取时，如果爬取的内容有图片数据，就可以按照上面的步骤将图片进行下载了。</p>
+<p>以上介绍了比较常用的 Pipeline 类的用法，Scrapy 还提供了更多的自带 Pipeline 类，有兴趣的同学可以参阅文档继续深入学习。
+现在关于 Scrapy 的所有操作已经基本完成了，从爬虫的创建、爬取解析、Item 封装到 Pipeline 保存都已经讲解完毕，下一篇用一个完整的爬取
+stackoverflow 网站的示例来做一个收尾。</p>
+    </div>
+
+    <div class="post-copyright">
+            
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>邹英杰 </span>
+                </p>
+            
+
+            
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=https://zouyingjie.cn/2017/scrapy-note-04/>https://zouyingjie.cn/2017/scrapy-note-04/</span>
+            </p>
+            
+            
+            <p class="copyright-item lincese">
+                本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可
+            </p>
+            
+    </div>
+
+
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-tag"></i>Tag(s):
+            
+            <span class="tag"><a href="https://zouyingjie.cn/tags/scrapy/">
+                    #Scrapy</a></span>
+            
+            <span class="tag"><a href="https://zouyingjie.cn/tags/%E7%88%AC%E8%99%AB/">
+                    #爬虫</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> ·
+                <span><a href="https://zouyingjie.cn">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://zouyingjie.cn/2017/scrapy-note-03/" class="prev" rel="prev" title="Scrapy 入门笔记(3) Item 类数据转换与 ItemLoader 机制解析"><i class="iconfont icon-left"></i>&nbsp;Scrapy 入门笔记(3) Item 类数据转换与 ItemLoader 机制解析</a>
+        
+        
+        <a href="https://zouyingjie.cn/2018/elk-quick-start/" class="next" rel="next" title="【ELK笔记】ELK的安装，快速搭建一个ELK日志分析平台">【ELK笔记】ELK的安装，快速搭建一个ELK日志分析平台&nbsp;<i class="iconfont icon-right"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+        
+            
+                <div id="gitalk-container"></div>
+<link rel="stylesheet" href="https://cdn.bootcss.com/gitalk/1.5.2/gitalk.css">
+<script src="https://cdn.bootcss.com/gitalk/1.5.2/gitalk.min.js"></script>
+<script>
+    const gitalk = new Gitalk({
+        clientID: '644ea43e1177645f4f35',
+        clientSecret: '40a7db92fa7b2f61bf9f93956a7db0a6ac84ad1f',
+        repo: 'zouyingjie.github.io',
+        owner: 'zouyingjie',
+        admin: ['zouyingjie'],
+        id: location.pathname, 
+        distractionFreeMode: false, 
+        proxy : 'https:\/\/shielded-brushlands-08810.herokuapp.com\/https:\/\/github.com\/login\/oauth\/access_token',
+    });
+    (function () {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.';
+            return;
+        }
+        gitalk.render('gitalk-container');
+    })();
+</script>
+
+            
+        
+    </div>
+</article>
+                </div>
+            </main>
+            <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2017 - 2021</span>
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i>
+         </span>
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://zouyingjie.cn">邹英杰</a> | </span>
+         
+
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/Mogeko/Mogege" target="_blank" rel="external nofollow">Mogege</a></span>
+    </div>
+</footer>
+
+
+
+
+
+
+<script defer src="/js/vendor_main.min.js"></script>
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/pangu@4.0.7/dist/browser/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script> pangu.spacingPage();</script>
+
+
+
+
+
+        </div>
+    </body>
+</html>

@@ -22,10 +22,10 @@
     
     <item>
       <title>Java 手动资源关闭最佳实践</title>
-      <link>https://zouyingjie.cn/2020/java-%E8%B5%84%E6%BA%90%E5%85%B3%E9%97%AD%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/</link>
+      <link>https://zouyingjie.cn/2020/java-finally-best-practice/</link>
       <pubDate>Sun, 10 May 2020 19:31:28 +0800</pubDate>
       
-      <guid>https://zouyingjie.cn/2020/java-%E8%B5%84%E6%BA%90%E5%85%B3%E9%97%AD%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/</guid>
+      <guid>https://zouyingjie.cn/2020/java-finally-best-practice/</guid>
       <description></description>
     </item>
     
@@ -58,19 +58,19 @@
     
     <item>
       <title>LeetCode 解题报告-328.奇偶链表</title>
-      <link>https://zouyingjie.cn/2020/leetcode-%E8%A7%A3%E9%A2%98%E6%8A%A5%E5%91%8A-328.%E5%A5%87%E5%81%B6%E9%93%BE%E8%A1%A8/</link>
+      <link>https://zouyingjie.cn/2020/leetcode-328/</link>
       <pubDate>Mon, 20 Apr 2020 19:31:28 +0800</pubDate>
       
-      <guid>https://zouyingjie.cn/2020/leetcode-%E8%A7%A3%E9%A2%98%E6%8A%A5%E5%91%8A-328.%E5%A5%87%E5%81%B6%E9%93%BE%E8%A1%A8/</guid>
+      <guid>https://zouyingjie.cn/2020/leetcode-328/</guid>
       <description></description>
     </item>
     
     <item>
       <title>AWS NAT Gateway 使用简记</title>
-      <link>https://zouyingjie.cn/2020/aws-nat-gateway-%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/</link>
+      <link>https://zouyingjie.cn/2020/aws-nat-gateway/</link>
       <pubDate>Thu, 02 Apr 2020 12:29:16 +0800</pubDate>
       
-      <guid>https://zouyingjie.cn/2020/aws-nat-gateway-%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/</guid>
+      <guid>https://zouyingjie.cn/2020/aws-nat-gateway/</guid>
       <description></description>
     </item>
     
@@ -103,10 +103,10 @@
     
     <item>
       <title>那些平淡的一天</title>
-      <link>https://zouyingjie.cn/2019/%E9%82%A3%E4%BA%9B%E5%B9%B3%E6%B7%A1%E7%9A%84%E4%B8%80%E5%A4%A9/</link>
+      <link>https://zouyingjie.cn/2019/days/</link>
       <pubDate>Mon, 02 Sep 2019 22:22:47 +0800</pubDate>
       
-      <guid>https://zouyingjie.cn/2019/%E9%82%A3%E4%BA%9B%E5%B9%B3%E6%B7%A1%E7%9A%84%E4%B8%80%E5%A4%A9/</guid>
+      <guid>https://zouyingjie.cn/2019/days/</guid>
       <description></description>
     </item>
     
@@ -130,37 +130,37 @@
     
     <item>
       <title>Java 虚拟机的内存分区以及内存分配与垃圾策略</title>
-      <link>https://zouyingjie.cn/2019/java-%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E5%8C%BA%E4%BB%A5%E5%8F%8A%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9E%83%E5%9C%BE%E7%AD%96%E7%95%A5/</link>
+      <link>https://zouyingjie.cn/2019/javavm-note-02/</link>
       <pubDate>Mon, 29 Jul 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://zouyingjie.cn/2019/java-%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E5%8C%BA%E4%BB%A5%E5%8F%8A%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9E%83%E5%9C%BE%E7%AD%96%E7%95%A5/</guid>
+      <guid>https://zouyingjie.cn/2019/javavm-note-02/</guid>
       <description>&lt;p&gt;《深入理解 Java 虚拟机》第二、三章学习笔记&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>LeetCode-337. House Robber III-简记</title>
-      <link>https://zouyingjie.cn/2019/leetcode-337.-house-robber-iii-%E7%AE%80%E8%AE%B0/</link>
+      <link>https://zouyingjie.cn/2019/leetcode-337.-house-robber-iii/</link>
       <pubDate>Tue, 23 Jul 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://zouyingjie.cn/2019/leetcode-337.-house-robber-iii-%E7%AE%80%E8%AE%B0/</guid>
+      <guid>https://zouyingjie.cn/2019/leetcode-337.-house-robber-iii/</guid>
       <description>&lt;p&gt;LeetCode 动态规划刷题训练。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>LeetCode-198. House Robber-简记</title>
-      <link>https://zouyingjie.cn/2019/leetcode-198.-house-robber-%E7%AE%80%E8%AE%B0/</link>
+      <link>https://zouyingjie.cn/2019/leetcode-198/</link>
       <pubDate>Fri, 19 Jul 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://zouyingjie.cn/2019/leetcode-198.-house-robber-%E7%AE%80%E8%AE%B0/</guid>
+      <guid>https://zouyingjie.cn/2019/leetcode-198/</guid>
       <description>&lt;p&gt;LeetCode 动态规划刷题训练。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>TCP 数据收发过程抓包分析</title>
-      <link>https://zouyingjie.cn/2019/tcp-%E6%95%B0%E6%8D%AE%E6%94%B6%E5%8F%91%E8%BF%87%E7%A8%8B%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/</link>
+      <link>https://zouyingjie.cn/2019/tcp-data-transform/</link>
       <pubDate>Fri, 12 Jul 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://zouyingjie.cn/2019/tcp-%E6%95%B0%E6%8D%AE%E6%94%B6%E5%8F%91%E8%BF%87%E7%A8%8B%E6%8A%93%E5%8C%85%E5%88%86%E6%9E%90/</guid>
+      <guid>https://zouyingjie.cn/2019/tcp-data-transform/</guid>
       <description></description>
     </item>
     
@@ -175,55 +175,55 @@
     
     <item>
       <title>基于ELK与ElaticAlert搭建系统监控报警</title>
-      <link>https://zouyingjie.cn/2018/%E5%9F%BA%E4%BA%8Eelk%E4%B8%8Eelaticalert%E6%90%AD%E5%BB%BA%E7%B3%BB%E7%BB%9F%E7%9B%91%E6%8E%A7%E6%8A%A5%E8%AD%A6/</link>
+      <link>https://zouyingjie.cn/2018/elk-alert/</link>
       <pubDate>Mon, 12 Nov 2018 20:38:40 +0000</pubDate>
       
-      <guid>https://zouyingjie.cn/2018/%E5%9F%BA%E4%BA%8Eelk%E4%B8%8Eelaticalert%E6%90%AD%E5%BB%BA%E7%B3%BB%E7%BB%9F%E7%9B%91%E6%8E%A7%E6%8A%A5%E8%AD%A6/</guid>
+      <guid>https://zouyingjie.cn/2018/elk-alert/</guid>
       <description></description>
     </item>
     
     <item>
       <title>【ELK笔记】ELK的安装，快速搭建一个ELK日志分析平台</title>
-      <link>https://zouyingjie.cn/2018/elk%E7%AC%94%E8%AE%B0elk%E7%9A%84%E5%AE%89%E8%A3%85%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AAelk%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90%E5%B9%B3%E5%8F%B0/</link>
+      <link>https://zouyingjie.cn/2018/elk-quick-start/</link>
       <pubDate>Mon, 19 Mar 2018 20:38:40 +0000</pubDate>
       
-      <guid>https://zouyingjie.cn/2018/elk%E7%AC%94%E8%AE%B0elk%E7%9A%84%E5%AE%89%E8%A3%85%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AAelk%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90%E5%B9%B3%E5%8F%B0/</guid>
+      <guid>https://zouyingjie.cn/2018/elk-quick-start/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Scrapy 入门笔记(4) 使用 Pipeline 保存数据</title>
-      <link>https://zouyingjie.cn/2017/scrapy-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B04-%E4%BD%BF%E7%94%A8-pipeline-%E4%BF%9D%E5%AD%98%E6%95%B0%E6%8D%AE/</link>
+      <link>https://zouyingjie.cn/2017/scrapy-note-04/</link>
       <pubDate>Sat, 20 May 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://zouyingjie.cn/2017/scrapy-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B04-%E4%BD%BF%E7%94%A8-pipeline-%E4%BF%9D%E5%AD%98%E6%95%B0%E6%8D%AE/</guid>
+      <guid>https://zouyingjie.cn/2017/scrapy-note-04/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Scrapy 入门笔记(3) Item 类数据转换与 ItemLoader 机制解析</title>
-      <link>https://zouyingjie.cn/2017/scrapy-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B03-item-%E7%B1%BB%E6%95%B0%E6%8D%AE%E8%BD%AC%E6%8D%A2%E4%B8%8E-itemloader-%E6%9C%BA%E5%88%B6%E8%A7%A3%E6%9E%90/</link>
+      <link>https://zouyingjie.cn/2017/scrapy-note-03/</link>
       <pubDate>Mon, 15 May 2017 20:26:47 +0000</pubDate>
       
-      <guid>https://zouyingjie.cn/2017/scrapy-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B03-item-%E7%B1%BB%E6%95%B0%E6%8D%AE%E8%BD%AC%E6%8D%A2%E4%B8%8E-itemloader-%E6%9C%BA%E5%88%B6%E8%A7%A3%E6%9E%90/</guid>
+      <guid>https://zouyingjie.cn/2017/scrapy-note-03/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Scrapy 入门笔记(2) xpath 与 css 解析以及解析网页示例</title>
-      <link>https://zouyingjie.cn/2017/scrapy-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B02-xpath-%E4%B8%8E-css-%E8%A7%A3%E6%9E%90%E4%BB%A5%E5%8F%8A%E8%A7%A3%E6%9E%90%E7%BD%91%E9%A1%B5%E7%A4%BA%E4%BE%8B/</link>
+      <link>https://zouyingjie.cn/2017/scrapy-note-02/</link>
       <pubDate>Wed, 10 May 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://zouyingjie.cn/2017/scrapy-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B02-xpath-%E4%B8%8E-css-%E8%A7%A3%E6%9E%90%E4%BB%A5%E5%8F%8A%E8%A7%A3%E6%9E%90%E7%BD%91%E9%A1%B5%E7%A4%BA%E4%BE%8B/</guid>
+      <guid>https://zouyingjie.cn/2017/scrapy-note-02/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Scrapy 入门笔记(1) Scrapy 项目搭建与架构介绍</title>
-      <link>https://zouyingjie.cn/2017/scrapy-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01-scrapy-%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA%E4%B8%8E%E6%9E%B6%E6%9E%84%E4%BB%8B%E7%BB%8D/</link>
+      <link>https://zouyingjie.cn/2017/scrapy-note-01/</link>
       <pubDate>Mon, 08 May 2017 10:57:14 +0000</pubDate>
       
-      <guid>https://zouyingjie.cn/2017/scrapy-%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B01-scrapy-%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA%E4%B8%8E%E6%9E%B6%E6%9E%84%E4%BB%8B%E7%BB%8D/</guid>
+      <guid>https://zouyingjie.cn/2017/scrapy-note-01/</guid>
       <description></description>
     </item>
     

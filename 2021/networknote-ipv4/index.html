@@ -9,7 +9,7 @@
     <meta name="description" content="邹英杰的个人博客">
     
     
-    <link rel="prev" href="https://zouyingjie.cn/2020/java-%E8%B5%84%E6%BA%90%E5%85%B3%E9%97%AD%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/" />
+    <link rel="prev" href="https://zouyingjie.cn/2020/java-finally-best-practice/" />
     
     <link rel="canonical" href="https://zouyingjie.cn/2021/networknote-ipv4/" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -56,7 +56,7 @@
     "datePublished": "2021-03-26 00:00:00 \x2b0000 UTC",
     "dateModified" : "2021-03-26 00:00:00 \x2b0000 UTC",
     "url" : "https:\/\/zouyingjie.cn\/2021\/networknote-ipv4\/",
-    "wordCount" : "7448",
+    "wordCount" : "8646",
     "keywords" : [ "TCP\/IP", "AhriJ`s Blog"]
 }
 </script>
@@ -163,7 +163,7 @@
                         
                         
                 </span>
-                <span class="post-word-count">7448 words</span>
+                <span class="post-word-count">8646 words</span>
         </div>
     </header>
 
@@ -188,34 +188,73 @@
         <p>这是我学习《TCP/IP Guide》和《TCP/IP 详解(英文版)》后生产的二手知识，如果打算彻底深入学习 TCP/IP 协议，请直接读《TCP/IP Guide》、《TCP/IP 详解》以及相应的 RFC。</p>
 <p><strong>务必读英文版！务必读英文版！务必读英文版！</strong></p>
 <hr>
+<!-- raw HTML omitted -->
+<ul>
+<li><a href="#%E4%B8%80-ip-%E5%8D%8F%E8%AE%AE-overview">一. IP 协议 Overview</a>
+<ul>
+<li><a href="#ip-%E5%8D%8F%E8%AE%AE%E5%8F%91%E5%B1%95%E5%8E%86%E5%8F%B2">IP 协议发展历史</a></li>
+<li><a href="#ip-%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%8A%9F%E8%83%BD%E4%B8%8E%E7%89%B9%E6%80%A7">IP 协议的功能与特性</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BA%8C-ip-%E5%AF%BB%E5%9D%80">二. IP 寻址</a>
+<ul>
+<li><a href="#21-ip-%E5%88%86%E7%B1%BB%E5%AF%BB%E5%9D%80classful-addressing">2.1 IP 分类寻址(Classful Addressing)</a>
+<ul>
+<li><a href="#%E5%88%86%E7%B1%BB%E5%AF%BB%E5%9D%80%E7%BD%91%E7%BB%9C%E4%B8%BB%E6%9C%BA%E5%8F%B7%E5%88%92%E5%88%86">分类寻址网络/主机号划分</a></li>
+<li><a href="#abc-%E7%B1%BB%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4">A/B/C 类地址空间</a></li>
+<li><a href="#%E7%89%B9%E6%AE%8A%E5%9C%B0%E5%9D%80%E5%90%AB%E4%B9%89%E5%A4%9A%E6%92%AD%E4%BF%9D%E7%95%99%E5%9C%B0%E5%9D%80%E7%AD%89">特殊地址含义（多播、保留地址等）</a></li>
+<li><a href="#%E5%88%86%E7%B1%BB%E5%AF%BB%E5%9D%80%E7%9A%84%E9%97%AE%E9%A2%98">分类寻址的问题</a></li>
+</ul>
+</li>
+<li><a href="#22-ip-%E5%AD%90%E7%BD%91%E5%AF%BB%E5%9D%80subnet-addressing">2.2 IP 子网寻址(Subnet addressing)</a>
+<ul>
+<li><a href="#%E5%8F%AF%E5%8F%98%E5%AD%90%E7%BD%91%E5%AF%BB%E5%9D%80vlsmvariable-length-subnet-masking-">可变子网寻址（VLSM，Variable Length Subnet Masking ）</a></li>
+</ul>
+</li>
+<li><a href="#23-%E6%97%A0%E7%B1%BB%E5%AF%BB%E5%9D%80">2.3 无类寻址</a>
+<ul>
+<li><a href="#cidr-%E7%AE%80%E4%BB%8B">CIDR 简介</a></li>
+<li><a href="#cidr-%E7%BD%91%E7%BB%9C%E5%88%86%E5%B1%82%E4%B8%8E%E8%A1%A8%E7%A4%BA">CIDR 网络分层与表示</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E4%B8%89-ip-%E6%95%B0%E6%8D%AE%E5%8C%85%E7%9A%84%E5%B0%81%E8%A3%85%E4%B8%8E%E6%A0%BC%E5%BC%8F">三. IP 数据包的封装与格式</a></li>
+<li><a href="#%E5%9B%9B-ip-%E6%95%B0%E6%8D%AE%E5%8C%85%E7%9A%84%E5%88%86%E7%89%87%E4%B8%8E%E9%87%8D%E7%BB%84">四. IP 数据包的分片与重组</a>
+<ul>
+<li><a href="#41-ip-%E5%88%86%E7%89%87%E5%A4%84%E7%90%86">4.1 IP 分片处理</a></li>
+<li><a href="#42-ip-%E6%95%B0%E6%8D%AE%E6%8A%A5%E9%87%8D%E7%BB%84">4.2 IP 数据报重组</a></li>
+</ul>
+</li>
+</ul>
+<!-- raw HTML omitted -->
 <p>文中图片均来自 <a href="http://www.tcpipguide.com/free/t_toc.htm">The TCP/IP Guide</a> 网站。</p>
 <h3 id="一-ip-协议-overview">一. IP 协议 Overview</h3>
-<h4 id="11-ip-协议发展历史">1.1 IP 协议发展历史</h4>
+<h4 id="ip-协议发展历史">IP 协议发展历史</h4>
 <p>IP 协议作为 TCP/IP 协议栈中最重要的协议，其最开始是属于 TCP 协议的一部分的，后来单独独立出来。1981 年，<a href="https://tools.ietf.org/html/rfc791">RFC 791</a> 发布，这标志着 IP 协议正式诞生，其定义了 IP 版本的核心功能和特性，并一直沿用至今。</p>
-<p><strong>IP 协议版本</strong></p>
 <p><a href="https://tools.ietf.org/html/rfc791">RFC 791</a>  定义的 IP 版本为 4，其原因是早期的 TCP 经历了三个较早的版本，并在版本 4 分为了 TCP 和 IP。为了保持一致性，该版本号同时应用于 TCP 和 IP。</p>
 <p>当前主流版本就是 4，也就是我们常说的 IPv4，一般情况下我们说的 IP 协议默认就是 IPv4。
-但因为一些原因，比如 IPv4 存在地址不足等原因，新版本的 IP 协议始终是需要的，最新版本的 IP 协议是 IPv6(Internet Protocol version 6 )，也被称为 <strong>IPng（IP Next Generation）</strong>。</p>
+但因为一些原因，比如 IPv4 存在地址不足的等原因，新版本的 IP 协议始终是需要的，最新版本的 IP 协议是 IPv6(Internet Protocol version 6 )，也被称为 <strong>IPng（IP Next Generation）</strong>。</p>
 <h4 id="ip-协议的功能与特性">IP 协议的功能与特性</h4>
 <p>简单来说，IP 协议主要实现了一个功能：</p>
 <blockquote>
-<p><strong>跨网络的数据报传输</strong>，其将上层（4层协议或者其他协议）协议发过来的数据（TCP、UDP等包）进行封装打包并进行必要的处理，然后将其发送到目标网络。</p>
+<p><strong>跨网络的数据报传输</strong>，其将上层（4层协议或者其他协议）协议发过来的数据（TCP、UDP等包）封装打包并进行必要的处理，然后将其发送到目标网络。</p>
 </blockquote>
 <p>IP 协议主要有下面一些特性：</p>
 <ul>
-<li>通用地址：其使用 IP 地址标识</li>
+<li>通用地址：其使用统一的 IP 地址标识网络接口</li>
 <li>底层协议无关：IP 协议不关心底层协议</li>
-<li>无连接：IP 协议是无连接的，因此其传输和数据时无需</li>
+<li>无连接：IP 协议是无连接的，因此其传输和数据时无需同步状态，建立连接</li>
 <li>不可靠</li>
 <li>无确认</li>
 </ul>
-<p>基于以上特性，IP 协议并不保证数据传输一定会成功，其目标只有一个：尽可能的传输数据。</p>
+<p>基于以上特性，IP 协议并不保证数据传输一定会成功，其目标只有一个：<strong>尽可能的传输数据</strong>。</p>
 <p>IP 协议主要有如下四个功能：</p>
 <ul>
-<li><strong>数据封装与打包</strong>：IP 会将上层传来的数据包以特定的格式封装为 IP 数据报。</li>
-<li><strong>IP 寻址</strong>：IP 协议定义了 IP 地址用于标识 IP 网络接口，</li>
-<li><strong>IP 路由 &amp; 间接传输</strong>：</li>
-<li><strong>数据分片与重组</strong>：IP 协议会</li>
+<li><strong>数据封装与打包</strong></li>
+<li><strong>IP 寻址</strong></li>
+<li><strong>IP 路由 &amp; 间接传输</strong></li>
+<li><strong>数据分片与重组</strong></li>
 </ul>
 <h3 id="二-ip-寻址">二. IP 寻址</h3>
 <p>为了能够在设备之间传递数据，IP 协议必须知道设备在哪，这是由 <strong>IP 地址</strong> 实现的，IP 协议最重要的功能之一就是<strong>IP 寻址</strong>，其主要包含两方面：</p>
@@ -225,22 +264,26 @@
 </ul>
 <p>注意 IP 地址标识的是网络接口，而不是主机，因为主机可以有多个网络接口，即一个主机可以有多个网络地址。</p>
 <p><strong>IP 地址表示</strong></p>
-<p>对于 IPv4，IP 地址是一串 32 位二进制数，当然也可以用十六进制或十进制形式表示。为了方便人们阅读，最常见的表示方式是 <strong>点分十进制表示法（dotted decimal notation ）: 将32位划分为四个字节，然后将每个字节的二进制串转换为十进制，然后用点分隔这些数字以创建点分十进制表示法，比如 IP 地址 11100011010100101001101110110001 分为四组是 11100011 - 01010010 - 10011101 - 10110001，然后转为十进制就是 227.82.157.177</strong>。如下图所示：</p>
+<p>对于 IPv4，IP 地址是一串 32 位二进制数，当然也可以用十六进制或十进制形式表示。为了方便人们阅读，最常见的表示方式是 <strong>点分十进制表示法（dotted decimal notation ）</strong>。</p>
+<blockquote>
+<p>将32位划分为四个字节，然后将每个字节的二进制串转换为十进制，然后用点分隔这些数字以创建点分十进制表示法，比如 IP 地址 11100011010100101001101110110001 分为四组是 11100011 - 01010010 - 10011101 - 10110001，然后转为十进制就是 227.82.157.177。</p>
+</blockquote>
+<p>如下图所示：</p>
 <p><img src="/images/ipv4division-networkid-and-hostid.png" alt=""></p>
 <p>32位的 IPv4 地址主要分为两部分：网络号和主机号</p>
 <ul>
 <li>网络号（Network ID）: 从 IP 地址最左边开始的若干位为网络号，用来标识网络接口所在的网络，实现路由功能。</li>
 <li>主机号（Host ID）: 用于标识位于网络中的某台主机。</li>
 </ul>
-<p>拿我们的手机号类比，比如中国大陆手机号格式是 +86 12233335555，其中 +86 表示是中国的国际区号，后面的号码就是某个人的具体手机号。当我们在国外打电话时，+86 告诉运营商我这是中国大陆的手机号，麻烦转到中国大陆，然后在通过手机号将信号发送到我们的手机。对应到 IP 地址，网络号就相当于 +86，而后面的手机号就相当于主机号。当数据在网络上传输，路由器通过网络号将 IP 数据报发送到目标网络，到达目标网络后通过主机号找到主机，然后将数据发送到主机相应的网络接口，这样就完成了 IP 数据的传输。</p>
+<p>拿我们的手机号类比，比如中国大陆手机号格式是 +86 12233335555，其中 +86 表示是中国的国际区号，后面的号码就是某个人的具体手机号。当我们在国外打电话时，+86 告诉运营商我这是中国大陆的手机号，麻烦转到中国大陆，然后在通过手机号将信号发送到我们的手机。对应到 IP 地址，网络号就相当于 +86，手机号相当于主机号。当数据在网络上传输，路由器通过网络号将 IP 数据报发送到目标网络，到达目标网络后在通过主机号找到具体接收数据的那一台主机，然后将数据发送到对应的网络接口，这样就完成了 IP 数据的传输。</p>
 <p>和我们的手机号其国际区号固定是 +86 三位不同，网络号和主机号的划分并不是固定的，因此我们需要知道 IPv4 地址中哪些是网络号，哪些是主机号。网络号与主机号的区分主要取决于其采用的<strong>寻址方式</strong>，IPv4 发展过程中先后有下面三种分类方式：</p>
 <ul>
 <li>分类寻址（ Classful Addressing）</li>
 <li>子网分类寻址（Subnetted Classful Addressing）</li>
 <li>无类寻址（Classless Addressing）</li>
 </ul>
-<h4 id="ip-分类寻址classful-addressing">IP 分类寻址(Classful Addressing)</h4>
-<p>所谓分类寻址就是，基于不同的功能将 IP 地址分为 A、B、C、D、E 5 类。如图</p>
+<h4 id="21-ip-分类寻址classful-addressing">2.1 IP 分类寻址(Classful Addressing)</h4>
+<p>所谓分类寻址就是，基于不同的功能将 IP 地址分为 A、B、C、D、E 5 类。如下表</p>
 <table>
 <thead>
 <tr>
@@ -291,7 +334,7 @@
 </table>
 <p>各个类别地址占比如图所示：</p>
 <p><img src="/images/IPv4-Address-Space-Into-Classes.png" alt=""></p>
-<p>A/B/C 三类地址是最重要的，其用于常规的单播地址，其地址数量占了 IPv4 地址总数量的 7/8，D 类地址保留个 IP 多播使用，而 E 类则保留给实验使用。</p>
+<p>A/B/C 三类地址是最重要的，其用于常规的单播地址，其地址数量占了 IPv4 地址总数量的 7/8，D 类地址保留给 IP 多播使用，而 E 类则保留给实验使用。</p>
 <p><strong>分类寻址的设计原理</strong></p>
 <p>虽然现在分类寻址已经被弃用，现在讨论更多的是分类寻址的缺点。但在互联网发展初期，分类寻址的实现是有其道理的。以当时的视角来看，分类寻址具有下面一些优点：</p>
 <ul>
@@ -420,17 +463,71 @@
 </table>
 <p>以 B 类地址为例，其前 2 位固定，因此其可用的网络号为 14 位，则其可用的网络 ID 就是 2 的 14 次方，对于主机号则是 2 的 16 次方，需要减 2 的原因是主机号全部为 0 或者 1 的两个地址被保留另做他用。由此我们可以知道，在基于分类寻址的网络结构中，一个 A 类网络大约有 1600 万个网络地址，B 类网络大约有地址为 65000 个，而 C 类网络地址只有 254 个。</p>
 <h5 id="特殊地址含义多播保留地址等">特殊地址含义（多播、保留地址等）</h5>
-<p>虽然理论是 IPv4 地址可以有 2^32 个，但实际可分配的地址数量是远远少于这个数的，有很多特殊地址是不用被分配的，包括保留地址、私有不可路由的地址、回环地址以及某些有特殊意义的地址。下面是一些地址示例。</p>
+<p>虽然理论上 IPv4 地址可以有 2^32 个，但实际可分配的地址数量是远远少于这个数的，有很多特殊地址是不用被分配的，包括保留地址、私有不可路由的地址、回环地址以及某些有特殊意义的地址。下面是一些地址示例。</p>
 <p><strong>特殊地址</strong></p>
-<p>对于某个 IPv4 地址，其网络号或主机号全部为 0 或者全部为 1 时有其特殊含义，如下：
-网络号|主机号|A类地址|B 类示例|C类示例| 描述
-&mdash;&ndash;  |&mdash;  |&mdash;&ndash; | &mdash;&ndash; |&mdash;&ndash; | &ndash;
-NetworkID | HostID  | 77.91.215.5 | 154.3.99.6 |227.82.157.160 | 正常 IP 地址
-NetworkID | 全部为 0 | 77.0.0.0    | 154.3.0.0  | 227.82.157.0   | 表示某个网络
-全部为 0   | HostID  | 0.91.215.5 | 0.0.99.6| 0.0.0.160 | 表示当前网络的特定主机
-全部为 0   | 全部为 0 | 0.0.0.0     | 0.0.0.0    | 0.0.0.0       |一般用来表示当前主机
-Network ID| 全部为 1 | 77.255.255.255 | 154.3.255.255 | 227.82.157.255 | 指定网络上的所有地址，一般用于广播到本地网络的所有主机
-全部为 1   | 全部为 1 | 77.0.0.0    | 154.3.0.0  | 227.82.157.0   |所有网络的所有主机，会向所有主机发送全局广播</p>
+<p>对于某个 IPv4 地址，其网络号或主机号全部为 0 或者全部为 1 时有其特殊含义，如下：</p>
+<table>
+<thead>
+<tr>
+<th>网络号</th>
+<th>主机号</th>
+<th>A类地址</th>
+<th>B 类示例</th>
+<th>C类示例</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NetworkID</td>
+<td>HostID</td>
+<td>77.91.215.5</td>
+<td>154.3.99.6</td>
+<td>227.82.157.160</td>
+<td>正常 IP 地址</td>
+</tr>
+<tr>
+<td>NetworkID</td>
+<td>全部为 0</td>
+<td>77.0.0.0</td>
+<td>154.3.0.0</td>
+<td>227.82.157.0</td>
+<td>表示某个网络</td>
+</tr>
+<tr>
+<td>全部为 0</td>
+<td>HostID</td>
+<td>0.91.215.5</td>
+<td>0.0.99.6</td>
+<td>0.0.0.160</td>
+<td>表示当前网络的特定主机</td>
+</tr>
+<tr>
+<td>全部为 0</td>
+<td>全部为 0</td>
+<td>0.0.0.0</td>
+<td>0.0.0.0</td>
+<td>0.0.0.0</td>
+<td>一般用来表示当前主机</td>
+</tr>
+<tr>
+<td>Network ID</td>
+<td>全部为 1</td>
+<td>77.255.255.255</td>
+<td>154.3.255.255</td>
+<td>227.82.157.255</td>
+<td>指定网络上的所有地址，一般用于广播到本地网络的所有主机</td>
+</tr>
+<tr>
+<td>全部为 1</td>
+<td>全部为 1</td>
+<td>77.0.0.0</td>
+<td>154.3.0.0</td>
+<td>227.82.157.0</td>
+<td>所有网络的所有主机，会向所有主机发送全局广播</td>
+</tr>
+</tbody>
+</table>
 <p><strong>私有地址</strong></p>
 <p><a href="https://tools.ietf.org/html/rfc1918">RFC1918</a> 定义一系列私有地址，其不能被用于公网 IP，路由器无法路由这些 IP 发出的请求。</p>
 <p><strong>回环地址</strong></p>
@@ -458,41 +555,62 @@ IP 规定 127.0.0.0 ~ 127.255.255.255 范围内的地址为回环地址，向该
 <p>基于分类寻址的若干问题，目前主要有三种解决方案：</p>
 <ul>
 <li>（1）子网寻址: 将主机号继续划为子网号和主机号，主要解决了第一个内部地址不灵活的问题。</li>
-<li>（2）无类寻址：比较好的解决了内部分配不灵活和路由表条目过多的问题，帮 IPv4 续了不知道多少命了，但依然受制于 IPv4 地址的数量问题。</li>
+<li>（2）无类寻址：比较好的解决了上述问题，帮 IPv4 续了不知道多少 s 的命，但依然受制于 IPv4 地址的数量问题。</li>
 <li>（3）IPv6：彻底解决上述问题。</li>
 </ul>
-<h4 id="23-ip-子网寻址subnet-addressing">2.3 IP 子网寻址(Subnet addressing)</h4>
+<h4 id="22-ip-子网寻址subnet-addressing">2.2 IP 子网寻址(Subnet addressing)</h4>
 <p>上面提到的分类寻址很快暴露出了问题，<a href="https://tools.ietf.org/html/rfc950">RFC 950</a>提出了新的寻址方式：子网寻址。</p>
 <p>子网寻址是将原来分类寻址中的 hostID 主机号进一步划分为子网ID（subnet Id）和主机 ID，如图所示：</p>
 <p><img src="/images/ipsubnet.png" alt=""></p>
-<p>这样基于分类地址的</p>
-<h5 id="221-子网掩码">2.2.1 子网掩码</h5>
-<h4 id="无类寻址">无类寻址</h4>
+<p>使用子网寻址后一个很重要的问题是如何区分子网号与主机号。这是通过 <strong>子网掩码（subnet mask）</strong> 实现的。子网掩码的格式也 IPv4 地址一样，也是 32 位的二进制数。对于网络号和子网号，子网掩码的数值是 1，对于主机号则是 0。如图所示，对于 B 类地址，我们将 16 位主机号中的前 5 位拿来做子网号，其子网掩码就是 <code>11111111 11111111 11111000 00000000</code>。</p>
+<p><img src="/images/ipsubnetmask.png" alt=""></p>
+<p>简单来说，子网掩码只做了一件事:</p>
+<blockquote>
+<p>传达子网 ID 与主机 ID 的分割线</p>
+</blockquote>
+<p>因为子网寻址依然是基于分类寻址的，因此通过类别我们可以知道网络号是多少，然后在通过子网掩码找到子网号，路由器就可以将 IP 路由到正确的子网了。具体使用是通过 AND 操作，因为子网掩码中主机号对应的都是 0，则执行 AND 操作之后也都是 0。而主机号和子网号都是 1 ，执行 AND 后保持不变，这样我们就拿到了子网地址，如图所示：</p>
+<p><img src="/images/ipsubnetmasking.png" alt=""></p>
+<h5 id="可变子网寻址vlsmvariable-length-subnet-masking-">可变子网寻址（VLSM，Variable Length Subnet Masking ）</h5>
+<p>子网寻址只提供了二级的网络层次结构，依然不够灵活。为了解决该问题，后面又提出了 VLSM 可变子网寻址的方案。</p>
+<p>具体方案就是可以对子网进行更多次的划分。如图所示，我们有 C 类网络地址  201.45.222.0/24，</p>
+<ul>
+<li>第一级划分：两个子网分别有 126 个主机</li>
+<li>二级划分：将某个子网又分为两个子网，每个含有 62 个主机</li>
+<li>三级划分：将某个 62 个主机的子网再次划分，分为了包含 14 个主机的 4 个子网。</li>
+</ul>
+<p><img src="/images/ipvlsm.png" alt=""></p>
+<p>VLSM 极大提高了网络配置的灵活性。其和下面的 CIDR 已经非常相似了，唯一不同就是 VLSM 是作用于某个子网的，而 CIDR 则是针对整个互联网的。</p>
+<h4 id="23-无类寻址">2.3 无类寻址</h4>
 <p><strong>子网寻址的问题</strong></p>
-<p>子网寻址虽然实现了网络内部的二级划分，但其依然是基于 A/B/C 分类寻址来设计，其最根本的问题依然没有解决：A、B(65534个地址) 类型的网络包含的地址数量太大了，而 C 类（254）地址数量又太少了。世界上存在众多组织其所需要的地址大于 254 而又远远小于 65534。</p>
+<p>子网寻址虽然实现了网络内部的二级划分，但是其网络依然是基于 A/B/C 分类寻址来设计，其最根本的问题依然没有解决：A、B(65534个地址) 类型的网络包含的地址数量太大了，而 C 类（254）地址数量又太少了。世界上存在众多组织其所需要的地址大于 254 而又远远小于 65534。</p>
 <p>比如一个公司只有 2000 台机器，如果分配 B 类地址，那么会有超过 62,000 个地址被浪费，这让本就数量不足的 IPv4 地址雪上加霜。而如果分配 C 类地址，我们需要申请 10 个 C 类网络，而这会造成路由表条目变为 10 条，极大降低路由效率，同时不足以支持内部对网络进行更加灵活的划分。</p>
-<p>由于子网寻址并不能彻底解决分类寻址带来的问题，人们意识到在 IPv6 普及之前还需要一种新的方案来延长 IPv4 协议的使用寿命。这一方案就是 <strong>无类域间路由(CIDR:Classless Inter-Domain Routing )</strong>。</p>
+<p>由于子网寻址并不能彻底解决分类寻址带来的问题，人们意识到在 IPv6 普及之前还需要一种新的方案来延长 IPv4协议的使用寿命。这一方案就是 <strong>无类域间路由(CIDR:Classless Inter-Domain Routing )</strong>。</p>
 <h5 id="cidr-简介">CIDR 简介</h5>
 <p>CIDR 在 1993 年提出，其相关的 RFC 为 <a href="https://tools.ietf.org/html/rfc1517">RFC1517</a>，<a href="https://tools.ietf.org/html/rfc1518">RFC1518</a>，<a href="https://tools.ietf.org/html/rfc1519">RFC1519</a>，<a href="https://tools.ietf.org/html/rfc1520">RFC1520</a>。</p>
 <p>CIDR 的核心思想是将子网划分的概念拓展至整个网络，并且除了一级子网划分之外可以对网络进行任意划分，形成多层次结构的网络。</p>
 <p><strong>CIDR的好处</strong></p>
 <ul>
 <li>有效的地址分配：不同于分类寻址只能按类和子网分配地址，CIDR 可以以任何二的倍数的大小分配地址。如果一个组织需要 5000 个地址，那么我可以分配 8190 个地址(2^13) 即可，而无需分配 65534 个 B 类地址。</li>
-<li>高效路由：CIDR 的多层次结构网络可以通过少量的路由条目实现</li>
+<li>高效路由：CIDR 的多层次结构网络可以通过少量的路由条目</li>
 <li>通用的的子网划分方案</li>
 </ul>
 <p>当然 CIDR 在解决分类寻址带来的问题的同时也存在一些新的问题，主要是两个：</p>
 <ul>
 <li>复杂性：分类寻址可以很容易知道是网络号和主机号，而 CIDR 没有那么简单</li>
 </ul>
-<h5 id="242-cidr-网络分层与表示">2.4.2 CIDR 网络分层与表示</h5>
+<h5 id="cidr-网络分层与表示">CIDR 网络分层与表示</h5>
 <p>CIDR 消除了类型的概念，因此无法像之前那样明确的知晓一个 IP 地址中哪些是网络号，哪些是主机号。其采用新的 <strong>CIDR 斜杠表示法(CIDR notation 或者 Slash notation.)</strong>，通过在 IP 地址后跟 <strong>斜杠/数字</strong> 的形式，数字代表了网络号所占位数。比如对于地址 184.13.152.0/22，其后面跟了 22，表示该 IP 地址中有 22位是网络号，10 位是主机号。</p>
-<p><img src="/images/cidr-address-block.png" alt=""></p>
+<p>通过 CIDR 我们可以自由的对网络进行划分。</p>
+<p>下面是 CIDR 的一个示例，首先将网络分成了两个包含 65534 个主机的子网，网络地址分别是</p>
+<ul>
+<li>子网1：71.94.0.0/16</li>
+<li>子网2：71.95.0.0/16</li>
+</ul>
+<p>然后又将第二个子网继续划分，如图所示：</p>
 <p><img src="/images/cidr-hierarchical-address-division.png" alt=""></p>
 <h3 id="三-ip-数据包的封装与格式">三. IP 数据包的封装与格式</h3>
 <p>对于由多层协议组成的 TCP/IP 协议栈，底层的协议会将上层协议发送过来的数据完整打包，将其封装为自己的消息格式，并添加包含重要的控制信息的包头(Header)和页脚（footer）。</p>
 <p><img src="/images/IP-datagram-encapsulation.png" alt=""></p>
-<h4 id="ip-数据包格式">IP 数据包格式</h4>
 <p>IP 协议会将传输的数据封装为 IP 数据报（IP datagram），其内部包含了 IP 传输数据所需的若干属性字段。IP 数据包格式如图：</p>
 <p><img src="/images/ipv4-datagram-format.png" alt=""></p>
 <p>各个字段含义如下表：</p>
@@ -722,10 +840,108 @@ IP 规定 127.0.0.0 ~ 127.255.255.255 范围内的地址为回环地址，向该
 <p>下面是 RFC1349 中对 TOS 字段的部分描述：
 <img src="/images/ip-tos-field-format.png" alt=""></p>
 <p><img src="/images/ip-tos-subfield-values.png" alt=""></p>
-<p>除了固定的 20 字节的 IP 头之外，IP 数据包还提供了 Options 字段来保证 IP 数据包的扩展性。可选字段如下：</p>
+<p><strong>IP Options</strong></p>
+<p>除了固定的 20 字节的 IP 头之外，IP 数据包还提供了 Options 字段来保证 IP 数据包的扩展性。IP Option 没有明确定义，不同类型的字段其包含的数据内容也不同，一般来说，IP Option 都是下面这种格式。</p>
+<p><img src="/images/ipoptionformat.png" alt=""></p>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>大小</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Type</td>
+<td>8bit</td>
+<td>可选字段类型，一般来说就是 1 个数字，但有的还可以细化为三个字段，如上图所示</td>
+</tr>
+<tr>
+<td>Len</td>
+<td>0 或者 8bit</td>
+<td>表示可选字段的长度</td>
+</tr>
+<tr>
+<td>Data</td>
+<td>可变长度</td>
+<td>可选项字段的数据，比如路由信息、时间戳等，不同类型的可选项字段包含的数据不同</td>
+</tr>
+</tbody>
+</table>
+<p>可用的 IP Option 字段如下</p>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>编号</th>
+<th>长度（bytes）</th>
+<th>名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>选项列表结尾</td>
+<td>表示 IP Option 字段的结尾，如果此时 IP 头长度不是 32bit 的倍数，后面会跟填充位。</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>无操作</td>
+<td>虚拟选项，需要时被用作“内部填充”，以在32位边界上对齐某些选项</td>
+</tr>
+<tr>
+<td>0</td>
+<td>2</td>
+<td>11</td>
+<td>安全性</td>
+<td>用于指示 IP 数据报的安全性分类</td>
+</tr>
+<tr>
+<td>0</td>
+<td>3</td>
+<td>可变</td>
+<td>松散的源路由</td>
+<td>携带一系列路由地址，要求 IP 报必须经过这些地址进行路由，但允许中间有跳跃节点。</td>
+</tr>
+<tr>
+<td>0</td>
+<td>7</td>
+<td>可变</td>
+<td>记录路由</td>
+<td>用来记录路由过程中的 IP 地址，在 ping 命令中可以用到</td>
+</tr>
+<tr>
+<td>0</td>
+<td>9</td>
+<td>可变</td>
+<td>严格的源路由</td>
+<td>其会携带一系列路由地址，要求 IP 报的路由路径必须经过这些地址</td>
+</tr>
+<tr>
+<td>2</td>
+<td>4</td>
+<td>可变</td>
+<td>时间戳</td>
+<td>用于指示 IP 数据报的安全性分类</td>
+</tr>
+<tr>
+<td>2</td>
+<td>18</td>
+<td>12</td>
+<td>安全性</td>
+<td>用于指示 IP 数据报的安全性分类</td>
+</tr>
+</tbody>
+</table>
 <h3 id="四-ip-数据包的分片与重组">四. IP 数据包的分片与重组</h3>
 <p>IP 数据报最终是经链路层传输的，链路层有 MTU（maximum transmission unit，最大传输单元）的限制，表示链路层能传输的最大数据值，也就是能传输的 IP 数据报的最大值。比如 Ethernet 的默认 MTU 是 1500 字节，如果一个 IP 数据报的大小超过 1500 字节，那么就会被分片传输。</p>
-<h4 id="ip-分片处理">IP 分片处理</h4>
+<h4 id="41-ip-分片处理">4.1 IP 分片处理</h4>
 <p>IP 的分片可以发生在路由过程的任一节点，因此最终的分片结果一定是基于路由过程中最小的 MTU 决定的。</p>
 <p>下图是一个 IP 分片的示例：</p>
 <p><img src="/images/IPv4-datagram-fragmentation-process.png" alt=""></p>
@@ -748,7 +964,7 @@ IP 规定 127.0.0.0 ~ 127.255.255.255 范围内的地址为回环地址，向该
 <li><strong>影响性能</strong>：可以看到分片后每个分片都多了个 IP header，传输的数据更多了，同时 IP 数据报的分片与重组也会消耗性能。</li>
 <li><strong>分片丢失</strong>：<strong>IP 分片一旦丢失，整个数据报都要重传。</strong> 因为整个路由过程都有可能发生分片，源主机并不知道哪个分片丢失了，因此只能重传整个数据报。当然我们知道 IP 协议是不支持重传的，因此这一般是由上层协议实现。因为重传会影响性能，因此 TCP 协议会尽量避免重传。</li>
 </ul>
-<h4 id="ip-数据报重组">IP 数据报重组</h4>
+<h4 id="42-ip-数据报重组">4.2 IP 数据报重组</h4>
 <p>分片可以发生在源主机或者路由器上，但是 IP 数据包的重组只会在最终目的机器上进行。这样设计的原因有下面几个：</p>
 <ul>
 <li>IP 包的传输路径不一致，某个路由器可能无法获取所有的 fragment</li>
@@ -802,7 +1018,7 @@ IP 规定 127.0.0.0 ~ 127.255.255.255 范围内的地址为回环地址，向该
 
     <div class="post-nav">
         
-        <a href="https://zouyingjie.cn/2020/java-%E8%B5%84%E6%BA%90%E5%85%B3%E9%97%AD%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/" class="prev" rel="prev" title="Java 手动资源关闭最佳实践"><i class="iconfont icon-left"></i>&nbsp;Java 手动资源关闭最佳实践</a>
+        <a href="https://zouyingjie.cn/2020/java-finally-best-practice/" class="prev" rel="prev" title="Java 手动资源关闭最佳实践"><i class="iconfont icon-left"></i>&nbsp;Java 手动资源关闭最佳实践</a>
         
         
     </div>
