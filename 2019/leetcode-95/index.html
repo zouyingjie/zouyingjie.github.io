@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noodp"/>
+    <meta name="author" content="邹英杰">
+    <meta name="description" content="邹英杰的个人博客">
+    
+    
+    <link rel="prev" href="https://zouyingjie.cn/2019/leetcode-96/" />
+    <link rel="next" href="https://zouyingjie.cn/2019/arts-anniversary/" />
+    <link rel="canonical" href="https://zouyingjie.cn/2019/leetcode-95/" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <title>
+        
+        
+            LeetCode-95、96. Unique Binary Search Trees-简记 | AhriJ`s Blog
+        
+    </title>
+    <meta name="title" content="LeetCode-95、96. Unique Binary Search Trees-简记 | AhriJ`s Blog">
+    
+<link rel="stylesheet" href="/css/main.min.css">
+
+
+    
+    
+ 
+
+<script type="application/ld+json">
+{
+    "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/zouyingjie.cn"
+    },
+    "articleSection" : "posts",
+    "name" : "LeetCode-95、96. Unique Binary Search Trees-简记",
+    "headline" : "LeetCode-95、96. Unique Binary Search Trees-简记",
+    "description" : "\x3cp\x3eLeetCode 平衡二叉树刷题训练。\x3c\/p\x3e",
+    "inLanguage" : "zh-cn",
+    "author" : "邹英杰",
+    "creator" : "邹英杰",
+    "publisher": "邹英杰",
+    "accountablePerson" : "邹英杰",
+    "copyrightHolder" : "邹英杰",
+    "copyrightYear" : "2019",
+    "datePublished": "2019-07-30 00:00:00 \x2b0000 UTC",
+    "dateModified" : "2019-07-30 00:00:00 \x2b0000 UTC",
+    "url" : "https:\/\/zouyingjie.cn\/2019\/leetcode-95\/",
+    "wordCount" : "824",
+    "keywords" : [ "LeetCode","动态规划", "AhriJ`s Blog"]
+}
+</script>
+
+  </head>
+    <body class="">
+        <div class="wrapper">
+            <nav class="navbar">
+    
+        <progress class="content_progress" max="0" value="0"></progress>
+    
+    <div class="container">
+        
+            <div class="navbar-header header-back2home-logo">
+                <span class="logo_mark" >>$</span>
+                <a href="https://zouyingjie.cn">
+                    <span class="logo_text" >cd /home/</span>
+                    <span class="logo_cursor" ></span>
+                </a>
+            </div>
+        
+        <div class="navbar-right">
+                
+                <span class="menu">
+                
+                <a class="menu-item" href="/posts/" title="">Blog</a>
+                
+                <a class="menu-item" href="/categories/" title="">Categories</a>
+                
+                <a class="menu-item" href="/tags/" title="">Tags</a>
+                
+                <a class="menu-item" href="/about/" title="">About</a>
+                
+                <span class="divide"></span>
+                <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-dark-mode"></i></a>
+                </span>
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+    
+        <progress class="content_progress" max="0" value="0"></progress>
+    
+     <div class="container">
+        <div class="navbar">
+            <div class="navbar-header header-logo">
+                    <a href="https://zouyingjie.cn">AhriJ`s Blog</a>
+            </div>
+            <div class="navbar-right">
+                <div><a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-dark-mode"></i></a></div>
+                <div class="menu-toggle">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                <nav class="mb-md">
+                    
+                    
+                        <a class="menu-item" href="/posts/" title="">
+                            <h3>Blog</h3>
+                            <div class="menu-active"></div>
+                        </a>
+                    
+                        <a class="menu-item" href="/categories/" title="">
+                            <h3>Categories</h3>
+                            <div class="menu-active"></div>
+                        </a>
+                    
+                        <a class="menu-item" href="/tags/" title="">
+                            <h3>Tags</h3>
+                            <div class="menu-active"></div>
+                        </a>
+                    
+                        <a class="menu-item" href="/about/" title="">
+                            <h3>About</h3>
+                            <div class="menu-active"></div>
+                        </a>
+                    
+                </nav>
+        </div>
+    </div>
+</nav>
+            <main class="main">
+                <div class="container">
+                    
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">LeetCode-95、96. Unique Binary Search Trees-简记</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="https://zouyingjie.cn" rel="author">邹英杰</a> with ♥
+                <span class="post-time">
+                on <time datetime=2019-07-30 itemprop="datePublished">July 30, 2019</time>
+                </span>
+                in
+                
+                <i class="iconfont icon-folder"></i>
+                <span class="post-category">
+                        
+                        
+                        
+                          <a href="https://zouyingjie.cn/categories/leetcode/"> LeetCode, </a>
+                        
+                        
+                </span>
+                <span class="post-word-count">824 words</span>
+        </div>
+    </header>
+
+    <div class="post-content">
+        
+
+        
+        
+
+        
+        
+        
+        
+        
+
+        
+        
+        
+
+        <p>LeetCode 平衡二叉树刷题训练。</p>
+<h3 id="二-第-95-题unique-binary-search-trees-ii">二. 第 95 题：Unique Binary Search Trees II</h3>
+<p>第 96 题是求可以组成的 BST 数量，而 95 题则要求计算出所有的 BST。按照上面的思路，对于数字 N，[1, N] 任意一个数字都可以作为根节点，然后构建出所有的 BST，那么我们只需要搞明白计算出一个数字所有的 BST 求法，然后遍历 [1,N] 就可以得出所有的 BST。每个节点都有可选值区间，对于根节点是 [1,N]，那么遍历起点 start 为 1，终点 end 为 N，那么当遍历到 i 时，对于左子节点可选项是是 [start, i-1]，对于右子节点可选项是 [i+1, end]。</p>
+<p>这里以 <code>i=3,N=7</code> 为例，当 3 为根节点时，其左子节点的可选项为 [1,2]，右子节点可选项为 [4,5,6,7]，那么其可能的的结构一共有 8 种。而对于左右子节点，又可以采用相同的方式计算以各个数字为根节点时其左右子树的组成。因此对于数字 N，求解步骤如下：</p>
+<ul>
+<li>遍历节点的选项区间</li>
+<li>计算每个数字对应的左右字节点可选项，构建 BST 节点</li>
+<li>对于左右子节点，继续遍历其可选区间。递归求解</li>
+</ul>
+<p>代码如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Java" data-lang="Java"> List<span style="color:#f92672">&lt;</span>TreeNode<span style="color:#f92672">&gt;</span> leftNodes<span style="color:#f92672">,</span> rightnodes<span style="color:#f92672">;</span>
+
+<span style="color:#75715e">// 遍历区间
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> start<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;=</span> end<span style="color:#f92672">;</span> i <span style="color:#f92672">++)</span> <span style="color:#f92672">{</span>
+    <span style="color:#75715e">// 计算 i 对应的的左子节点选项
+</span><span style="color:#75715e"></span>    leftNodes <span style="color:#f92672">=</span> helper<span style="color:#f92672">(</span>start<span style="color:#f92672">,</span> i <span style="color:#f92672">-</span> 1<span style="color:#f92672">);</span>
+    <span style="color:#75715e">// 计算 i 的右子节点选项
+</span><span style="color:#75715e"></span>    rightnodes <span style="color:#f92672">=</span> helper<span style="color:#f92672">(</span>i <span style="color:#f92672">+</span> 1<span style="color:#f92672">,</span> end<span style="color:#f92672">);</span>
+
+    <span style="color:#75715e">// 双层遍历构建所有可能节点
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>TreeNode leftNode<span style="color:#f92672">:</span> leftNodes<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>TreeNode rightNode<span style="color:#f92672">:</span> rightnodes<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            TreeNode root <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> TreeNode<span style="color:#f92672">(</span>i<span style="color:#f92672">);</span>
+            root<span style="color:#f92672">.</span><span style="color:#a6e22e">left</span> <span style="color:#f92672">=</span> leftNode<span style="color:#f92672">;</span>
+            root<span style="color:#f92672">.</span><span style="color:#a6e22e">right</span> <span style="color:#f92672">=</span> rightNode<span style="color:#f92672">;</span>
+            nodes<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>root<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+
+</code></pre></div><p>上面就是整个递归的关键运算代码，而递归一定要有结束条件，</p>
+<ul>
+<li>start &gt; end：说明已经遍历完成了，此时不会再有可构造的节点，所以节点为 null</li>
+<li>start = end：已经遍历到最后，此时只有一种可能，就是节点值为 start，并且不会再有递归。</li>
+</ul>
+<p>代码表示如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Java" data-lang="Java">List<span style="color:#f92672">&lt;</span>TreeNode<span style="color:#f92672">&gt;</span> nodes <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ArrayList<span style="color:#f92672">&lt;&gt;();</span>
+
+<span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>start <span style="color:#f92672">&gt;</span> end<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    nodes<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">null</span><span style="color:#f92672">);</span>
+    <span style="color:#66d9ef">return</span> nodes<span style="color:#f92672">;</span>
+<span style="color:#f92672">}</span>
+
+<span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>start <span style="color:#f92672">==</span> end<span style="color:#f92672">){</span>
+    nodes<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> TreeNode<span style="color:#f92672">(</span>start<span style="color:#f92672">));</span>
+    <span style="color:#66d9ef">return</span> nodes<span style="color:#f92672">;</span>
+<span style="color:#f92672">}</span>
+
+</code></pre></div><p>这样递归操作和终止条件都有了，完整实现代码如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Java" data-lang="Java"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Solution</span> <span style="color:#f92672">{</span>
+
+    <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>TreeNode<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">generateTrees</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> n<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>n <span style="color:#f92672">==</span> 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> ArrayList<span style="color:#f92672">();</span>
+        <span style="color:#f92672">}</span>
+        <span style="color:#66d9ef">return</span> helper<span style="color:#f92672">(</span>1<span style="color:#f92672">,</span> n<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">private</span> List<span style="color:#f92672">&lt;</span>TreeNode<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">helper</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> start<span style="color:#f92672">,</span> <span style="color:#66d9ef">int</span> end<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        List<span style="color:#f92672">&lt;</span>TreeNode<span style="color:#f92672">&gt;</span> nodes <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ArrayList<span style="color:#f92672">&lt;&gt;();</span>
+
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>start <span style="color:#f92672">&gt;</span> end<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            nodes<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">null</span><span style="color:#f92672">);</span>
+            <span style="color:#66d9ef">return</span> nodes<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+
+        <span style="color:#75715e">// 这里多一次 start == end 的判断，可以减少下面两次 helper 的调用
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>start <span style="color:#f92672">==</span> end<span style="color:#f92672">){</span>
+            nodes<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> TreeNode<span style="color:#f92672">(</span>start<span style="color:#f92672">));</span>
+            <span style="color:#66d9ef">return</span> nodes<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+
+        List<span style="color:#f92672">&lt;</span>TreeNode<span style="color:#f92672">&gt;</span> leftNodes<span style="color:#f92672">,</span> rightnodes<span style="color:#f92672">;</span>
+        <span style="color:#75715e">// 遍历区间
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> start<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;=</span> end<span style="color:#f92672">;</span> i <span style="color:#f92672">++)</span> <span style="color:#f92672">{</span>
+            <span style="color:#75715e">// 计算 i 对应的的左子节点选项
+</span><span style="color:#75715e"></span>            leftNodes <span style="color:#f92672">=</span> helper<span style="color:#f92672">(</span>start<span style="color:#f92672">,</span> i <span style="color:#f92672">-</span> 1<span style="color:#f92672">);</span>
+            <span style="color:#75715e">// 计算 i 的右子节点选项
+</span><span style="color:#75715e"></span>             rightnodes <span style="color:#f92672">=</span> helper<span style="color:#f92672">(</span>i <span style="color:#f92672">+</span> 1<span style="color:#f92672">,</span> end<span style="color:#f92672">);</span>
+
+            <span style="color:#75715e">// 双层遍历构建 BST
+</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>TreeNode leftNode<span style="color:#f92672">:</span> leftNodes<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>TreeNode rightNode<span style="color:#f92672">:</span> rightnodes<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                    TreeNode root <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> TreeNode<span style="color:#f92672">(</span>i<span style="color:#f92672">);</span>
+                    root<span style="color:#f92672">.</span><span style="color:#a6e22e">left</span> <span style="color:#f92672">=</span> leftNode<span style="color:#f92672">;</span>
+                    root<span style="color:#f92672">.</span><span style="color:#a6e22e">right</span> <span style="color:#f92672">=</span> rightNode<span style="color:#f92672">;</span>
+                    nodes<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>root<span style="color:#f92672">);</span>
+                <span style="color:#f92672">}</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+        <span style="color:#66d9ef">return</span> nodes<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+
+</code></pre></div>
+    </div>
+
+    <div class="post-copyright">
+            
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>邹英杰 </span>
+                </p>
+            
+
+            
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=https://zouyingjie.cn/2019/leetcode-95/>https://zouyingjie.cn/2019/leetcode-95/</span>
+            </p>
+            
+            
+            <p class="copyright-item lincese">
+                本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可
+            </p>
+            
+    </div>
+
+
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-tag"></i>Tag(s):
+            
+            <span class="tag"><a href="https://zouyingjie.cn/tags/leetcode/">
+                    #LeetCode</a></span>
+            
+            <span class="tag"><a href="https://zouyingjie.cn/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">
+                    #动态规划</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> ·
+                <span><a href="https://zouyingjie.cn">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://zouyingjie.cn/2019/leetcode-96/" class="prev" rel="prev" title="LeetCode-95、96. Unique Binary Search Trees-简记"><i class="iconfont icon-left"></i>&nbsp;LeetCode-95、96. Unique Binary Search Trees-简记</a>
+        
+        
+        <a href="https://zouyingjie.cn/2019/arts-anniversary/" class="next" rel="next" title="ARTS 周年记">ARTS 周年记&nbsp;<i class="iconfont icon-right"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+        
+            
+                <div id="gitalk-container"></div>
+<link rel="stylesheet" href="https://cdn.bootcss.com/gitalk/1.5.2/gitalk.css">
+<script src="https://cdn.bootcss.com/gitalk/1.5.2/gitalk.min.js"></script>
+<script>
+    const gitalk = new Gitalk({
+        clientID: '644ea43e1177645f4f35',
+        clientSecret: '40a7db92fa7b2f61bf9f93956a7db0a6ac84ad1f',
+        repo: 'zouyingjie.github.io',
+        owner: 'zouyingjie',
+        admin: ['zouyingjie'],
+        id: location.pathname, 
+        distractionFreeMode: false, 
+        proxy : 'https:\/\/shielded-brushlands-08810.herokuapp.com\/https:\/\/github.com\/login\/oauth\/access_token',
+    });
+    (function () {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.';
+            return;
+        }
+        gitalk.render('gitalk-container');
+    })();
+</script>
+
+            
+        
+    </div>
+</article>
+                </div>
+            </main>
+            <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span itemprop="copyrightYear">2017 - 2021</span>
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i>
+         </span>
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://zouyingjie.cn">邹英杰</a> | </span>
+         
+
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/Mogeko/Mogege" target="_blank" rel="external nofollow">Mogege</a></span>
+    </div>
+</footer>
+
+
+
+
+
+
+<script defer src="/js/vendor_main.min.js"></script>
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/pangu@4.0.7/dist/browser/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script> pangu.spacingPage();</script>
+
+
+
+
+
+        </div>
+    </body>
+</html>

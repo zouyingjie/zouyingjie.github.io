@@ -13,19 +13,28 @@
     
     <item>
       <title>LeetCode-95、96. Unique Binary Search Trees-简记</title>
-      <link>https://zouyingjie.cn/2019/leetcode-9596.-unique-binary-search-trees-%E7%AE%80%E8%AE%B0/</link>
+      <link>https://zouyingjie.cn/2019/leetcode-95/</link>
       <pubDate>Tue, 30 Jul 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://zouyingjie.cn/2019/leetcode-9596.-unique-binary-search-trees-%E7%AE%80%E8%AE%B0/</guid>
+      <guid>https://zouyingjie.cn/2019/leetcode-95/</guid>
       <description>&lt;p&gt;LeetCode 平衡二叉树刷题训练。&lt;/p&gt;</description>
     </item>
     
     <item>
+      <title>LeetCode-95、96. Unique Binary Search Trees-简记</title>
+      <link>https://zouyingjie.cn/2019/leetcode-96/</link>
+      <pubDate>Tue, 30 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://zouyingjie.cn/2019/leetcode-96/</guid>
+      <description>一. 第 96 题：Unique Binary Search Trees LeetCode 第 96. Unique Binary Search Trees，题目概要： Given n, how many structurally unique BST&amp;rsquo;s (binary search trees) that store values 1 &amp;hellip; n? Example: Input: 3 Output: 5 Explanation: Given n = 3, there are a total of 5 unique BST&amp;rsquo;s: 1 3 3 2</description>
+    </item>
+    
+    <item>
       <title>LeetCode-337. House Robber III-简记</title>
-      <link>https://zouyingjie.cn/2019/leetcode-337.-house-robber-iii/</link>
+      <link>https://zouyingjie.cn/2019/leetcode-337./</link>
       <pubDate>Tue, 23 Jul 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://zouyingjie.cn/2019/leetcode-337.-house-robber-iii/</guid>
+      <guid>https://zouyingjie.cn/2019/leetcode-337./</guid>
       <description>&lt;p&gt;LeetCode 动态规划刷题训练。&lt;/p&gt;</description>
     </item>
     
