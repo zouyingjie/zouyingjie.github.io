@@ -56,7 +56,7 @@
     "datePublished": "2021-03-26 00:00:00 \x2b0000 UTC",
     "dateModified" : "2021-03-26 00:00:00 \x2b0000 UTC",
     "url" : "https:\/\/zouyingjie.cn\/2021\/networknote-ipv4\/",
-    "wordCount" : "8649",
+    "wordCount" : "8677",
     "keywords" : [ "TCP\/IP", "AhriJ`s Blog"]
 }
 </script>
@@ -163,7 +163,7 @@
                         
                         
                 </span>
-                <span class="post-word-count">8649 words</span>
+                <span class="post-word-count">8677 words</span>
         </div>
     </header>
 
@@ -233,8 +233,7 @@
 <h4 id="ip-协议发展历史">IP 协议发展历史</h4>
 <p>IP 协议作为 TCP/IP 协议栈中最重要的协议，其最开始是属于 TCP 协议的一部分的，后来单独独立出来。1981 年，<a href="https://tools.ietf.org/html/rfc791">RFC 791</a> 发布，这标志着 IP 协议正式诞生，其定义了 IP 版本的核心功能和特性，并一直沿用至今。</p>
 <p><a href="https://tools.ietf.org/html/rfc791">RFC 791</a>  定义的 IP 版本为 4，其原因是早期的 TCP 经历了三个较早的版本，并在版本 4 分为了 TCP 和 IP。为了保持一致性，该版本号同时应用于 TCP 和 IP。</p>
-<p>当前主流版本就是 4，也就是我们常说的 IPv4，一般情况下我们说的 IP 协议默认就是 IPv4。
-但因为一些原因，比如 IPv4 存在地址不足的等原因，新版本的 IP 协议始终是需要的，最新版本的 IP 协议是 IPv6(Internet Protocol version 6 )，也被称为 <strong>IPng（IP Next Generation）</strong>。</p>
+<p>当前主流版本就是 4，也就是我们常说的 IPv4，一般情况下我们说的 IP 协议默认就是 IPv4。但因为 IPv4 存在地址不足的等原因，新版本的 IP 协议始终是需要的，最新版本的 IP 协议是 IPv6(Internet Protocol version 6 )，也被称为 <strong>IPng（IP Next Generation）</strong>。</p>
 <h4 id="ip-协议的功能与特性">IP 协议的功能与特性</h4>
 <p>简单来说，IP 协议主要实现了一个功能：</p>
 <blockquote>
@@ -671,7 +670,7 @@ IP 规定 127.0.0.0 ~ 127.255.255.255 范围内的地址为回环地址，向该
 <tr>
 <td>Header Checksum</td>
 <td>2</td>
-<td>首部校验和，用于验证数据，防止数据被损坏，其仅计算 IP 首部的内容，不对首部后面的数据做计算。</td>
+<td>首部校验和，用于验证数据，防止数据被损坏，其仅计算 IP 首部的内容，不对首部后面的数据做计算。具体计算方式是：首先将校验和字段设置为 0，然后每两个字节（16bit）做一次计算得到补码，然后求和。</td>
 </tr>
 <tr>
 <td>Source Address</td>
@@ -805,7 +804,7 @@ IP 规定 127.0.0.0 ~ 127.255.255.255 范围内的地址为回环地址，向该
 <tr>
 <td>Precedence(优先权)</td>
 <td>3bit</td>
-<td>标识数据报的优先级，有 8 个只，优先级由低到高是：000: Routine</td>
+<td>标识数据报的优先级，有 8 个值</td>
 </tr>
 <tr>
 <td>D</td>
