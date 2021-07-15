@@ -6,10 +6,28 @@
     <description>Recent content in Posts on AhriJ`s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 26 Mar 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 20 Apr 2021 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://zouyingjie.cn/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>TCP 协议笔记（01）- TCP Overview 与 TCP 数据包格式</title>
+      <link>https://zouyingjie.cn/2021/networknote-tcp01/</link>
+      <pubDate>Tue, 20 Apr 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://zouyingjie.cn/2021/networknote-tcp01/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>TCP 协议笔记（01）- 状态机与连接管理</title>
+      <link>https://zouyingjie.cn/2021/networknote-tcp02/</link>
+      <pubDate>Tue, 13 Apr 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://zouyingjie.cn/2021/networknote-tcp02/</guid>
+      <description>TCP 一个巨复杂的协议，但其核心机制主要有两个：有限状态机和滑动窗口机制。理解了这两个概念和工作机制 1. TCP 有限状态机 TCP 是一个面向连接的协议，所谓连</description>
+    </item>
     
     <item>
       <title>网络协议笔记-IPv4 协议</title>
