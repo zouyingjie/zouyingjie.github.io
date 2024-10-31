@@ -62,21 +62,18 @@ icon = "brand-twitter"
     enabled = false
     default = "Licensed under CC BY-NC-SA 4.0"
 
-  [params.comments]
+  [Params.Comments]
   enabled = true
   provider = "giscus"
-  [params.comments.giscus]
-    reactionsEnabled = 1
-    emitMetadata = 0
-    enable = true
+  [Params.Comments.giscus]
+    src = "https://giscus.app/client.js"
     repo = "zouyingjie/zouyingjie.github.io"
     repoId = "R_kgDONIBCAw"
     category = "Announcements"
     categoryId = "DIC_kwDONIBCA84Cj2UX"
     mapping = "pathname"
     data-input-position="bottom"
-    data-lang="zh-CN"
-    data-theme="preferred_color_scheme"
+
 
 
 [[params.widgets.homepage]]
