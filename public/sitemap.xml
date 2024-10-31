@@ -23,6 +23,24 @@
     <loc>http://localhost:1313/</loc>
     <lastmod>2024-10-30T14:34:37+08:00</lastmod>
   </url><url>
+    <loc>http://localhost:1313/post/gfs%E8%AF%A6%E8%A7%A3/</loc>
+    <lastmod>2024-10-30T11:34:37+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/post/mapreduce%E8%AF%A6%E8%A7%A3/</loc>
+    <lastmod>2024-10-30T11:34:37+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/</loc>
+    <lastmod>2024-10-30T11:34:37+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/</loc>
+    <lastmod>2024-10-30T11:34:37+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/</loc>
+    <lastmod>2024-10-30T11:34:37+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/categories/%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/</loc>
+    <lastmod>2024-10-30T11:34:37+08:00</lastmod>
+  </url><url>
     <loc>http://localhost:1313/post/iptables%E8%B5%84%E6%96%99%E6%8E%A8%E8%8D%90/</loc>
     <lastmod>2023-09-02T09:17:14+00:00</lastmod>
   </url><url>
