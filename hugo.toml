@@ -63,38 +63,21 @@ icon = "brand-twitter"
     default = "Licensed under CC BY-NC-SA 4.0"
 
   [params.comments]
-  enabled = false
-  provider = "disqus"
-
-    [params.comments.disqusjs]
-
-    [params.comments.utterances]
-    issueTerm = "pathname"
-
-    [params.comments.beaudar]
-    issueTerm = "pathname"
-
-    [params.comments.remark42]
-
-    [params.comments.vssue]
-    autoCreateIssue = false
-
-    [params.comments.waline]
-    emoji = [ "https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo" ]
-    requiredMeta = [ "nick", "mail" ]
-
-      [params.comments.waline.locale]
-      admin = "Admin"
-
-    [params.comments.twikoo]
-
-    [params.comments.giscus]
+  enabled = true
+  provider = "giscus"
+  [params.comments.giscus]
     reactionsEnabled = 1
     emitMetadata = 0
+    enable = true
+    repo = "zouyingjie/zouyingjie.github.io"
+    repoId = "R_kgDONIBCAw"
+    category = "Announcements"
+    categoryId = "DIC_kwDONIBCA84Cj2UX"
+    mapping = "pathname"
+    data-input-position="bottom"
+    data-lang="zh-CN"
+    data-theme="preferred_color_scheme"
 
-    [params.comments.gitalk]
-
-    [params.comments.cusdis]
 
 [[params.widgets.homepage]]
 type = "search"
