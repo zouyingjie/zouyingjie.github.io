@@ -72,8 +72,8 @@ icon = "brand-twitter"
     category = "Announcements"
     categoryId = "DIC_kwDONIBCA84Cj2UX"
     mapping = "pathname"
-    data-input-position="bottom"
-
+    inputPosition = "bottom"
+    lang = "zh-CN"
 
 
 [[params.widgets.homepage]]
