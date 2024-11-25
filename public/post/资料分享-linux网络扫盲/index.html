@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en-us" dir="ltr">
     <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="推荐一些学习 iptables 的优质材料，包括入门介绍、深入原理、NAT 等。">
-<title>【资料推荐】一些学习iptables的优质材料</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="之前为了学习 Kubernetes 网络，需要对 Linux 网络有一个比较全面的了解。这里推荐一些学习过程中觉得不错的资料，可以帮助有需要的同学快速入门。 # Introduction to Linux interfaces for virtual networking 介绍了 Linux 中常用的网络概念，比如 bridge 网桥、veth 对、VLAN &amp; VXLAN、MACVLAN 等，可以帮助自己对这些概念做一个快速的了解。 # An introduction to Linux virtual interfaces: Tunnels 算是上一篇文章的姊妹篇，主要介绍了 Linux 网络隧道相关的知识点。简单来说，隧道本质上都是在 IP 包里带上另外一个包，这个包可能是另一个 IP 包，也可能是 UDP 或者其他包，传输时通过外层的 IP 做路由，到达目的地后再解析出内部的包在做一次路由。 VXLAN &amp; Linux 一篇介绍 VXLAN 的文章，可以帮助自己对 VXLAN 有更好的理解。 How Container Networking Works: a Docker Bridge Network From Scratch 前三篇算是对 Linux 网络的一个扫盲，有了这些基础知识再看现在的容器和 Kubernetes 网络，就会发现都是上述基础知识的运用。这些硬核基础知识始终应该是我们学习的重点。 这一篇是非常详细的介绍容器网络，尤其是其提供了在线的 Playground 帮助自己边读边练，手把手创建网桥设备、veth 以及配置 iptables。文章读完，自己也跟着手把手将容器网络实现了。 容器网络与生态 周志明老师《凤凰架构》一书中的章节，对容器网络的技术做了整体性的梳理，可以看到上面文章中提到的技术是如何应用在容器网络中的。">
+<title>【资料推荐】Linux 网络扫盲帖</title>
 
-<link rel='canonical' href='http://localhost:1313/post/iptables%E8%B5%84%E6%96%99%E6%8E%A8%E8%8D%90/'>
+<link rel='canonical' href='http://localhost:1313/post/%E8%B5%84%E6%96%99%E5%88%86%E4%BA%AB-linux%E7%BD%91%E7%BB%9C%E6%89%AB%E7%9B%B2/'>
 
-<link rel="stylesheet" href="/scss/style.min.a852226dbc58e92e6be364455821a4c709483bbb290b825546f34b5af980fd45.css"><meta property='og:title' content="【资料推荐】一些学习iptables的优质材料">
-<meta property='og:description' content="推荐一些学习 iptables 的优质材料，包括入门介绍、深入原理、NAT 等。">
-<meta property='og:url' content='http://localhost:1313/post/iptables%E8%B5%84%E6%96%99%E6%8E%A8%E8%8D%90/'>
+<link rel="stylesheet" href="/scss/style.min.a852226dbc58e92e6be364455821a4c709483bbb290b825546f34b5af980fd45.css"><meta property='og:title' content="【资料推荐】Linux 网络扫盲帖">
+<meta property='og:description' content="之前为了学习 Kubernetes 网络，需要对 Linux 网络有一个比较全面的了解。这里推荐一些学习过程中觉得不错的资料，可以帮助有需要的同学快速入门。 # Introduction to Linux interfaces for virtual networking 介绍了 Linux 中常用的网络概念，比如 bridge 网桥、veth 对、VLAN &amp; VXLAN、MACVLAN 等，可以帮助自己对这些概念做一个快速的了解。 # An introduction to Linux virtual interfaces: Tunnels 算是上一篇文章的姊妹篇，主要介绍了 Linux 网络隧道相关的知识点。简单来说，隧道本质上都是在 IP 包里带上另外一个包，这个包可能是另一个 IP 包，也可能是 UDP 或者其他包，传输时通过外层的 IP 做路由，到达目的地后再解析出内部的包在做一次路由。 VXLAN &amp; Linux 一篇介绍 VXLAN 的文章，可以帮助自己对 VXLAN 有更好的理解。 How Container Networking Works: a Docker Bridge Network From Scratch 前三篇算是对 Linux 网络的一个扫盲，有了这些基础知识再看现在的容器和 Kubernetes 网络，就会发现都是上述基础知识的运用。这些硬核基础知识始终应该是我们学习的重点。 这一篇是非常详细的介绍容器网络，尤其是其提供了在线的 Playground 帮助自己边读边练，手把手创建网桥设备、veth 以及配置 iptables。文章读完，自己也跟着手把手将容器网络实现了。 容器网络与生态 周志明老师《凤凰架构》一书中的章节，对容器网络的技术做了整体性的梳理，可以看到上面文章中提到的技术是如何应用在容器网络中的。">
+<meta property='og:url' content='http://localhost:1313/post/%E8%B5%84%E6%96%99%E5%88%86%E4%BA%AB-linux%E7%BD%91%E7%BB%9C%E6%89%AB%E7%9B%B2/'>
 <meta property='og:site_name' content='寻雾启示'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='iptables' /><meta property='article:tag' content='计算机网络' /><meta property='article:published_time' content='2023-09-02T09:17:14&#43;00:00'/><meta property='article:modified_time' content='2023-09-02T09:17:14&#43;00:00'/>
-<meta name="twitter:title" content="【资料推荐】一些学习iptables的优质材料">
-<meta name="twitter:description" content="推荐一些学习 iptables 的优质材料，包括入门介绍、深入原理、NAT 等。">
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Linux' /><meta property='article:tag' content='Network' /><meta property='article:published_time' content='2024-11-25T11:30:42&#43;08:00'/><meta property='article:modified_time' content='2024-11-25T11:30:42&#43;08:00'/>
+<meta name="twitter:title" content="【资料推荐】Linux 网络扫盲帖">
+<meta name="twitter:description" content="之前为了学习 Kubernetes 网络，需要对 Linux 网络有一个比较全面的了解。这里推荐一些学习过程中觉得不错的资料，可以帮助有需要的同学快速入门。 # Introduction to Linux interfaces for virtual networking 介绍了 Linux 中常用的网络概念，比如 bridge 网桥、veth 对、VLAN &amp; VXLAN、MACVLAN 等，可以帮助自己对这些概念做一个快速的了解。 # An introduction to Linux virtual interfaces: Tunnels 算是上一篇文章的姊妹篇，主要介绍了 Linux 网络隧道相关的知识点。简单来说，隧道本质上都是在 IP 包里带上另外一个包，这个包可能是另一个 IP 包，也可能是 UDP 或者其他包，传输时通过外层的 IP 做路由，到达目的地后再解析出内部的包在做一次路由。 VXLAN &amp; Linux 一篇介绍 VXLAN 的文章，可以帮助自己对 VXLAN 有更好的理解。 How Container Networking Works: a Docker Bridge Network From Scratch 前三篇算是对 Linux 网络的一个扫盲，有了这些基础知识再看现在的容器和 Kubernetes 网络，就会发现都是上述基础知识的运用。这些硬核基础知识始终应该是我们学习的重点。 这一篇是非常详细的介绍容器网络，尤其是其提供了在线的 Playground 帮助自己边读边练，手把手创建网桥设备、veth 以及配置 iptables。文章读完，自己也跟着手把手将容器网络实现了。 容器网络与生态 周志明老师《凤凰架构》一书中的章节，对容器网络的技术做了整体性的梳理，可以看到上面文章中提到的技术是如何应用在容器网络中的。">
     </head>
     <body class="
     article-page
@@ -192,12 +192,8 @@
     
     <header class="article-category">
         
-            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" >
-                计算机网络
-            </a>
-        
-            <a href="/categories/iptables/" >
-                Iptables
+            <a href="/categories/linux/" >
+                Linux
             </a>
         
     </header>
@@ -205,13 +201,9 @@
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/post/iptables%E8%B5%84%E6%96%99%E6%8E%A8%E8%8D%90/">【资料推荐】一些学习iptables的优质材料</a>
+            <a href="/post/%E8%B5%84%E6%96%99%E5%88%86%E4%BA%AB-linux%E7%BD%91%E7%BB%9C%E6%89%AB%E7%9B%B2/">【资料推荐】Linux 网络扫盲帖</a>
         </h2>
     
-        
-        <h3 class="article-subtitle">
-            推荐一些学习 iptables 的优质材料，包括入门介绍、深入原理、NAT 等。
-        </h3>
         
     </div>
 
@@ -231,7 +223,7 @@
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published">Sep 02, 2023</time>
+                <time class="article-time--published">Nov 25, 2024</time>
             </div>
         
 
@@ -261,69 +253,33 @@
     <section class="article-content">
     
     
-    <p>iptables 是 Linux 下的一个非常重要的网络包过滤工具，可以用来配置防火墙、NAT 等。学习 iptables 有助于理解网络包的传输过程、网络安全等。Kubernetes 在 1.31 版本中引入 nfttables 前，也使用 iptables 作为 kube-proxy 的实现。</p>
-<p>iptables 的原理和使用方法网上有很多资料，这里推荐一些个人觉得不错的材料。</p>
+    <p>之前为了学习 Kubernetes 网络，需要对 Linux 网络有一个比较全面的了解。这里推荐一些学习过程中觉得不错的资料，可以帮助有需要的同学快速入门。</p>
 <ol>
-<li><a class="link" href="https://iximiuz.com/en/posts/laymans-iptables-101/"  target="_blank" rel="noopener"
-    >Illustrated introduction to Linux iptables</a></li>
+<li><a class="link" href="https://developers.redhat.com/blog/2018/10/22/introduction-to-linux-interfaces-for-virtual-networking#ifb"  target="_blank" rel="noopener"
+    ># Introduction to Linux interfaces for virtual networking</a></li>
 </ol>
-<p>一篇非常好的介绍 iptables 的入门文章，给出了大量的图例帮助理解。比如 iptables 是基于 netfilter 的 hook 点工作的。文章给出的图示非常直观的将 5 个 hook 的生效位置展现了出来。</p>
-<p><img src="https://iximiuz.com/laymans-iptables-101/iptables-stages-white.png"
-	
-	
-	
-	loading="lazy"
-	
-	
-></p>
+<p>介绍了 Linux 中常用的网络概念，比如 bridge 网桥、veth 对、VLAN &amp; VXLAN、MACVLAN 等，可以帮助自己对这些概念做一个快速的了解。</p>
 <ol start="2">
-<li><a class="link" href="https://www.digitalocean.com/community/tutorials/a-deep-dive-into-iptables-and-netfilter-architecture"  target="_blank" rel="noopener"
-    >A Deep Dive into Iptables and Netfilter Architecture</a></li>
+<li><a class="link" href="https://developers.redhat.com/blog/2019/05/17/an-introduction-to-linux-virtual-interfaces-tunnels#summary"  target="_blank" rel="noopener"
+    ># An introduction to Linux virtual interfaces: Tunnels</a></li>
 </ol>
-<p>这篇文章讲的更细致一些，对表的功能、优先级、规则做了比较全面的介绍，非常浅显易懂。读英文觉得困难的话也可以看这篇译文 <a class="link" href="https://arthurchiao.art/blog/deep-dive-into-iptables-and-netfilter-arch-zh/"  target="_blank" rel="noopener"
-    >(译)深入理解 iptables 和 netfilter 架构</a>。</p>
-<p>读完上述两篇文章，对 iptables 就能有个基本的理解了。</p>
-<p>简单来说，iptables 就是使用 netfilter 提供的 hook 点来注册 IP 包的处理规则， iptables 基于功能（过滤、地址转换、修改包、追踪、安全）将这些规则组织成了不同的表。</p>
-<p>每个表有若干个规则链，iptables 默认有 5 种链，对应 netfilter 的 5 个 hook 点。在某个表的某个链上添加规则，本质上就是在链对应的 hook 点注册规则。如果多个表在同一个链上注册规则，则基于表的优先级生效。</p>
-<p>结合包的传输顺序、表的作用点和优先级，就形成了文章中的二维表格：</p>
-<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/iptables-001.png"
-	
-	
-	
-	loading="lazy"
-	
-		alt="alt text"
-	
-	
-></p>
-<p>Tables 列有由上到下代表的 table 的执行顺序，由此我们可以得出处理网络包时，iptables 规则执行顺序：</p>
-<ul>
-<li>发送到本机的包：<code>PREROUTING(raw, mangle, dnat)</code> -&gt; <code>INPUT(mangle, filter, security, snat)</code></li>
-<li>本机路由到其他机器的包：<code>PREROUTING(raw, mangle, dnat)</code> -&gt; <code>FORWARD(mangle, filter, security)</code> -&gt; <code>POSTROUTING(mangle, snat)</code></li>
-<li>本地发送到其他机器的包：<code>OUTPUT(raw, mangle, dnat, filter, security)</code> -&gt; <code>POSTROUTING（mangle, snat）</code></li>
-</ul>
-<p>理解了上述内容，在看下面这张经典的配图就不至于头大了。</p>
-<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/iptables-002.png"
-	
-	
-	
-	loading="lazy"
-	
-		alt="alt text"
-	
-	
-></p>
+<p>算是上一篇文章的姊妹篇，主要介绍了 Linux 网络隧道相关的知识点。简单来说，隧道本质上都是在 IP 包里带上另外一个包，这个包可能是另一个 IP 包，也可能是 UDP 或者其他包，传输时通过外层的 IP 做路由，到达目的地后再解析出内部的包在做一次路由。</p>
 <ol start="3">
-<li><a class="link" href="https://www.karlrupp.net/en/computer/nat_tutorial"  target="_blank" rel="noopener"
-    >Network Address Translation</a></li>
+<li><a class="link" href="https://vincent.bernat.ch/en/blog/2017-vxlan-linux"  target="_blank" rel="noopener"
+    >VXLAN &amp; Linux</a></li>
 </ol>
-<p>这篇文章对 iptables 中的 NAT 做了更细致的讲解。也可以看这篇译文 <a class="link" href="https://arthurchiao.art/blog/nat-zh/"  target="_blank" rel="noopener"
-    >(译)# NAT - 网络地址转换</a>。</p>
+<p>一篇介绍 VXLAN 的文章，可以帮助自己对 VXLAN 有更好的理解。</p>
 <ol start="4">
-<li><a class="link" href="https://www.zsythink.net/archives/tag/iptables/"  target="_blank" rel="noopener"
-    >iptables 快速入门系列文章</a></li>
+<li><a class="link" href="https://labs.iximiuz.com/tutorials/container-networking-from-scratch"  target="_blank" rel="noopener"
+    >How Container Networking Works: a Docker Bridge Network From Scratch</a></li>
 </ol>
-<p>国内一位技术人员写的一系列关于 iptables 的文章，有十几篇，从基础到进阶都有涉及，通俗易懂的介绍了 iptables 的概念、命令、用法，非常值得一读。</p>
+<p>前三篇算是对 Linux 网络的一个扫盲，有了这些基础知识再看现在的容器和 Kubernetes 网络，就会发现都是上述基础知识的运用。这些硬核基础知识始终应该是我们学习的重点。</p>
+<p>这一篇是非常详细的介绍容器网络，尤其是其提供了在线的 Playground 帮助自己边读边练，手把手创建网桥设备、veth 以及配置 iptables。文章读完，自己也跟着手把手将容器网络实现了。</p>
+<ol start="5">
+<li><a class="link" href="https://icyfenix.cn/immutable-infrastructure/network/cni.html"  target="_blank" rel="noopener"
+    >容器网络与生态</a></li>
+</ol>
+<p>周志明老师《凤凰架构》一书中的章节，对容器网络的技术做了整体性的梳理，可以看到上面文章中提到的技术是如何应用在容器网络中的。</p>
 
 </section>
 
@@ -332,9 +288,9 @@
     
     <section class="article-tags">
         
-            <a href="/tags/iptables/">Iptables</a>
+            <a href="/tags/linux/">Linux</a>
         
-            <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>
+            <a href="/tags/network/">Network</a>
         
     </section>
 

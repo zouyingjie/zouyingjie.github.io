@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en-us" dir="ltr">
     <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="推荐一些学习 iptables 的优质材料，包括入门介绍、深入原理、NAT 等。">
-<title>【资料推荐】一些学习iptables的优质材料</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="之前工作中经常遇到 TLS 证书配置的情况，比如 Kafka 的 SALA + TLS 安全配置，ES 的 TLS 配置等。通常这些场景下使用自签名证书就足够了。 这里对这些常用的命令做记录备忘，方便后续使用。 首先，我们需要生成 CA 的密钥和证书。命令如下： openssl req -new -x509 -keyout ca-key -out ca-cert -days 3650 参数说明： -new：生成一个新的证书请求 -x509：生成一个自签名证书 -keyout：指定输出 CA 密钥的文件名 -out：指定输出 CA 证书的文件名 -days：指定证书的有效期（天） 然后我们就可以生成服务的私钥并签发证书了。 生成私钥 openssl genpkey -algorithm RSA -aes256 -out server-key.pem 1. 生成 CA 的密钥和证书 openssl req -new -x509 -keyout ca-key -out ca-cert -days 3650 参数说明： -new：生成一个新的证书请求 -x509：生成一个自签名证书 -keyout：指定输出 CA 密钥的文件名 -out：指定输出 CA 证书的文件名 -days：指定证书的有效期（天） 2. 生成服务密钥库和密钥对 keytool -keystore kafka.">
+<title>Openssl &amp; Keytool 自签名证书命令备忘</title>
 
-<link rel='canonical' href='http://localhost:1313/post/iptables%E8%B5%84%E6%96%99%E6%8E%A8%E8%8D%90/'>
+<link rel='canonical' href='http://localhost:1313/post/openssl%E8%87%AA%E7%AD%BE%E5%90%8D%E8%AF%81%E4%B9%A6%E5%91%BD%E4%BB%A4%E5%A4%87%E5%BF%98/'>
 
-<link rel="stylesheet" href="/scss/style.min.a852226dbc58e92e6be364455821a4c709483bbb290b825546f34b5af980fd45.css"><meta property='og:title' content="【资料推荐】一些学习iptables的优质材料">
-<meta property='og:description' content="推荐一些学习 iptables 的优质材料，包括入门介绍、深入原理、NAT 等。">
-<meta property='og:url' content='http://localhost:1313/post/iptables%E8%B5%84%E6%96%99%E6%8E%A8%E8%8D%90/'>
+<link rel="stylesheet" href="/scss/style.min.a852226dbc58e92e6be364455821a4c709483bbb290b825546f34b5af980fd45.css"><meta property='og:title' content="Openssl & Keytool 自签名证书命令备忘">
+<meta property='og:description' content="之前工作中经常遇到 TLS 证书配置的情况，比如 Kafka 的 SALA + TLS 安全配置，ES 的 TLS 配置等。通常这些场景下使用自签名证书就足够了。 这里对这些常用的命令做记录备忘，方便后续使用。 首先，我们需要生成 CA 的密钥和证书。命令如下： openssl req -new -x509 -keyout ca-key -out ca-cert -days 3650 参数说明： -new：生成一个新的证书请求 -x509：生成一个自签名证书 -keyout：指定输出 CA 密钥的文件名 -out：指定输出 CA 证书的文件名 -days：指定证书的有效期（天） 然后我们就可以生成服务的私钥并签发证书了。 生成私钥 openssl genpkey -algorithm RSA -aes256 -out server-key.pem 1. 生成 CA 的密钥和证书 openssl req -new -x509 -keyout ca-key -out ca-cert -days 3650 参数说明： -new：生成一个新的证书请求 -x509：生成一个自签名证书 -keyout：指定输出 CA 密钥的文件名 -out：指定输出 CA 证书的文件名 -days：指定证书的有效期（天） 2. 生成服务密钥库和密钥对 keytool -keystore kafka.">
+<meta property='og:url' content='http://localhost:1313/post/openssl%E8%87%AA%E7%AD%BE%E5%90%8D%E8%AF%81%E4%B9%A6%E5%91%BD%E4%BB%A4%E5%A4%87%E5%BF%98/'>
 <meta property='og:site_name' content='寻雾启示'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='iptables' /><meta property='article:tag' content='计算机网络' /><meta property='article:published_time' content='2023-09-02T09:17:14&#43;00:00'/><meta property='article:modified_time' content='2023-09-02T09:17:14&#43;00:00'/>
-<meta name="twitter:title" content="【资料推荐】一些学习iptables的优质材料">
-<meta name="twitter:description" content="推荐一些学习 iptables 的优质材料，包括入门介绍、深入原理、NAT 等。">
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='TLS' /><meta property='article:published_time' content='2024-11-25T10:43:20&#43;08:00'/><meta property='article:modified_time' content='2024-11-25T10:43:20&#43;08:00'/>
+<meta name="twitter:title" content="Openssl & Keytool 自签名证书命令备忘">
+<meta name="twitter:description" content="之前工作中经常遇到 TLS 证书配置的情况，比如 Kafka 的 SALA + TLS 安全配置，ES 的 TLS 配置等。通常这些场景下使用自签名证书就足够了。 这里对这些常用的命令做记录备忘，方便后续使用。 首先，我们需要生成 CA 的密钥和证书。命令如下： openssl req -new -x509 -keyout ca-key -out ca-cert -days 3650 参数说明： -new：生成一个新的证书请求 -x509：生成一个自签名证书 -keyout：指定输出 CA 密钥的文件名 -out：指定输出 CA 证书的文件名 -days：指定证书的有效期（天） 然后我们就可以生成服务的私钥并签发证书了。 生成私钥 openssl genpkey -algorithm RSA -aes256 -out server-key.pem 1. 生成 CA 的密钥和证书 openssl req -new -x509 -keyout ca-key -out ca-cert -days 3650 参数说明： -new：生成一个新的证书请求 -x509：生成一个自签名证书 -keyout：指定输出 CA 密钥的文件名 -out：指定输出 CA 证书的文件名 -days：指定证书的有效期（天） 2. 生成服务密钥库和密钥对 keytool -keystore kafka.">
     </head>
     <body class="
     article-page
@@ -182,7 +182,43 @@
     </ol>
 </aside>
 
-    
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#1-生成-ca-的密钥和证书">1. 生成 CA 的密钥和证书</a></li>
+        <li><a href="#2-生成服务密钥库和密钥对">2. 生成服务密钥库和密钥对</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
 
             <main class="main full-width">
     <article class="main-article">
@@ -192,12 +228,8 @@
     
     <header class="article-category">
         
-            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" >
-                计算机网络
-            </a>
-        
-            <a href="/categories/iptables/" >
-                Iptables
+            <a href="/categories/tls/" >
+                TLS
             </a>
         
     </header>
@@ -205,13 +237,9 @@
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/post/iptables%E8%B5%84%E6%96%99%E6%8E%A8%E8%8D%90/">【资料推荐】一些学习iptables的优质材料</a>
+            <a href="/post/openssl%E8%87%AA%E7%AD%BE%E5%90%8D%E8%AF%81%E4%B9%A6%E5%91%BD%E4%BB%A4%E5%A4%87%E5%BF%98/">Openssl &amp; Keytool 自签名证书命令备忘</a>
         </h2>
     
-        
-        <h3 class="article-subtitle">
-            推荐一些学习 iptables 的优质材料，包括入门介绍、深入原理、NAT 等。
-        </h3>
         
     </div>
 
@@ -231,7 +259,7 @@
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published">Sep 02, 2023</time>
+                <time class="article-time--published">Nov 25, 2024</time>
             </div>
         
 
@@ -261,70 +289,51 @@
     <section class="article-content">
     
     
-    <p>iptables 是 Linux 下的一个非常重要的网络包过滤工具，可以用来配置防火墙、NAT 等。学习 iptables 有助于理解网络包的传输过程、网络安全等。Kubernetes 在 1.31 版本中引入 nfttables 前，也使用 iptables 作为 kube-proxy 的实现。</p>
-<p>iptables 的原理和使用方法网上有很多资料，这里推荐一些个人觉得不错的材料。</p>
-<ol>
-<li><a class="link" href="https://iximiuz.com/en/posts/laymans-iptables-101/"  target="_blank" rel="noopener"
-    >Illustrated introduction to Linux iptables</a></li>
-</ol>
-<p>一篇非常好的介绍 iptables 的入门文章，给出了大量的图例帮助理解。比如 iptables 是基于 netfilter 的 hook 点工作的。文章给出的图示非常直观的将 5 个 hook 的生效位置展现了出来。</p>
-<p><img src="https://iximiuz.com/laymans-iptables-101/iptables-stages-white.png"
-	
-	
-	
-	loading="lazy"
-	
-	
-></p>
-<ol start="2">
-<li><a class="link" href="https://www.digitalocean.com/community/tutorials/a-deep-dive-into-iptables-and-netfilter-architecture"  target="_blank" rel="noopener"
-    >A Deep Dive into Iptables and Netfilter Architecture</a></li>
-</ol>
-<p>这篇文章讲的更细致一些，对表的功能、优先级、规则做了比较全面的介绍，非常浅显易懂。读英文觉得困难的话也可以看这篇译文 <a class="link" href="https://arthurchiao.art/blog/deep-dive-into-iptables-and-netfilter-arch-zh/"  target="_blank" rel="noopener"
-    >(译)深入理解 iptables 和 netfilter 架构</a>。</p>
-<p>读完上述两篇文章，对 iptables 就能有个基本的理解了。</p>
-<p>简单来说，iptables 就是使用 netfilter 提供的 hook 点来注册 IP 包的处理规则， iptables 基于功能（过滤、地址转换、修改包、追踪、安全）将这些规则组织成了不同的表。</p>
-<p>每个表有若干个规则链，iptables 默认有 5 种链，对应 netfilter 的 5 个 hook 点。在某个表的某个链上添加规则，本质上就是在链对应的 hook 点注册规则。如果多个表在同一个链上注册规则，则基于表的优先级生效。</p>
-<p>结合包的传输顺序、表的作用点和优先级，就形成了文章中的二维表格：</p>
-<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/iptables-001.png"
-	
-	
-	
-	loading="lazy"
-	
-		alt="alt text"
-	
-	
-></p>
-<p>Tables 列有由上到下代表的 table 的执行顺序，由此我们可以得出处理网络包时，iptables 规则执行顺序：</p>
+    <p>之前工作中经常遇到 TLS 证书配置的情况，比如 Kafka 的 SALA + TLS 安全配置，ES 的 TLS 配置等。通常这些场景下使用自签名证书就足够了。</p>
+<p>这里对这些常用的命令做记录备忘，方便后续使用。</p>
+<p>首先，我们需要生成 CA 的密钥和证书。命令如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>openssl req -new -x509 -keyout ca-key -out ca-cert -days <span style="color:#ae81ff">3650</span>
+</span></span></code></pre></div><p>参数说明：</p>
 <ul>
-<li>发送到本机的包：<code>PREROUTING(raw, mangle, dnat)</code> -&gt; <code>INPUT(mangle, filter, security, snat)</code></li>
-<li>本机路由到其他机器的包：<code>PREROUTING(raw, mangle, dnat)</code> -&gt; <code>FORWARD(mangle, filter, security)</code> -&gt; <code>POSTROUTING(mangle, snat)</code></li>
-<li>本地发送到其他机器的包：<code>OUTPUT(raw, mangle, dnat, filter, security)</code> -&gt; <code>POSTROUTING（mangle, snat）</code></li>
+<li><code>-new</code>：生成一个新的证书请求</li>
+<li><code>-x509</code>：生成一个自签名证书</li>
+<li><code>-keyout</code>：指定输出 CA 密钥的文件名</li>
+<li><code>-out</code>：指定输出 CA 证书的文件名</li>
+<li><code>-days</code>：指定证书的有效期（天）</li>
 </ul>
-<p>理解了上述内容，在看下面这张经典的配图就不至于头大了。</p>
-<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/iptables-002.png"
-	
-	
-	
-	loading="lazy"
-	
-		alt="alt text"
-	
-	
-></p>
-<ol start="3">
-<li><a class="link" href="https://www.karlrupp.net/en/computer/nat_tutorial"  target="_blank" rel="noopener"
-    >Network Address Translation</a></li>
-</ol>
-<p>这篇文章对 iptables 中的 NAT 做了更细致的讲解。也可以看这篇译文 <a class="link" href="https://arthurchiao.art/blog/nat-zh/"  target="_blank" rel="noopener"
-    >(译)# NAT - 网络地址转换</a>。</p>
-<ol start="4">
-<li><a class="link" href="https://www.zsythink.net/archives/tag/iptables/"  target="_blank" rel="noopener"
-    >iptables 快速入门系列文章</a></li>
-</ol>
-<p>国内一位技术人员写的一系列关于 iptables 的文章，有十几篇，从基础到进阶都有涉及，通俗易懂的介绍了 iptables 的概念、命令、用法，非常值得一读。</p>
-
+<p>然后我们就可以生成服务的私钥并签发证书了。</p>
+<ul>
+<li>生成私钥</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>openssl genpkey -algorithm RSA -aes256 -out server-key.pem
+</span></span></code></pre></div><h3 id="1-生成-ca-的密钥和证书">1. 生成 CA 的密钥和证书
+</h3><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>openssl req -new -x509 -keyout ca-key -out ca-cert -days <span style="color:#ae81ff">3650</span>
+</span></span></code></pre></div><p>参数说明：</p>
+<ul>
+<li><code>-new</code>：生成一个新的证书请求</li>
+<li><code>-x509</code>：生成一个自签名证书</li>
+<li><code>-keyout</code>：指定输出 CA 密钥的文件名</li>
+<li><code>-out</code>：指定输出 CA 证书的文件名</li>
+<li><code>-days</code>：指定证书的有效期（天）</li>
+</ul>
+<h3 id="2-生成服务密钥库和密钥对">2. 生成服务密钥库和密钥对
+</h3><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>keytool -keystore kafka.server.keystore.jks -alias kafka_server -validity <span style="color:#ae81ff">3650</span> -genkey -keyalg RSA -storepass spirit-2426GPU -keypass spirit-2426GPU
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 为服务器证书生成证书签名请求（CSR）</span>
+</span></span><span style="display:flex;"><span>keytool -keystore kafka.server.keystore.jks -alias kafka_server -certreq -file kafka_server.csr -storepass spirit-2426GPU
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 使用 CA 签署服务器的 CSR</span>
+</span></span><span style="display:flex;"><span>openssl x509 -req -CA ca-cert -CAkey ca-key -in kafka_server.csr -out kafka_server-signed.crt -days <span style="color:#ae81ff">3650</span> -CAcreateserial -passin pass:spirit-2426GPU
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 将 CA 证书导入服务器密钥库</span>
+</span></span><span style="display:flex;"><span>keytool -keystore kafka.server.keystore.jks -alias kafka_ca -import -file ca-cert -storepass spirit-2426GPU
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 将签名后的服务器证书导入服务器密钥库</span>
+</span></span><span style="display:flex;"><span>keytool -keystore kafka.server.keystore.jks -alias kafka_server -import -file kafka_server-signed.crt -storepass spirit-2426GPU
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建服务器信任库并导入 CA 证书</span>
+</span></span><span style="display:flex;"><span>keytool -keystore kafka.server.truststore.jks -alias kafka_ca -import -file ca-cert -storepass spirit-1024Serverless
+</span></span></code></pre></div>
 </section>
 
 
@@ -332,9 +341,7 @@
     
     <section class="article-tags">
         
-            <a href="/tags/iptables/">Iptables</a>
-        
-            <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>
+            <a href="/tags/tls/">TLS</a>
         
     </section>
 

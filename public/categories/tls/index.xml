@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>TLS on 寻雾启示</title>
+        <link>http://localhost:1313/categories/tls/</link>
+        <description>Recent content in TLS on 寻雾启示</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <lastBuildDate>Mon, 25 Nov 2024 10:43:20 +0800</lastBuildDate><atom:link href="http://localhost:1313/categories/tls/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Openssl &amp; Keytool 自签名证书命令备忘</title>
+        <link>http://localhost:1313/post/openssl%E8%87%AA%E7%AD%BE%E5%90%8D%E8%AF%81%E4%B9%A6%E5%91%BD%E4%BB%A4%E5%A4%87%E5%BF%98/</link>
+        <pubDate>Mon, 25 Nov 2024 10:43:20 +0800</pubDate>
+        
+        <guid>http://localhost:1313/post/openssl%E8%87%AA%E7%AD%BE%E5%90%8D%E8%AF%81%E4%B9%A6%E5%91%BD%E4%BB%A4%E5%A4%87%E5%BF%98/</guid>
+        <description>&lt;p&gt;之前工作中经常遇到 TLS 证书配置的情况，比如 Kafka 的 SALA + TLS 安全配置，ES 的 TLS 配置等。通常这些场景下使用自签名证书就足够了。&lt;/p&gt;
+&lt;p&gt;这里对这些常用的命令做记录备忘，方便后续使用。&lt;/p&gt;
+&lt;p&gt;首先，我们需要生成 CA 的密钥和证书。命令如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;openssl req -new -x509 -keyout ca-key -out ca-cert -days &lt;span style=&#34;color:#ae81ff&#34;&gt;3650&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;参数说明：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-new&lt;/code&gt;：生成一个新的证书请求&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-x509&lt;/code&gt;：生成一个自签名证书&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-keyout&lt;/code&gt;：指定输出 CA 密钥的文件名&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-out&lt;/code&gt;：指定输出 CA 证书的文件名&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-days&lt;/code&gt;：指定证书的有效期（天）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;然后我们就可以生成服务的私钥并签发证书了。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;生成私钥&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;openssl genpkey -algorithm RSA -aes256 -out server-key.pem
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;1-生成-ca-的密钥和证书&#34;&gt;1. 生成 CA 的密钥和证书
+&lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;openssl req -new -x509 -keyout ca-key -out ca-cert -days &lt;span style=&#34;color:#ae81ff&#34;&gt;3650&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;参数说明：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-new&lt;/code&gt;：生成一个新的证书请求&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-x509&lt;/code&gt;：生成一个自签名证书&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-keyout&lt;/code&gt;：指定输出 CA 密钥的文件名&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-out&lt;/code&gt;：指定输出 CA 证书的文件名&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-days&lt;/code&gt;：指定证书的有效期（天）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;2-生成服务密钥库和密钥对&#34;&gt;2. 生成服务密钥库和密钥对
+&lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;keytool -keystore kafka.server.keystore.jks -alias kafka_server -validity &lt;span style=&#34;color:#ae81ff&#34;&gt;3650&lt;/span&gt; -genkey -keyalg RSA -storepass spirit-2426GPU -keypass spirit-2426GPU
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# 为服务器证书生成证书签名请求（CSR）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;keytool -keystore kafka.server.keystore.jks -alias kafka_server -certreq -file kafka_server.csr -storepass spirit-2426GPU
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# 使用 CA 签署服务器的 CSR&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;openssl x509 -req -CA ca-cert -CAkey ca-key -in kafka_server.csr -out kafka_server-signed.crt -days &lt;span style=&#34;color:#ae81ff&#34;&gt;3650&lt;/span&gt; -CAcreateserial -passin pass:spirit-2426GPU
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# 将 CA 证书导入服务器密钥库&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;keytool -keystore kafka.server.keystore.jks -alias kafka_ca -import -file ca-cert -storepass spirit-2426GPU
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# 将签名后的服务器证书导入服务器密钥库&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;keytool -keystore kafka.server.keystore.jks -alias kafka_server -import -file kafka_server-signed.crt -storepass spirit-2426GPU
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# 创建服务器信任库并导入 CA 证书&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;keytool -keystore kafka.server.truststore.jks -alias kafka_ca -import -file ca-cert -storepass spirit-1024Serverless
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+        </item>
+        
+    </channel>
+</rss>
