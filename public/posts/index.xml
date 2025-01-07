@@ -2,16 +2,16 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Posts on 寻雾启示</title>
-        <link>http://localhost:1313/posts/</link>
+        <link>https://zouyingjie.github.io/posts/</link>
         <description>Recent content in Posts on 寻雾启示</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Wed, 30 Oct 2024 14:34:37 +0800</lastBuildDate><atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 30 Oct 2024 14:34:37 +0800</lastBuildDate><atom:link href="https://zouyingjie.github.io/posts/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>AWS NAT Gateway 使用简记</title>
-        <link>http://localhost:1313/posts/awsnatgateway%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/</link>
+        <link>https://zouyingjie.github.io/posts/awsnatgateway%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/</link>
         <pubDate>Wed, 30 Oct 2024 14:34:37 +0800</pubDate>
         
-        <guid>http://localhost:1313/posts/awsnatgateway%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/</guid>
+        <guid>https://zouyingjie.github.io/posts/awsnatgateway%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/</guid>
         <description>&lt;p&gt;最近项目遇到个需求，需要将后端的服务器出口统一成一个 IP，服务器在 AWS 上，这个可以用 AWS 的 NAT Gateway 实现，调研实施的过程中发现如果对 AWS 相关概念不熟悉的话会绕点路的，这里简单整理下，希望对需要的小伙伴有帮助。&lt;/p&gt;
 &lt;h3 id=&#34;一-相关概念简介&#34;&gt;一. 相关概念简介
 &lt;/h3&gt;&lt;h4 id=&#34;1-nat-gateway&#34;&gt;1. NAT Gateway
@@ -223,20 +223,11 @@
 </description>
         </item>
         <item>
-        <title>【论文精读】 GPS 详解</title>
-        <link>http://localhost:1313/posts/my-first-post/</link>
-        <pubDate>Wed, 30 Oct 2024 11:34:37 +0800</pubDate>
-        
-        <guid>http://localhost:1313/posts/my-first-post/</guid>
-        <description>&lt;p&gt;this is a test&lt;/p&gt;
-</description>
-        </item>
-        <item>
         <title>【动手实验】MySQL 客户端 SocketTimeout 问题抓包分析</title>
-        <link>http://localhost:1313/posts/mysql%E5%AE%A2%E6%88%B7%E7%AB%AFtimeout%E5%88%86%E6%9E%90/</link>
+        <link>https://zouyingjie.github.io/posts/mysql%E5%AE%A2%E6%88%B7%E7%AB%AFtimeout%E5%88%86%E6%9E%90/</link>
         <pubDate>Sat, 02 Sep 2023 09:17:14 +0000</pubDate>
         
-        <guid>http://localhost:1313/posts/mysql%E5%AE%A2%E6%88%B7%E7%AB%AFtimeout%E5%88%86%E6%9E%90/</guid>
+        <guid>https://zouyingjie.github.io/posts/mysql%E5%AE%A2%E6%88%B7%E7%AB%AFtimeout%E5%88%86%E6%9E%90/</guid>
         <description>&lt;h2 id=&#34;实验准备&#34;&gt;实验准备
 &lt;/h2&gt;&lt;h3 id=&#34;服务端环境准备&#34;&gt;服务端环境准备
 &lt;/h3&gt;&lt;ul&gt;
@@ -911,10 +902,10 @@
         </item>
         <item>
         <title>【资料推荐】一些学习iptables的优质材料</title>
-        <link>http://localhost:1313/posts/iptables%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99%E6%8E%A8%E8%8D%90/</link>
+        <link>https://zouyingjie.github.io/posts/iptables%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99%E6%8E%A8%E8%8D%90/</link>
         <pubDate>Sat, 02 Sep 2023 09:17:14 +0000</pubDate>
         
-        <guid>http://localhost:1313/posts/iptables%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99%E6%8E%A8%E8%8D%90/</guid>
+        <guid>https://zouyingjie.github.io/posts/iptables%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99%E6%8E%A8%E8%8D%90/</guid>
         <description>&lt;p&gt;iptables 是 Linux 下的一个非常重要的网络包过滤工具，可以用来配置防火墙、NAT 等。学习 iptables 有助于理解网络包的传输过程、网络安全等。Kubernetes 在 1.31 版本中引入 nfttables 前，也使用 iptables 作为 kube-proxy 的实现。&lt;/p&gt;
 &lt;p&gt;iptables 的原理和使用方法网上有很多资料，这里推荐一些个人觉得不错的材料。&lt;/p&gt;
 &lt;ol&gt;

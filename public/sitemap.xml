@@ -2,117 +2,92 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://localhost:1313/tags/aws/</loc>
+    <loc>https://zouyingjie.github.io/tags/aws/</loc>
     <lastmod>2024-10-30T14:34:37+08:00</lastmod>
     <changefreq>always</changefreq>
     <priority>0.5</priority>
   </url><url>
-    <loc>http://localhost:1313/categories/aws/</loc>
+    <loc>https://zouyingjie.github.io/categories/aws/</loc>
     <lastmod>2024-10-30T14:34:37+08:00</lastmod>
     <changefreq>always</changefreq>
     <priority>0.5</priority>
   </url><url>
-    <loc>http://localhost:1313/posts/awsnatgateway%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/</loc>
+    <loc>https://zouyingjie.github.io/posts/awsnatgateway%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/</loc>
     <lastmod>2024-10-30T14:34:37+08:00</lastmod>
     <changefreq>always</changefreq>
     <priority>0.5</priority>
   </url><url>
-    <loc>http://localhost:1313/categories/</loc>
+    <loc>https://zouyingjie.github.io/categories/</loc>
     <lastmod>2024-10-30T14:34:37+08:00</lastmod>
     <changefreq>always</changefreq>
     <priority>0.5</priority>
   </url><url>
-    <loc>http://localhost:1313/posts/</loc>
+    <loc>https://zouyingjie.github.io/posts/</loc>
     <lastmod>2024-10-30T14:34:37+08:00</lastmod>
     <changefreq>always</changefreq>
     <priority>0.5</priority>
   </url><url>
-    <loc>http://localhost:1313/tags/</loc>
+    <loc>https://zouyingjie.github.io/tags/</loc>
     <lastmod>2024-10-30T14:34:37+08:00</lastmod>
     <changefreq>always</changefreq>
     <priority>0.5</priority>
   </url><url>
-    <loc>http://localhost:1313/</loc>
+    <loc>https://zouyingjie.github.io/</loc>
     <lastmod>2024-10-30T14:34:37+08:00</lastmod>
     <changefreq>always</changefreq>
     <priority>0.5</priority>
   </url><url>
-    <loc>http://localhost:1313/posts/my-first-post/</loc>
-    <lastmod>2024-10-30T11:34:37+08:00</lastmod>
-    <changefreq>always</changefreq>
-    <priority>0.5</priority>
-  </url><url>
-    <loc>http://localhost:1313/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/</loc>
-    <lastmod>2024-10-30T11:34:37+08:00</lastmod>
-    <changefreq>always</changefreq>
-    <priority>0.5</priority>
-  </url><url>
-    <loc>http://localhost:1313/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/</loc>
-    <lastmod>2024-10-30T11:34:37+08:00</lastmod>
-    <changefreq>always</changefreq>
-    <priority>0.5</priority>
-  </url><url>
-    <loc>http://localhost:1313/tags/%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/</loc>
-    <lastmod>2024-10-30T11:34:37+08:00</lastmod>
-    <changefreq>always</changefreq>
-    <priority>0.5</priority>
-  </url><url>
-    <loc>http://localhost:1313/categories/%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/</loc>
-    <lastmod>2024-10-30T11:34:37+08:00</lastmod>
-    <changefreq>always</changefreq>
-    <priority>0.5</priority>
-  </url><url>
-    <loc>http://localhost:1313/posts/mysql%E5%AE%A2%E6%88%B7%E7%AB%AFtimeout%E5%88%86%E6%9E%90/</loc>
+    <loc>https://zouyingjie.github.io/posts/mysql%E5%AE%A2%E6%88%B7%E7%AB%AFtimeout%E5%88%86%E6%9E%90/</loc>
     <lastmod>2023-09-02T09:17:14+00:00</lastmod>
     <changefreq>always</changefreq>
     <priority>0.5</priority>
   </url><url>
-    <loc>http://localhost:1313/posts/iptables%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99%E6%8E%A8%E8%8D%90/</loc>
+    <loc>https://zouyingjie.github.io/posts/iptables%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99%E6%8E%A8%E8%8D%90/</loc>
     <lastmod>2023-09-02T09:17:14+00:00</lastmod>
     <changefreq>always</changefreq>
     <priority>0.5</priority>
   </url><url>
-    <loc>http://localhost:1313/tags/iptables/</loc>
+    <loc>https://zouyingjie.github.io/tags/iptables/</loc>
     <lastmod>2023-09-02T09:17:14+00:00</lastmod>
     <changefreq>always</changefreq>
     <priority>0.5</priority>
   </url><url>
-    <loc>http://localhost:1313/categories/iptables/</loc>
+    <loc>https://zouyingjie.github.io/categories/iptables/</loc>
     <lastmod>2023-09-02T09:17:14+00:00</lastmod>
     <changefreq>always</changefreq>
     <priority>0.5</priority>
   </url><url>
-    <loc>http://localhost:1313/tags/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/</loc>
+    <loc>https://zouyingjie.github.io/tags/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/</loc>
     <lastmod>2023-09-02T09:17:14+00:00</lastmod>
     <changefreq>always</changefreq>
     <priority>0.5</priority>
   </url><url>
-    <loc>http://localhost:1313/categories/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/</loc>
+    <loc>https://zouyingjie.github.io/categories/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/</loc>
     <lastmod>2023-09-02T09:17:14+00:00</lastmod>
     <changefreq>always</changefreq>
     <priority>0.5</priority>
   </url><url>
-    <loc>http://localhost:1313/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</loc>
+    <loc>https://zouyingjie.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</loc>
     <lastmod>2023-09-02T09:17:14+00:00</lastmod>
     <changefreq>always</changefreq>
     <priority>0.5</priority>
   </url><url>
-    <loc>http://localhost:1313/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</loc>
+    <loc>https://zouyingjie.github.io/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</loc>
     <lastmod>2023-09-02T09:17:14+00:00</lastmod>
     <changefreq>always</changefreq>
     <priority>0.5</priority>
   </url><url>
-    <loc>http://localhost:1313/page/archives/</loc>
+    <loc>https://zouyingjie.github.io/page/archives/</loc>
     <lastmod>2019-05-28T00:00:00+00:00</lastmod>
     <changefreq>always</changefreq>
     <priority>0.5</priority>
   </url><url>
-    <loc>http://localhost:1313/page/</loc>
+    <loc>https://zouyingjie.github.io/page/</loc>
     <lastmod>2019-05-28T00:00:00+00:00</lastmod>
     <changefreq>always</changefreq>
     <priority>0.5</priority>
   </url><url>
-    <loc>http://localhost:1313/page/about/</loc>
+    <loc>https://zouyingjie.github.io/page/about/</loc>
     <lastmod>2019-05-28T00:00:00+00:00</lastmod>
     <changefreq>always</changefreq>
     <priority>0.5</priority>

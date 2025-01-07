@@ -2,16 +2,16 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Iptables on 寻雾启示</title>
-        <link>http://localhost:1313/tags/iptables/</link>
+        <link>https://zouyingjie.github.io/tags/iptables/</link>
         <description>Recent content in Iptables on 寻雾启示</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Sat, 02 Sep 2023 09:17:14 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/iptables/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sat, 02 Sep 2023 09:17:14 +0000</lastBuildDate><atom:link href="https://zouyingjie.github.io/tags/iptables/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>【资料推荐】一些学习iptables的优质材料</title>
-        <link>http://localhost:1313/posts/iptables%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99%E6%8E%A8%E8%8D%90/</link>
+        <link>https://zouyingjie.github.io/posts/iptables%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99%E6%8E%A8%E8%8D%90/</link>
         <pubDate>Sat, 02 Sep 2023 09:17:14 +0000</pubDate>
         
-        <guid>http://localhost:1313/posts/iptables%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99%E6%8E%A8%E8%8D%90/</guid>
+        <guid>https://zouyingjie.github.io/posts/iptables%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99%E6%8E%A8%E8%8D%90/</guid>
         <description>&lt;p&gt;iptables 是 Linux 下的一个非常重要的网络包过滤工具，可以用来配置防火墙、NAT 等。学习 iptables 有助于理解网络包的传输过程、网络安全等。Kubernetes 在 1.31 版本中引入 nfttables 前，也使用 iptables 作为 kube-proxy 的实现。&lt;/p&gt;
 &lt;p&gt;iptables 的原理和使用方法网上有很多资料，这里推荐一些个人觉得不错的材料。&lt;/p&gt;
 &lt;ol&gt;

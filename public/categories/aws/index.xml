@@ -2,16 +2,16 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>AWS on 寻雾启示</title>
-        <link>http://localhost:1313/categories/aws/</link>
+        <link>https://zouyingjie.github.io/categories/aws/</link>
         <description>Recent content in AWS on 寻雾启示</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Wed, 30 Oct 2024 14:34:37 +0800</lastBuildDate><atom:link href="http://localhost:1313/categories/aws/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 30 Oct 2024 14:34:37 +0800</lastBuildDate><atom:link href="https://zouyingjie.github.io/categories/aws/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>AWS NAT Gateway 使用简记</title>
-        <link>http://localhost:1313/posts/awsnatgateway%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/</link>
+        <link>https://zouyingjie.github.io/posts/awsnatgateway%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/</link>
         <pubDate>Wed, 30 Oct 2024 14:34:37 +0800</pubDate>
         
-        <guid>http://localhost:1313/posts/awsnatgateway%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/</guid>
+        <guid>https://zouyingjie.github.io/posts/awsnatgateway%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/</guid>
         <description>&lt;p&gt;最近项目遇到个需求，需要将后端的服务器出口统一成一个 IP，服务器在 AWS 上，这个可以用 AWS 的 NAT Gateway 实现，调研实施的过程中发现如果对 AWS 相关概念不熟悉的话会绕点路的，这里简单整理下，希望对需要的小伙伴有帮助。&lt;/p&gt;
 &lt;h3 id=&#34;一-相关概念简介&#34;&gt;一. 相关概念简介
 &lt;/h3&gt;&lt;h4 id=&#34;1-nat-gateway&#34;&gt;1. NAT Gateway
