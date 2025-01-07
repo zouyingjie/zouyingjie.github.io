@@ -1,0 +1,143 @@
+baseURL: https://zouyingjie.github.io
+languageCode: en-us
+title: 寻雾启示
+theme: "hugo-theme-stack"
+hasCJKLanguage: true
+enableEmoji: true
+
+pagination:
+    pagerSize: 3
+
+menu:
+  main:
+    - name: "Home"
+      url: "/"
+      weight: 2
+      identifier: "/"
+      params:
+        icon: "messages"
+
+    - name: "云原生"
+      url: "https://architecture-notes.tech/"
+      weight: 5
+      params:
+        icon: "link"
+        newTab: true
+    - name: "X(Twitter)"
+      url: "https://x.com/BoyYingjiezou1"
+      weight: 19
+      params:
+        icon: "brand-twitter"
+        newTab: true
+
+params:
+  description: So you have to trust that the dots will somehow connect in your future
+  mainSections:
+    - posts
+  featuredImageField: "image"
+  rssFullContent: true
+  customCSS:
+    - "css/custom.css"
+  social:
+    - identifier: "twitter"
+      name: "Twitter"
+      url: "https://x.com/ixiaowenz"
+  footer:
+    since: 2007
+    customText:
+  dateFormat:
+    published: Jan 02, 2006
+    lastUpdated: Jan 02, 2006 15:04 MST
+  sidebar:
+    compact: false
+    emoji: "😈"
+    subtitle: "So you have to trust that the dots will somehow connect in your future"
+    avatar:
+      enabled: true
+      local: true
+      src: "/img/avatar.png"
+  article:
+    math: false
+    toc: true
+    readingTime: true
+    license:
+      enabled: true
+      default: "Licensed under CC BY-NC-SA 4.0"
+  comments:
+    enabled: true
+    provider: "giscus"
+    giscus:
+      src: "https://giscus.app/client.js"
+      repo: "zouyingjie/zouyingjie.github.io"
+      repoId: "R_kgDONIBCAw"
+      category: "Announcements"
+      categoryId: "DIC_kwDONIBCA84Cj2UX"
+      mapping: "pathname"
+      inputPosition: "bottom"
+      lang: "zh-CN"
+  widgets:
+    homepage:
+      - type: search
+      - type: categories
+        params:
+          limit: 20
+      - type: archives
+        params:
+          limit: 20
+      - type: tag-cloud
+        params:
+          limit: 30
+    page:
+      - type: toc
+  opengraph:
+    twitter:
+      # Your Twitter username
+      site: iamshaynez
+
+      # Available values: summary, summary_large_image
+      card: summary_large_image
+  colorScheme:
+    # Display toggle
+    toggle: true
+
+    # Available values: auto, light, dark
+    default: light
+
+  imageProcessing:
+    cover:
+      enabled: true
+    content:
+      enabled: true
+sitemap:
+  changefreq: always
+  filename: sitemap.xml
+  priority: 0.5
+
+related:
+  includeNewer: true
+  threshold: 60
+  toLower: false
+  indices:
+    - name: tags
+      weight: 100
+
+    - name: categories
+      weight: 200
+
+markup:
+  goldmark:
+    renderer:
+      ## Set to true if you have HTML content inside Markdown
+      unsafe: true
+  tableOfContents:
+    endLevel: 4
+    ordered: true
+    startLevel: 2
+  highlight:
+    noClasses: false
+    codeFences: true
+    guessSyntax: true
+    lineNoStart: 1
+    lineNos: true
+    lineNumbersInTable: true
+    tabWidth: 4

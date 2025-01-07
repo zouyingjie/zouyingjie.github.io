@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="AWS NAT 网关介绍以及使用方式简介">
+<title>AWS NAT Gateway 使用简记</title>
+
+<link rel='canonical' href='http://localhost:1313/posts/awsnatgateway%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/'>
+
+<link rel="stylesheet" href="/scss/style.min.baa0c6fc03d63243c69d7ca6090e93d8e0abfa2a14c598edcda6406f8031901c.css"><meta property='og:title' content="AWS NAT Gateway 使用简记">
+<meta property='og:description' content="AWS NAT 网关介绍以及使用方式简介">
+<meta property='og:url' content='http://localhost:1313/posts/awsnatgateway%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/'>
+<meta property='og:site_name' content='寻雾启示'>
+<meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:tag' content='AWS' /><meta property='article:published_time' content='2024-10-30T14:34:37&#43;08:00'/><meta property='article:modified_time' content='2024-10-30T14:34:37&#43;08:00'/>
+<meta name="twitter:site" content="@iamshaynez">
+    <meta name="twitter:creator" content="@iamshaynez"><meta name="twitter:title" content="AWS NAT Gateway 使用简记">
+<meta name="twitter:description" content="AWS NAT 网关介绍以及使用方式简介">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "light");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hue8ac1b12d28d2f82755e78ff12ac0e80_107847_300x0_resize_box_3.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">😈</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">寻雾启示</a></h1>
+            <h2 class="site-description">So you have to trust that the dots will somehow connect in your future</h2>
+        </div>
+    </header><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-messages" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M21 14l-3 -3h-7a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1h9a1 1 0 0 1 1 1v10" />
+  <path d="M14 15v2a1 1 0 0 1 -1 1h-7l-3 3v-10a1 1 0 0 1 1 -1h2" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/page/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='https://architecture-notes.tech/' target="_blank">
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>云原生</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/page/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='https://x.com/BoyYingjiezou1' target="_blank">
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                
+                <span>X(Twitter)</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li>
+      <ol>
+        <li><a href="#一-相关概念简介">一. 相关概念简介</a>
+          <ol>
+            <li><a href="#1-nat-gateway">1. NAT Gateway</a></li>
+          </ol>
+        </li>
+        <li><a href="#二-nat-网关设置">二. NAT 网关设置</a>
+          <ol>
+            <li><a href="#1-设置私有子网">1. 设置私有子网</a></li>
+            <li><a href="#2-创建私有服务器与跳板机">2. 创建私有服务器与跳板机</a></li>
+            <li><a href="#3-创建-nat-网关">3. 创建 NAT 网关</a></li>
+            <li><a href="#4-修改私有子网的路由表">4. 修改私有子网的路由表</a></li>
+            <li><a href="#5-测试网络">5. 测试网络</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/aws/" >
+                AWS
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/posts/awsnatgateway%E4%BD%BF%E7%94%A8%E7%AE%80%E8%AE%B0/">AWS NAT Gateway 使用简记</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            AWS NAT 网关介绍以及使用方式简介
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Oct 30, 2024</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    4 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>最近项目遇到个需求，需要将后端的服务器出口统一成一个 IP，服务器在 AWS 上，这个可以用 AWS 的 NAT Gateway 实现，调研实施的过程中发现如果对 AWS 相关概念不熟悉的话会绕点路的，这里简单整理下，希望对需要的小伙伴有帮助。</p>
+<h3 id="一-相关概念简介">一. 相关概念简介
+</h3><h4 id="1-nat-gateway">1. NAT Gateway
+</h4><p><a class="link" href="https://docs.aws.amazon.com/zh_cn/vpc/latest/userguide/vpc-nat-gateway.html"  target="_blank" rel="noopener"
+    >NAT Gateway（网络地址转换网关）</a> 主要用来对一组私有子网内的服务器进行代理，被代理的所有服务器的对外请求都将通过 NAT 网关发出，这样目标服务所看到的请求 IP 也都是 NAT 网关的 IP。这么做有两个好处：</p>
+<ul>
+<li>应用服务器只能在内网访问，提高了安全性</li>
+<li>如果要访问的服务存在 IP 白名单的话，只需要将 NAT 网关的 IP 加进去即可，不需要挨个添加服务器地址。（自己之前和一家公司对接数据接口，对方就有 IP 白名单，当时没有统一网关导致添加了 20 几个 IP，一旦服务器 IP 变了还得重加，都是泪。。。）</li>
+</ul>
+<p>下图是 AWS 官网中给出一个包含 NAT 网关的 VPC 架构图：</p>
+<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/f12bafc7ea70604f0f453de38612a21c.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>简单讲解一下，在 10.0.0.0 VPC 下有两个子网：公共子网 <code>10.0.0.0/24</code> 和 私有子网 <code>10.0.1.0/24</code>。NAT 网关位于公共子网中，因此可以访问公网。私有子网的三台机器连接到了 NAT 网关，对公网的访问全部通过 NAT 网关实现。</p>
+<p><em><strong>公共子网与私有子网</strong></em></p>
+<p>AWS 的 VPC 网络配置关系是：<em><strong>实例与子网关联，子网关联路由表，路由表设置网关</strong></em>。所谓公共子网就是其对应的路由表中配置了规则将请求路由到了 <code>Internet Gateway</code>，这样公共子网内的服务器实例、NAT 网关就可以对外访问。而私有子网就是其关联的路由表中没有配置到 <code>Internet Gatway</code> 的路由规则，因此无法对外访问。</p>
+<p>清楚了公共子网、私有子网的概念，就可以进行 NAT 网关的相关设置了。私有子网中的服务器通过 NAT 网关对外访问需要做下面几步操作：</p>
+<ul>
+<li>VPC 下创建公共子网和私有子网</li>
+<li>在私有子网中开通服务器实例</li>
+<li>在公共子网中开通 NAT 网关和登陆到私有服务器的跳板机</li>
+<li>修改私有子网的路由表规则，配置路由地址到 NAT 网关</li>
+<li>执行测试。</li>
+</ul>
+<p>下面是具体的操作，</p>
+<h3 id="二-nat-网关设置">二. NAT 网关设置
+</h3><h4 id="1-设置私有子网">1. 设置私有子网
+</h4><p>上面提到，AWS 中网络配置的关系：<code>实例与子网关联，子网关联路由表，路由表设置网关</code>。我在 AWS 香港地区有三个子网如下</p>
+<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/aws-nat-blog-01.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>所有子网的默认路由表配置一般都是指向了 <code>Internet Gateway</code>，如图所示：</p>
+<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/aws-nat-blog-02.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>图中 <code>0.0.0.0/0</code> 的规则就表示将所有的请求路由到默认的 <code>Internet Gateway</code>，从而可以与公网通信。为了将使得子网变为私有，我们需要自己新建路由表，并将指向 <code>Internet Gateway</code> 的路由规则给去掉，这样子网就无法直接访问公网了。如图所示：</p>
+<ul>
+<li>创建路由表</li>
+</ul>
+<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/aws-nat-blog-03.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/aws-nat-blog-04.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<ul>
+<li>修改子网关联</li>
+</ul>
+<p>可以看到新建好的路由表并没有关联子网，点击 <code>编辑子网关联</code> 将 <code>subnet-1f2a2767</code> 子网关联上，这样这个子网下的服务器就无法和公网通信了。</p>
+<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/aws-nat-blog-05.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/aws-nat-blog-06.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<h4 id="2-创建私有服务器与跳板机">2. 创建私有服务器与跳板机
+</h4><p>我选择第上面关联到自定义路由表的自我一个子网 <code>subnet-1f2a2767</code> 作为私有子网，第二个 f500f 作为公有子网。在私有子网下开了两台服务器，在公有子网下设置了一台服务器作为跳板机，步骤如下，注意在 「配置示例」模块选择对应的子网，并将在私有子网中的服务器禁用公网 IP。</p>
+<ul>
+<li>选择服务器</li>
+</ul>
+<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/aws-nat-blog-07.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="01"
+	
+	
+></p>
+<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/aws-nat-blog-08.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="02"
+	
+	
+></p>
+<ul>
+<li>选择子网，启动实例。</li>
+</ul>
+<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/aws-nat-blog-09.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="03"
+	
+	
+></p>
+<p>此时子网中的两台服务器是无法与公网通信的。跳板机的创建也是上面的步骤，只是要选择公共子网并设置公网 IP，这里不再赘述。</p>
+<h4 id="3-创建-nat-网关">3. 创建 NAT 网关
+</h4><p>在 AWS 的 VPC 控制面板，选择 「NAT 网关」，点击创建，需要选择子网，这里一定要选择公共子网，保证 NAT 网关是可以与公网通信。</p>
+<ul>
+<li>创建 NAT 网关，选择公共子网并分配 IP</li>
+</ul>
+<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/aws-nat-blog-10.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/aws-nat-blog-11.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>可以看到创建的 NAT 网关 IP 为 <code>18.162.217.123</code>，待 NAT 网关的状态变为可用之后就可以修改路由表，将子网中的请求路由到 NAT 网关了。</p>
+<h4 id="4-修改私有子网的路由表">4. 修改私有子网的路由表
+</h4><p>创建完成 NAT 网关之后，修改我们自己创建的私有子网的路由表，将子网中所有的请求路由到 NAT 网关了。如图：</p>
+<ul>
+<li>
+<p>选择之前新建的路由表，选择「编辑路由」
+<img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/aws-nat-blog-12.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+</li>
+<li>
+<p>第一栏目标设置为 <code>0.0.0.0/0</code> 表示除第一条外所有的请求都路由向设置的网关，第二栏目标选择 NAT 网关，就会出现可选的 NAT 网关列表
+<img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/aws-nat-blog-13.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+</li>
+<li>
+<p>选择上面新建的 NAT 网关</p>
+</li>
+</ul>
+<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/aws-nat-blog-14.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<h4 id="5-测试网络">5. 测试网络
+</h4><p>默认情况下，私有网络内的服务器是无法访问公网的，可以先用 ping 或者 curl 命令试下。配置完成之后就可以测试我们的私网服务器是否可以与外界通信了，我在腾讯云开了一台新的服务器并运行了 Nginx，访问情况如下：</p>
+<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/aws-nat-blog-15.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>可以看到私网内的服务器可以访问其他网络内的服务器了，然后看下腾讯云上的 Nginx 日志，如下：</p>
+<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/aws-nat-blog-16.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>日志中请求的源 IP 为 <code>18.162.217.123</code>，是我们设置的 NAT 网关的 IP 地址，由此通过 NAT 网关实现私有子网内服务器对外统一访问的设置就完成了。</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/aws/">AWS</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+     
+    
+        
+    <script
+    src="https://giscus.app/client.js"
+    data-repo="zouyingjie/zouyingjie.github.io"
+    data-repo-id="R_kgDONIBCAw"
+    data-category="Announcements"
+    data-category-id="DIC_kwDONIBCA84Cj2UX"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="light"
+    data-lang="zh-CN"
+    data-loading=""
+    crossorigin="anonymous"
+    async
+></script>
+<script>
+    function setGiscusTheme(theme) {
+        let giscus = document.querySelector("iframe.giscus-frame");
+        if (giscus) {
+            giscus.contentWindow.postMessage(
+                {
+                    giscus: {
+                        setConfig: {
+                            theme: theme,
+                        },
+                    },
+                },
+                "https://giscus.app"
+            );
+        }
+    }
+
+    (function () {
+        addEventListener("message", (e) => {
+            if (event.origin !== "https://giscus.app") return;
+            handler();
+        });
+        window.addEventListener("onColorSchemeChange", handler);
+
+        function handler() {
+            if (document.documentElement.dataset.scheme === "light") {
+                setGiscusTheme('light');
+            } else {
+                setGiscusTheme('dark_dimmed');
+            }
+        }
+    })();
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2007 - 
+        
+        2025 寻雾启示
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.29.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e229e17ea13345ce1ff5532b7580733bad2699c26d1b1efa3771d041940ef53.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

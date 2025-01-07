@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Iptables on 寻雾启示</title>
+        <link>http://localhost:1313/tags/iptables/</link>
+        <description>Recent content in Iptables on 寻雾启示</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <lastBuildDate>Sat, 02 Sep 2023 09:17:14 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/iptables/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>【资料推荐】一些学习iptables的优质材料</title>
+        <link>http://localhost:1313/posts/iptables%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99%E6%8E%A8%E8%8D%90/</link>
+        <pubDate>Sat, 02 Sep 2023 09:17:14 +0000</pubDate>
+        
+        <guid>http://localhost:1313/posts/iptables%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99%E6%8E%A8%E8%8D%90/</guid>
+        <description>&lt;p&gt;iptables 是 Linux 下的一个非常重要的网络包过滤工具，可以用来配置防火墙、NAT 等。学习 iptables 有助于理解网络包的传输过程、网络安全等。Kubernetes 在 1.31 版本中引入 nfttables 前，也使用 iptables 作为 kube-proxy 的实现。&lt;/p&gt;
+&lt;p&gt;iptables 的原理和使用方法网上有很多资料，这里推荐一些个人觉得不错的材料。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://iximiuz.com/en/posts/laymans-iptables-101/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Illustrated introduction to Linux iptables&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;一篇非常好的介绍 iptables 的入门文章，给出了大量的图例帮助理解。比如 iptables 是基于 netfilter 的 hook 点工作的。文章给出的图示非常直观的将 5 个 hook 的生效位置展现了出来。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://iximiuz.com/laymans-iptables-101/iptables-stages-white.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.digitalocean.com/community/tutorials/a-deep-dive-into-iptables-and-netfilter-architecture&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;A Deep Dive into Iptables and Netfilter Architecture&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这篇文章讲的更细致一些，对表的功能、优先级、规则做了比较全面的介绍，非常浅显易懂。读英文觉得困难的话也可以看这篇译文 &lt;a class=&#34;link&#34; href=&#34;https://arthurchiao.art/blog/deep-dive-into-iptables-and-netfilter-arch-zh/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;(译)深入理解 iptables 和 netfilter 架构&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;读完上述两篇文章，对 iptables 就能有个基本的理解了。&lt;/p&gt;
+&lt;p&gt;简单来说，iptables 就是使用 netfilter 提供的 hook 点来注册 IP 包的处理规则， iptables 基于功能（过滤、地址转换、修改包、追踪、安全）将这些规则组织成了不同的表。&lt;/p&gt;
+&lt;p&gt;每个表有若干个规则链，iptables 默认有 5 种链，对应 netfilter 的 5 个 hook 点。在某个表的某个链上添加规则，本质上就是在链对应的 hook 点注册规则。如果多个表在同一个链上注册规则，则基于表的优先级生效。&lt;/p&gt;
+&lt;p&gt;结合包的传输顺序、表的作用点和优先级，就形成了文章中的二维表格：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/iptables-001.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Tables 列有由上到下代表的 table 的执行顺序，由此我们可以得出处理网络包时，iptables 规则执行顺序：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;发送到本机的包：&lt;code&gt;PREROUTING(raw, mangle, dnat)&lt;/code&gt; -&amp;gt; &lt;code&gt;INPUT(mangle, filter, security, snat)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;本机路由到其他机器的包：&lt;code&gt;PREROUTING(raw, mangle, dnat)&lt;/code&gt; -&amp;gt; &lt;code&gt;FORWARD(mangle, filter, security)&lt;/code&gt; -&amp;gt; &lt;code&gt;POSTROUTING(mangle, snat)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;本地发送到其他机器的包：&lt;code&gt;OUTPUT(raw, mangle, dnat, filter, security)&lt;/code&gt; -&amp;gt; &lt;code&gt;POSTROUTING（mangle, snat）&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;理解了上述内容，在看下面这张经典的配图就不至于头大了。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/iptables-002.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;alt text&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.karlrupp.net/en/computer/nat_tutorial&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Network Address Translation&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这篇文章对 iptables 中的 NAT 做了更细致的讲解。也可以看这篇译文 &lt;a class=&#34;link&#34; href=&#34;https://arthurchiao.art/blog/nat-zh/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;(译)# NAT - 网络地址转换&lt;/a&gt;。&lt;/p&gt;
+&lt;ol start=&#34;4&#34;&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.zsythink.net/archives/tag/iptables/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;iptables 快速入门系列文章&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;国内一位技术人员写的一系列关于 iptables 的文章，有十几篇，从基础到进阶都有涉及，通俗易懂的介绍了 iptables 的概念、命令、用法，非常值得一读。&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>
