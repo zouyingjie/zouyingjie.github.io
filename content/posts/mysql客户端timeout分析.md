@@ -242,7 +242,7 @@ Caused by: java.net.SocketTimeoutException: Read timed out
 
 ![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/mysql-sockettimeout-06.png)
 
-### 实验三：sleep(10) 但查询不到数据
+## 实验三：sleep(10) 但查询不到数据
 这里将传递的 ID 改为 10，数据库中是没有这条数据的，因此 sleep(10) 不会生效，查询会正常执行，
 
 ```shell
