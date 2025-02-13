@@ -1,0 +1,1756 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="握个手，好朋友">
+<title>【动手实验】TCP 连接的建立与关闭抓包分析</title>
+
+<link rel='canonical' href='http://localhost:1313/posts/%E5%AE%9E%E9%AA%8C-tcp%E8%BF%9E%E6%8E%A5%E5%BB%BA%E7%AB%8B%E4%B8%8E%E5%85%B3%E9%97%AD%E6%8A%93%E5%8C%85/'>
+
+<link rel="stylesheet" href="/scss/style.min.6a538462a5b07a9b5e41eaaf70b78b9a19378364a05f79bed5b4bc01a31d2e87.css"><meta property='og:title' content="【动手实验】TCP 连接的建立与关闭抓包分析">
+<meta property='og:description' content="握个手，好朋友">
+<meta property='og:url' content='http://localhost:1313/posts/%E5%AE%9E%E9%AA%8C-tcp%E8%BF%9E%E6%8E%A5%E5%BB%BA%E7%AB%8B%E4%B8%8E%E5%85%B3%E9%97%AD%E6%8A%93%E5%8C%85/'>
+<meta property='og:site_name' content='寻雾启示'>
+<meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:tag' content='计算机网络' /><meta property='article:tag' content='动手实验' /><meta property='article:published_time' content='2023-09-02T09:17:14&#43;00:00'/><meta property='article:modified_time' content='2023-09-02T09:17:14&#43;00:00'/>
+<meta name="twitter:site" content="@iamshaynez">
+    <meta name="twitter:creator" content="@iamshaynez"><meta name="twitter:title" content="【动手实验】TCP 连接的建立与关闭抓包分析">
+<meta name="twitter:description" content="握个手，好朋友">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "light");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hue8ac1b12d28d2f82755e78ff12ac0e80_107847_300x0_resize_box_3.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">😈</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">寻雾启示</a></h1>
+            <h2 class="site-description">So you have to trust that the dots will somehow connect in your future</h2>
+        </div>
+    </header><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-messages" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M21 14l-3 -3h-7a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1h9a1 1 0 0 1 1 1v10" />
+  <path d="M14 15v2a1 1 0 0 1 -1 1h-7l-3 3v-10a1 1 0 0 1 1 -1h2" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/page/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='https://architecture-notes.tech/' target="_blank">
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>云原生</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/page/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='https://x.com/BoyYingjiezou1' target="_blank">
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                
+                <span>X(Twitter)</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#实验环境">实验环境</a></li>
+    <li><a href="#启动服务">启动服务</a></li>
+    <li><a href="#连接建立">连接建立</a>
+      <ol>
+        <li><a href="#三次握手抓包--tcp-协议头解析">三次握手抓包 &amp; TCP 协议头解析</a></li>
+        <li><a href="#syn-sent-状态抓包">SYN-SENT 状态抓包</a></li>
+        <li><a href="#syn-recv-状态抓包">SYN-RECV 状态抓包</a></li>
+        <li><a href="#syn-flood-攻击">SYN Flood 攻击</a></li>
+      </ol>
+    </li>
+    <li><a href="#连接关闭">连接关闭</a>
+      <ol>
+        <li><a href="#正常关闭">正常关闭</a></li>
+        <li><a href="#fin_wait1">FIN_WAIT1</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" >
+                计算机网络
+            </a>
+        
+            <a href="/categories/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/" >
+                动手实验
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/posts/%E5%AE%9E%E9%AA%8C-tcp%E8%BF%9E%E6%8E%A5%E5%BB%BA%E7%AB%8B%E4%B8%8E%E5%85%B3%E9%97%AD%E6%8A%93%E5%8C%85/">【动手实验】TCP 连接的建立与关闭抓包分析</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            握个手，好朋友
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Sep 02, 2023</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    14 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>本篇是基于<a class="link" href="https://wx.zsxq.com/group/15552551584552"  target="_blank" rel="noopener"
+    >知识星球程序员踩坑案例分享</a>中的作业进行的复现和总结，对 TCP 连接的建立和关闭进行抓包分析和理论总结， 原文参见<a class="link" href="https://articles.zsxq.com/id_ppf2tv11zc64.html"  target="_blank" rel="noopener"
+    >TCP 连接的建立和关闭 —— 强烈建议新手看看</a>。</p>
+<h2 id="实验环境">实验环境
+</h2><p>这里使用两台位于同一子网的腾讯云服务器，IP 分别是 node2（172.19.0.12）和 node3（172.19.0.15），内核版本均为 5.15.0-130-generic。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># node02</span>
+</span></span><span class="line"><span class="cl">$ uname -a
+</span></span><span class="line"><span class="cl">Linux node2 5.15.0-130-generic <span class="c1">#140-Ubuntu SMP Wed Dec 18 17:59:53 UTC 2024 x86_64 x86_64 x86_64 GNU/Linux</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">$ ip -4 addr
+</span></span><span class="line"><span class="cl">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu <span class="m">65536</span> qdisc noqueue state UNKNOWN group default qlen <span class="m">1000</span>
+</span></span><span class="line"><span class="cl">    inet 127.0.0.1/8 scope host lo
+</span></span><span class="line"><span class="cl">       valid_lft forever preferred_lft forever
+</span></span><span class="line"><span class="cl">2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span class="m">8500</span> qdisc mq state UP group default qlen <span class="m">1000</span>
+</span></span><span class="line"><span class="cl">    altname enp0s5
+</span></span><span class="line"><span class="cl">    altname ens5
+</span></span><span class="line"><span class="cl">    inet 172.19.0.12/20 metric <span class="m">100</span> brd 172.19.15.255 scope global eth0
+</span></span><span class="line"><span class="cl">       valid_lft forever preferred_lft forever
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># node03</span>
+</span></span><span class="line"><span class="cl">$ uname -a
+</span></span><span class="line"><span class="cl">Linux node3 5.15.0-130-generic <span class="c1">#140-Ubuntu SMP Wed Dec 18 17:59:53 UTC 2024 x86_64 x86_64 x86_64 GNU/Linux</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">$ ip -4 addr
+</span></span><span class="line"><span class="cl">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu <span class="m">65536</span> qdisc noqueue state UNKNOWN group default qlen <span class="m">1000</span>
+</span></span><span class="line"><span class="cl">    inet 127.0.0.1/8 scope host lo
+</span></span><span class="line"><span class="cl">       valid_lft forever preferred_lft forever
+</span></span><span class="line"><span class="cl">2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span class="m">8500</span> qdisc mq state UP group default qlen <span class="m">1000</span>
+</span></span><span class="line"><span class="cl">    altname enp0s5
+</span></span><span class="line"><span class="cl">    altname ens5
+</span></span><span class="line"><span class="cl">    inet 172.19.0.15/20 metric <span class="m">100</span> brd 172.19.15.255 scope global eth0
+</span></span><span class="line"><span class="cl">       valid_lft forever preferred_lft forever
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="启动服务">启动服务
+</h2><p>首先我们使用 nc(netcat) 作为服务端，在 node2 监听 9527 端口：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># ubuntu @ node2 in ~ [10:40:58]
+</span></span><span class="line"><span class="cl">$ nc -k -l 172.19.0.12  9527
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>该命令表示在 IP 地址 172.19.0.12 的 9527 端口上持续监听（等待连接并接收数据）。参数含义如下：</p>
+<ul>
+<li><code>-k</code>	保持连接（Keep Listening），在客户端断开后继续监听端口。</li>
+<li><code>-l</code>	监听模式（Listen Mode），启动服务器等待连接。</li>
+</ul>
+<p>启动成功后用 netstat 命令查看 socket 的连接状态：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ sudo netstat -anpo | grep Recv-Q; sudo netstat -anpo | grep 9527
+</span></span><span class="line"><span class="cl">Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name     Timer
+</span></span><span class="line"><span class="cl">tcp        0      0 172.19.0.12:9527        0.0.0.0:*               LISTEN      13504/nc             off (0.00/0/0)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>netstat 命令的各个参数含义如下：</p>
+<ul>
+<li><code>-a</code>	显示所有连接和监听的套接字。</li>
+<li><code>-n</code>	显示 IP 地址和端口号，不解析主机名。</li>
+<li><code>-o</code>	显示进程 ID（PID）和计时器信息。</li>
+<li><code>-p</code>	显示进程名称。</li>
+</ul>
+<p>可以看到 9527 端口处于 LISTEN 状态，表示正在监听端口，等待连接请求。</p>
+<h2 id="连接建立">连接建立
+</h2><p>在客户端请求 node2 之前，我们先在 node2 开启 tcpdump 抓包：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># ubuntu @ node2 in ~ [10:38:33]</span>
+</span></span><span class="line"><span class="cl">$ sudo tcpdump -s0 -X -nn <span class="s2">&#34;tcp port 9527&#34;</span> -w tcp.pcap --print
+</span></span><span class="line"><span class="cl">tcpdump: listening on eth0, link-type EN10MB <span class="o">(</span>Ethernet<span class="o">)</span>, snapshot length <span class="m">262144</span> bytes
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>命令各个参数含义为：</p>
+<ul>
+<li><code>-s0</code>	捕获完整数据包（默认 -s 只抓取前 68/96 字节），0 代表不截断。</li>
+<li><code>-X</code>	以十六进制（hex）+ ASCII 格式打印数据包内容。</li>
+<li><code>-nn</code>	不解析主机名和端口（-n 不解析 IP，-nn 也不解析端口）。</li>
+<li><code>&quot;tcp port 9527&quot;</code>	仅捕获 TCP 端口 9527 的流量。</li>
+<li><code>-w tcp.pcap</code>	将捕获的数据包写入 tcp.pcap 文件（可用 wireshark 或 tcpdump -r tcp.pcap 查看）。</li>
+<li><code>--print</code>	同时在终端打印数据包内容（类似 -X，但 &ndash;print 仅在 -w 选项启用时生效）。</li>
+</ul>
+<p>接下来我们在 node3 上使用 nc 连接 node2 的 9527 端口：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># ubuntu @ node3 in ~ [10:41:48]
+</span></span><span class="line"><span class="cl">$ nc 172.19.0.12 9527
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>我们分别在 node2 和 node3 上使用 netstat 命令查看 socket 的连接状态：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># node2</span>
+</span></span><span class="line"><span class="cl">$ sudo netstat -anpo <span class="p">|</span> grep -E <span class="s2">&#34;Recv-Q|9527&#34;</span>
+</span></span><span class="line"><span class="cl">Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name     Timer
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.12:9527        0.0.0.0:*               LISTEN      13504/nc             off <span class="o">(</span>0.00/0/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.12:9527        172.19.0.15:48868       ESTABLISHED 13504/nc             off <span class="o">(</span>0.00/0/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># node3</span>
+</span></span><span class="line"><span class="cl">$ sudo netstat -anpo <span class="p">|</span> grep -E <span class="s2">&#34;Recv-Q|9527&#34;</span>
+</span></span><span class="line"><span class="cl">Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name     Timer
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.15:48868       172.19.0.12:9527        ESTABLISHED 17255/nc             off <span class="o">(</span>0.00/0/0<span class="o">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>可以看到 node2 和 node3 中都有一条端口为 9527 处于 ESTABLISHED 状态的连接，表示连接已建立。 tcpdump 命令也会输出三次握手的数据包详情。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ sudo tcpdump -s0 -X -nn &#34;tcp port 9527&#34; -w tcp.pcap --print
+</span></span><span class="line"><span class="cl">tcpdump: listening on eth0, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+</span></span><span class="line"><span class="cl">10:54:13.960797 IP 172.19.0.15.48868 &gt; 172.19.0.12.9527: Flags [S], seq 2713301685, win 59220, options [mss 8460,sackOK,TS val 2002430584 ecr 0,nop,wscale 7], length 0
+</span></span><span class="line"><span class="cl">	0x0000:  4500 003c 3a31 4000 4006 a849 ac13 000f  E..&lt;:1@.@..I....
+</span></span><span class="line"><span class="cl">	0x0010:  ac13 000c bee4 2537 a1b9 b2b5 0000 0000  ......%7........
+</span></span><span class="line"><span class="cl">	0x0020:  a002 e754 92b3 0000 0204 210c 0402 080a  ...T......!.....
+</span></span><span class="line"><span class="cl">	0x0030:  775a aa78 0000 0000 0103 0307            wZ.x........
+</span></span><span class="line"><span class="cl">10:54:13.960874 IP 172.19.0.12.9527 &gt; 172.19.0.15.48868: Flags [S.], seq 3309498602, ack 2713301686, win 59136, options [mss 8460,sackOK,TS val 556655863 ecr 2002430584,nop,wscale 7], length 0
+</span></span><span class="line"><span class="cl">	0x0000:  4500 003c 0000 4000 4006 e27a ac13 000c  E..&lt;..@.@..z....
+</span></span><span class="line"><span class="cl">	0x0010:  ac13 000f 2537 bee4 c542 f0ea a1b9 b2b6  ....%7...B......
+</span></span><span class="line"><span class="cl">	0x0020:  a012 e700 5870 0000 0204 210c 0402 080a  ....Xp....!.....
+</span></span><span class="line"><span class="cl">	0x0030:  212d e4f7 775a aa78 0103 0307            !-..wZ.x....
+</span></span><span class="line"><span class="cl">10:54:13.961020 IP 172.19.0.15.48868 &gt; 172.19.0.12.9527: Flags [.], ack 1, win 463, options [nop,nop,TS val 2002430584 ecr 556655863], length 0
+</span></span><span class="line"><span class="cl">	0x0000:  4500 0034 3a32 4000 4006 a850 ac13 000f  E..4:2@.@..P....
+</span></span><span class="line"><span class="cl">	0x0010:  ac13 000c bee4 2537 a1b9 b2b6 c542 f0eb  ......%7.....B..
+</span></span><span class="line"><span class="cl">	0x0020:  8010 01cf 05fa 0000 0101 080a 775a aa78  ............wZ.x
+</span></span><span class="line"><span class="cl">	0x0030:  212d e4f7                                !-..
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="三次握手抓包--tcp-协议头解析">三次握手抓包 &amp; TCP 协议头解析
+</h3><p>我们将抓包文件拖入 Wireshark 中来分析三次握手的过程。</p>
+<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/tcp-handshake-01.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>首先回顾下 TCP 协议头格式：</p>
+<p><img src="https://nmap.org/book/images/hdr/MJB-TCP-Header-800x564.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>图片来自 <a class="link" href="https://nmap.org/book/tcpip-ref.html"  target="_blank" rel="noopener"
+    >TCP/IP Reference</a></p>
+<p>像序列号、端口信息、FLAG 等字段都比较熟悉了，我们这里重点看下 Options 的各个字段，完整的 Option 字段可以参考 <a class="link" href="https://www.iana.org/assignments/tcp-parameters/tcp-parameters.xhtml"  target="_blank" rel="noopener"
+    >Transmission Control Protocol (TCP) Parameters</a>，这里我们只关注包中出现的最常见的几个字段：</p>
+<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/tcp-handshake-02.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<ul>
+<li><strong>MSS（Maximum Segment Size）</strong> 该字段只能在 SYN 包中，用来告知对方自己可以接收的最大数据包，这里指的是 TCP 包中 data 的大小，不包含 TCP 头数据。<a class="link" href="https://www.rfc-editor.org/rfc/rfc6691"  target="_blank" rel="noopener"
+    >RFC 6691</a> 中规定了 MSS 的值为 MTU 减去 IP 固定头大小（20 字节）和 TCP 固定头大小（20字节），不包含任何 Option 字段。从 <code>ip -4 addr</code> 命令中可以看到网卡的 MTU 大小为 8500，因此 MSS 大小为 8500 - 20 - 20 = 8460，和抓包中显示的 MSS 大小一致。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># ubuntu @ node3 in ~ [10:41:48]
+</span></span><span class="line"><span class="cl">$ ip -4 addr
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 8500 qdisc mq state UP group default qlen 1000
+</span></span><span class="line"><span class="cl">...
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li><strong>SACK（Selective Acknowledgment）</strong>  选择性确认。用来告知对方自己可以接收的 TCP 数据包的序列号范围，从而减少传输的数据量，提高传输效率。</li>
+</ul>
+<p>在 Linux 内核中，使用 <code>net.ipv4.tcp_sack</code> 参数来控制是否开启 SACK ，默认是开启的，可以通过 <code>sysctl net.ipv4.tcp_sack</code> 命令查看：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ sysctl net.ipv4.tcp_sack
+</span></span><span class="line"><span class="cl">net.ipv4.tcp_sack <span class="o">=</span> <span class="m">1</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li><strong>TS（Timestamp）</strong> 时间戳标记。内核用来计算 RTT（Round-Trip Time），即数据包从发送端到接收端的时间。在内核中可以使用 <code>net.ipv4.tcp_timestamps</code> 参数来控制是否开启该选项。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ sysctl net.ipv4.tcp_timestamps
+</span></span><span class="line"><span class="cl">net.ipv4.tcp_timestamps <span class="o">=</span> <span class="m">1</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>
+<p><strong>NOP（No Operation）</strong> NOP 一般用来占位对齐，因为 TCP 头大小必须是 4 字节的倍数。因此当 TCP 固定头 + Option 字段长度不为 4 字节的倍数时，一般会填充 NOP 字段。</p>
+</li>
+<li>
+<p><strong>WScale（Window Scale）</strong> 窗口缩放因子。TCP 的 window 窗口字段大小是 16bit，其最大值为 65536 ，也就是说 TCP 包能传输的最大数据为 65536 byte / 1024 = 64KB。在硬件设备和网络如此发达的今天，这个窗口大小显然有点太小了，为此 <a class="link" href="https://www.rfc-editor.org/rfc/rfc7323"  target="_blank" rel="noopener"
+    >RFC 7323</a> 中提出了 WScale 选项，用来扩展 window 字段的大小。</p>
+<p>WScale Option 中有 shift.count 值，顾名思义就是移位数，表示 2 的多少次方，虽然 shift.count 占了 1 个字节，但 RFC 规定只能使用后 4 位，其最大值为 1110，也就是 14。结合最大 window 值为 64KB，在 WScale 的帮助下，最大窗口大小可以达到 64KB * （2^14） = 1048576KB = 1GB。</p>
+</li>
+</ul>
+<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/tcp-window-scale.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>在我们的抓包中，可以看到 WScale 选项的值为 7，因此 window * (2^7) 才是真正的 window 大小。</p>
+<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/tcp-wscale-02.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>需要注意的是，WScale 只会在携带这个选项的包之后生效，因此发送第一个 SYN 包时是没有生效的，在第三次握手时该选项才生效，可以看到 window 值为 463，而计算后的 window 值为 463 * (2^7) = 463 * 128 = 59264。</p>
+<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/tcp-wscale-03.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>在 Linux 内核中，可以通过 <code>net.ipv4.tcp_window_scaling</code> 参数来控制是否开启 WScale 选项。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ sysctl net.ipv4.tcp_window_scaling
+</span></span><span class="line"><span class="cl">net.ipv4.tcp_window_scaling <span class="o">=</span> <span class="m">1</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="syn-sent-状态抓包">SYN-SENT 状态抓包
+</h3><p>前文抓包我们看到的是 LISTEN 和 ESTABLISHED 状态的 socket，除了这两种状态，连接建立时还会经历 SYN-SENT 和 SYN-RECV 状态。</p>
+<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/tcp-handshake-state.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+>
+图片来自 <a class="link" href="http://www.tcpipguide.com/free/t_TCPOperationalOverviewandtheTCPFiniteStateMachineF-2.htm"  target="_blank" rel="noopener"
+    >TCP/IP Guide</a></p>
+<p>这里通过 iptables 拦截握手包来看下 SYN-SENT 和 SYN-RECV 状态的 socket，首先在 node2 上使用 iptables 规则，将访问 9527 的端口包丢弃掉，命令如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo iptables -A INPUT -p tcp --dport <span class="m">9527</span> -j DROP
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后在 node3 再次执行 nc 命令连接服务，这次带上参数 -w 3600，表示连接超时时间为 3600 秒，命令如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">nc -w <span class="m">3600</span> 172.19.0.12 <span class="m">9527</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>请求发出后，tcpdump 抓包会打印 SYN 包和后续的重传包，用 Wireshark 打开抓包文件：</p>
+<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/tcp-handshake-03.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>可以看到 SYN 包一共有 6 次重传，共传了 7 个包。Linux 的 SYN 最大重传次数是由内核参数 <code>net.ipv4.tcp_syn_retries</code> 控制的，默认值为 6。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># ubuntu @ node3 in ~ [16:26:35] C:130</span>
+</span></span><span class="line"><span class="cl">$ sysctl net.ipv4.tcp_syn_retries
+</span></span><span class="line"><span class="cl">net.ipv4.tcp_syn_retries <span class="o">=</span> <span class="m">6</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>重传的超时 RTO 时间初始值通常在 1s 左右，按照指数级增长，因此重传时间间隔大约为 1s、2s、4s、8s、16s、32s。从抓包中也可以看到，在 1.02，3.03，7.726s，15.15，31.58，65.11s 发生了重传，因此默认情况下，一个 TCP 连接的超时时间会大于 64s。</p>
+<p>在重传期间，查看 node3 的 netstat 信息可以看到 SYN-SENT 状态的 socket，表示连接正在等待 SYN 包的响应。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># ubuntu @ node3 in ~ [16:26:35] C:130
+</span></span><span class="line"><span class="cl">$ while true; do sudo netstat -anpo | grep 9527; sleep 1; done
+</span></span><span class="line"><span class="cl">tcp        0      1 172.19.0.15:44004       172.19.0.12:9527        SYN_SENT    3066236/nc           on (0.77/0/0)
+</span></span><span class="line"><span class="cl">tcp        0      1 172.19.0.15:44004       172.19.0.12:9527        SYN_SENT    3066236/nc           on (1.78/1/0)
+</span></span><span class="line"><span class="cl">tcp        0      1 172.19.0.15:44004       172.19.0.12:9527        SYN_SENT    3066236/nc           on (0.76/1/0)
+</span></span><span class="line"><span class="cl">tcp        0      1 172.19.0.15:44004       172.19.0.12:9527        SYN_SENT    3066236/nc           on (3.76/2/0)
+</span></span><span class="line"><span class="cl">tcp        0      1 172.19.0.15:44004       172.19.0.12:9527        SYN_SENT    3066236/nc           on (2.74/2/0)
+</span></span><span class="line"><span class="cl">tcp        0      1 172.19.0.15:44004       172.19.0.12:9527        SYN_SENT    3066236/nc           on (1.72/2/0)
+</span></span><span class="line"><span class="cl">tcp        0      1 172.19.0.15:44004       172.19.0.12:9527        SYN_SENT    3066236/nc           on (0.70/2/0)
+</span></span><span class="line"><span class="cl">tcp        0      1 172.19.0.15:44004       172.19.0.12:9527        SYN_SENT    3066236/nc           on (7.88/3/0)
+</span></span><span class="line"><span class="cl">tcp        0      1 172.19.0.15:44004       172.19.0.12:9527        SYN_SENT    3066236/nc           on (6.86/3/0)
+</span></span><span class="line"><span class="cl">tcp        0      1 172.19.0.15:44004       172.19.0.12:9527        SYN_SENT    3066236/nc           on (5.84/3/0)
+</span></span><span class="line"><span class="cl">tcp        0      1 172.19.0.15:44004       172.19.0.12:9527        SYN_SENT    3066236/nc           on (4.82/3/0)
+</span></span><span class="line"><span class="cl">tcp        0      1 172.19.0.15:44004       172.19.0.12:9527        SYN_SENT    3066236/nc           on (3.80/3/0)
+</span></span><span class="line"><span class="cl">tcp        0      1 172.19.0.15:44004       172.19.0.12:9527        SYN_SENT    3066236/nc           on (2.78/3/0)
+</span></span><span class="line"><span class="cl">tcp        0      1 172.19.0.15:44004       172.19.0.12:9527        SYN_SENT    3066236/nc           on (1.76/3/0)
+</span></span><span class="line"><span class="cl">tcp        0      1 172.19.0.15:44004       172.19.0.12:9527        SYN_SENT    3066236/nc           on (0.75/3/0)
+</span></span><span class="line"><span class="cl">tcp        0      1 172.19.0.15:44004       172.19.0.12:9527        SYN_SENT    3066236/nc           on (15.92/4/0)
+</span></span><span class="line"><span class="cl">tcp        0      1 172.19.0.15:44004       172.19.0.12:9527        SYN_SENT    3066236/nc           on (14.90/4/0)
+</span></span><span class="line"><span class="cl">tcp        0      1 172.19.0.15:44004       172.19.0.12:9527        SYN_SENT    3066236/nc           on (13.88/4/0)
+</span></span><span class="line"><span class="cl">tcp        0      1 172.19.0.15:44004       172.19.0.12:9527        SYN_SENT    3066236/nc           on (12.86/4/0)
+</span></span><span class="line"><span class="cl">tcp        0      1 172.19.0.15:44004       172.19.0.12:9527        SYN_SENT    3066236/nc           on (11.84/4/0)
+</span></span><span class="line"><span class="cl">tcp        0      1 172.19.0.15:44004       172.19.0.12:9527        SYN_SENT    3066236/nc           on (10.83/4/0)
+</span></span><span class="line"><span class="cl">tcp        0      1 172.19.0.15:44004       172.19.0.12:9527        SYN_SENT    3066236/nc           on (9.81/4/0)
+</span></span><span class="line"><span class="cl">tcp        0      1 172.19.0.15:44004       172.19.0.12:9527        SYN_SENT    3066236/nc           on (8.79/4/0)
+</span></span><span class="line"><span class="cl">tcp        0      1 172.19.0.15:44004       172.19.0.12:9527        SYN_SENT    3066236/nc           on (7.77/4/0)
+</span></span><span class="line"><span class="cl">tcp        0      1 172.19.0.15:44004       172.19.0.12:9527        SYN_SENT    3066236/nc           on (6.75/4/0)
+</span></span><span class="line"><span class="cl">tcp        0      1 172.19.0.15:44004       172.19.0.12:9527        SYN_SENT    3066236/nc           on (5.73/4/0)
+</span></span><span class="line"><span class="cl">tcp        0      1 172.19.0.15:44004       172.19.0.12:9527        SYN_SENT    3066236/nc           on (4.71/4/0)
+</span></span><span class="line"><span class="cl">tcp        0      1 172.19.0.15:44004       172.19.0.12:9527        SYN_SENT    3066236/nc           on (3.70/4/0)
+</span></span><span class="line"><span class="cl">tcp        0      1 172.19.0.15:44004       172.19.0.12:9527        SYN_SENT    3066236/nc           on (2.68/4/0)
+</span></span><span class="line"><span class="cl">tcp        0      1 172.19.0.15:44004       172.19.0.12:9527        SYN_SENT    3066236/nc           on (1.65/4/0)
+</span></span><span class="line"><span class="cl">tcp        0      1 172.19.0.15:44004       172.19.0.12:9527        SYN_SENT    3066236/nc           on (0.64/4/0)
+</span></span><span class="line"><span class="cl">tcp        0      1 172.19.0.15:44004       172.19.0.12:9527        SYN_SENT    3066236/nc           on (31.74/5/0)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>最后一列是 Timer 计时器，格式为 <code>timer(a/b/c)</code>，timer取值有四种</p>
+<ul>
+<li>on 超时计时器</li>
+<li>off 没有计时器</li>
+<li>keepalive keepalive 计时器</li>
+<li>timewait TIME_WAIT 计时器</li>
+</ul>
+<p>对于超时计时器，a 表示当前计时器剩余时间，b 表示当前计时器重传次数，c 表示已发送的保活探测次数，比如命令中一行时 <code>(1.72/2/0)</code>，1.72 表示在等 1.72 秒进行重传，2 表示已经重传了两次。</p>
+<p>node2 使用 iptables 屏蔽了所有 9527 端口的包，因此 node2 是没有收到过 SYN 包的，因此不会有任何 socket 信息。</p>
+<h3 id="syn-recv-状态抓包">SYN-RECV 状态抓包
+</h3><p>我们在修改下 node3 的 iptables 规则，将源端口为 9527 的包丢弃掉，命令如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># --sport 9527 表示源端口为 9527 的包被匹配，也就是 node2 发来的 ACK 包会被拦截</span>
+</span></span><span class="line"><span class="cl">sudo iptables -A INPUT -p tcp --sport <span class="m">9527</span> -j DROP
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>为了避免 SYN 重传，这里使用 namp 命令执行访问，命令如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo nmap -sS 172.19.0.12 -p <span class="m">9527</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>node02 抓包如下：</p>
+<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/tcp-handshake-04.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>可以看到 SYN-ACK 重传了 5 次，这是由内核参数 <code>net.ipv4.tcp_synack_retries</code> 控制的，默认值为 5，重传时间也是从 1s 开始逐渐翻倍，成指数级增长。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ sysctl net.ipv4.tcp_synack_retries
+</span></span><span class="line"><span class="cl">net.ipv4.tcp_synack_retries <span class="o">=</span> <span class="m">5</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>重传过程中，查看 node2 的 netstat 信息可以看到 SYN-RECV 状态的 socket，表示连接正在等待 SYN-ACK 包的响应。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ $ <span class="k">while</span> true<span class="p">;</span> <span class="k">do</span> sudo netstat -anpo <span class="p">|</span> grep SYN_RECV<span class="p">;</span> sleep 1<span class="p">;</span> <span class="k">done</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.12:9527        172.19.0.15:48803       SYN_RECV    -                    on <span class="o">(</span>1.24/1/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.12:9527        172.19.0.15:48803       SYN_RECV    -                    on <span class="o">(</span>0.22/1/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.12:9527        172.19.0.15:48803       SYN_RECV    -                    on <span class="o">(</span>3.22/2/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.12:9527        172.19.0.15:48803       SYN_RECV    -                    on <span class="o">(</span>2.20/2/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.12:9527        172.19.0.15:48803       SYN_RECV    -                    on <span class="o">(</span>1.18/2/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.12:9527        172.19.0.15:48803       SYN_RECV    -                    on <span class="o">(</span>0.16/2/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.12:9527        172.19.0.15:48803       SYN_RECV    -                    on <span class="o">(</span>7.34/3/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.12:9527        172.19.0.15:48803       SYN_RECV    -                    on <span class="o">(</span>6.32/3/0<span class="o">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="syn-flood-攻击">SYN Flood 攻击
+</h3><p>上面实验可以看到在 SYN-ACK 包重传期间，始终会占用服务器的资源。如果有恶意攻击者不断发送 SYN 包，同时 SYN-ACK 拒绝接收 SYN-ACK 包，服务器就会有大量处于 SYN-RECV 状态的连接消耗资源，这里简要解释下其原理。</p>
+<p>在三次握手过程中，Linux 会维护两个队列分别是：</p>
+<ul>
+<li>SYN Queue 半连接队列</li>
+<li>Accept Queue 全连接队列</li>
+</ul>
+<p>三次握手过程中，两个队列作用如下：</p>
+<ul>
+<li>客户端向服务端发送 SYN 包</li>
+<li>服务端收到 SYN 包后，将 socket 信息放入 SYN Queue 队列，然后发送 SYN-ACK 包</li>
+<li>客户端收到 SYN-ACK 包后，发送 ACK 包，客户端进入 ESTABLISHED 状态</li>
+<li>服务端收到 ACK 包后，将 socket 状态变为 ESTABLISHED，并从 SYN Queue 队列中移除放入 Accept Queue 队列</li>
+</ul>
+<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/tcp-synqueue-01.jpg"
+	
+	
+	
+	loading="lazy"
+	
+	
+>
+图片来自：<a class="link" href="https://www.51cto.com/article/687595.html"  target="_blank" rel="noopener"
+    >从一次线上问题说起，详解 TCP 半连接队列、全连接队列
+</a></p>
+<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/syn-queue-02.jpeg"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>图片来自<a class="link" href="https://blog.cloudflare.com/syn-packet-handling-in-the-wild/?utm_source=chatgpt.com/"  target="_blank" rel="noopener"
+    >Cloudflare Blog: SYN Packet Handling in the Wild</a></p>
+<p>如果服务器收到大量的 SYN 包，同时 SYN-ACK 包没有被正常接收，就会有大量处于 SYN-RECV 状态的 socket 占满 SYN Queue 队列，导致无法正常处理新的 SYN 包，这就是所谓的 SYN Flood 攻击。</p>
+<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/syn-queue-03.jpeg"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>图片来自<a class="link" href="https://blog.cloudflare.com/syn-packet-handling-in-the-wild/?utm_source=chatgpt.com/"  target="_blank" rel="noopener"
+    >Cloudflare Blog: SYN Packet Handling in the Wild</a></p>
+<p>这里有几个内核参数需要了解下：</p>
+<ul>
+<li>
+<p><code>net.ipv4.tcp_max_syn_backlog</code>：SYN Queue 队列的最大长度，默认值为 256。表示收到 SYN 包但尚未完成三次握手的 socket 数量，也就是处于 SYN-RECV 状态的 socket 最大数量。</p>
+</li>
+<li>
+<p><code>net.core.somaxconn</code>：Accept Queue 队列的最大长度，默认值为 4096。表示已经完成三次握手处于 ESTABLISHED 状态但还未被应用层 accept 的 socket 最大数量。</p>
+</li>
+<li>
+<p><code>net.ipv4.tcp_syncookies</code> 表示是否开启 SYN Cookie 机制，默认值为 1 表示开启。</p>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ sysctl net.ipv4.tcp_max_syn_backlog
+</span></span><span class="line"><span class="cl">net.ipv4.tcp_max_syn_backlog <span class="o">=</span> <span class="m">256</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">$ sysctl net.core.somaxconn
+</span></span><span class="line"><span class="cl">net.core.somaxconn <span class="o">=</span> <span class="m">4096</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">$ sysctl net.ipv4.tcp_syncookies
+</span></span><span class="line"><span class="cl">net.ipv4.tcp_syncookies <span class="o">=</span> <span class="m">1</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>socket 的队列长度可以在调用 listen 系统调试时设置：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="nf">listen</span><span class="p">(</span><span class="n">server_fd</span><span class="p">,</span> <span class="mi">128</span><span class="p">);</span>  <span class="c1">// 128 表示 backlog 长度，也就是半连接队列长度
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后内核的计算方法是：</p>
+<blockquote>
+<p>min_syn_queue = min(backlog, net.core.somaxconn, net.ipv4.tcp_max_syn_backlog)</p>
+<p>min_accept_queue = min(backlog, net.core.somaxconn)</p>
+</blockquote>
+<p>这里我们修改下 node2 默认的最大队列长度看下包是怎么被处理的。</p>
+<p><strong>原实验用了 nc 验证 SYN Queue 的队列长度，但笔者在做实验时发现 nc 的 SYN-Queue 默认长度为 1，无法复现实验中的效果。</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ ss -ltn
+</span></span><span class="line"><span class="cl">State    Recv-Q   Send-Q     Local Address:Port      Peer Address:Port   Process
+</span></span><span class="line"><span class="cl">LISTEN   <span class="m">0</span>        <span class="m">1</span>            172.19.0.12:9526           0.0.0.0:*
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在 ChatGPT 帮助下了解到，对于网络 socket 来说，nc 在调用 listen 时，默认的 backlog 长度为 1，因此无法复现实验中的效果。查看 nc 的源码也可以验证这一点。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// 源码地址
+</span></span></span><span class="line"><span class="cl"><span class="c1">// https://github.com/openbsd/src/blob/d800967ee04b1c92ceefa78494d0ff66606a806d/usr.bin/nc/netcat.c#L1072
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * local_listen()
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Returns a socket listening on a local port, binds to specified source
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * address. Returns -1 on failure.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span>
+</span></span><span class="line"><span class="cl"><span class="nf">local_listen</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">host</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">port</span><span class="p">,</span> <span class="k">struct</span> <span class="n">addrinfo</span> <span class="n">hints</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">// 代码省略
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">uflag</span> <span class="o">&amp;&amp;</span> <span class="n">s</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 调用 listen 时，默认的 backlog 长度为 1
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="k">if</span> <span class="p">(</span><span class="nf">listen</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">			<span class="nf">err</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#34;listen&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"> <span class="c1">// 代码省略
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="n">s</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>基于 nc 的问题，后续操作我们使用 python 程序作为服务端的实现。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">socket</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">time</span> 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">start_server</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">backlog</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;Starting server on </span><span class="si">{</span><span class="n">host</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">port</span><span class="si">}</span><span class="s2"> with backlog </span><span class="si">{</span><span class="n">backlog</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">server</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">server</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 只 listen，不做 accept，让全连接队列占满</span>
+</span></span><span class="line"><span class="cl">    <span class="n">server</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="n">backlog</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># backlog 长度为 8</span>
+</span></span><span class="line"><span class="cl">    <span class="n">start_server</span><span class="p">(</span><span class="s1">&#39;172.19.0.12&#39;</span><span class="p">,</span> <span class="mi">9527</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>首先我们修改下 node2 的参数，关闭 SYN Cookie 机制，修改队列的最大长度</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ sudo sysctl -w net.ipv4.tcp_syncookies<span class="o">=</span><span class="m">0</span> net.ipv4.tcp_max_syn_backlog<span class="o">=</span><span class="m">4</span> net.core.somaxconn<span class="o">=</span><span class="m">8</span>
+</span></span><span class="line"><span class="cl">net.ipv4.tcp_syncookies <span class="o">=</span> <span class="m">0</span> <span class="c1"># 关闭 SYN Cookie 机制</span>
+</span></span><span class="line"><span class="cl">net.ipv4.tcp_max_syn_backlog <span class="o">=</span> <span class="m">4</span> <span class="c1"># 最大半连接队列长度为 4</span>
+</span></span><span class="line"><span class="cl">net.core.somaxconn <span class="o">=</span> <span class="m">8</span> <span class="c1"># 最大全连接队列长度为 8</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>启动服务端程序后，使用 nmap 命令循环发送 SYN 包，命令如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 在 node2 启动服务端</span>
+</span></span><span class="line"><span class="cl">$ python3 server.py
+</span></span><span class="line"><span class="cl">Starting server on 172.19.0.12:9527 with backlog <span class="m">8</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 在 node3 使用 nmap 命令发送 SYN 包</span>
+</span></span><span class="line"><span class="cl"><span class="k">while</span> true<span class="p">;</span> <span class="k">do</span> sudo  nmap -sS 172.19.0.12 -p 9527<span class="p">;</span> <span class="k">done</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>此时在 node2 可以看到 SYN-RECV 状态的 socket 数量为 4，表示半连接队列被占满。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ ss -nlt state syn-recv
+</span></span><span class="line"><span class="cl">Recv-Q     Send-Q         Local Address:Port         Peer Address:Port     Process
+</span></span><span class="line"><span class="cl"><span class="m">0</span>          <span class="m">0</span>                172.19.0.12:9527          172.19.0.15:58404
+</span></span><span class="line"><span class="cl"><span class="m">0</span>          <span class="m">0</span>                172.19.0.12:9527          172.19.0.15:62220
+</span></span><span class="line"><span class="cl"><span class="m">0</span>          <span class="m">0</span>                172.19.0.12:9527          172.19.0.15:37746
+</span></span><span class="line"><span class="cl"><span class="m">0</span>          <span class="m">0</span>                172.19.0.12:9527          172.19.0.15:54045
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>使用 netstat -s 命令可以看到被丢弃的 syn 包</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># ubuntu @ node2 in ~ [11:57:24]</span>
+</span></span><span class="line"><span class="cl">$ sudo netstat -s <span class="p">|</span> grep -E <span class="s2">&#34;LISTEN|overflowed&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="m">352</span> SYNs to LISTEN sockets dropped
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># ubuntu @ node2 in ~ [11:57:27]</span>
+</span></span><span class="line"><span class="cl">$ sudo netstat -s <span class="p">|</span> grep -E <span class="s2">&#34;LISTEN|overflowed&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="m">354</span> SYNs to LISTEN sockets dropped
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># ubuntu @ node2 in ~ [11:57:28]</span>
+</span></span><span class="line"><span class="cl">$ sudo netstat -s <span class="p">|</span> grep -E <span class="s2">&#34;LISTEN|overflowed&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="m">363</span> SYNs to LISTEN sockets dropped
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>接下来我们使用测试脚本验证下 Accept Queue 队列的限制情况。测试脚本会发起 10 次请求，打满全连接队列。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">socket</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">time</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">connect_and_hold</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">count</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cli_list</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="k">try</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># 连接 10 次</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">count</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">            <span class="n">cli</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">cli</span><span class="o">.</span><span class="n">connect</span><span class="p">((</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">            <span class="n">cli_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cli</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;Failed to connect: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">connect_and_hold</span><span class="p">(</span><span class="s1">&#39;172.19.0.12&#39;</span><span class="p">,</span> <span class="mi">9527</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>首先我们需要清理下 node3 的 iptables 规则，将之前添加的 DROP ACK 包的规则删除，从而可以让客户端能够发起第三次握手。 命令如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># node3  清理 iptables</span>
+</span></span><span class="line"><span class="cl">$ sudo iptables -D INPUT -p tcp --sport <span class="m">9527</span> -j DROP
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 在 node2 启动服务端</span>
+</span></span><span class="line"><span class="cl">$ python3 server.py
+</span></span><span class="line"><span class="cl">Starting server on 172.19.0.12:9527 with backlog <span class="m">8</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 在 node3 启动客户端</span>
+</span></span><span class="line"><span class="cl">$ python3 client.py
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 分别执行 netstat 命令统计 socket 数量</span>
+</span></span><span class="line"><span class="cl">$ sudo netstat -anpo <span class="p">|</span> grep -E <span class="s2">&#34;Recv-Q|9527&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>下面是 node2、node3 的 netstat 统计结果：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># node2</span>
+</span></span><span class="line"><span class="cl">$ sudo netstat -anpo <span class="p">|</span> grep -E <span class="s2">&#34;Recv-Q|9527&#34;</span>
+</span></span><span class="line"><span class="cl">Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name     Timer
+</span></span><span class="line"><span class="cl">tcp        <span class="m">9</span>      <span class="m">0</span> 172.19.0.12:9527        0.0.0.0:*               LISTEN      123347/python3       off <span class="o">(</span>0.00/0/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.12:9527        172.19.0.15:41088       ESTABLISHED -                    off <span class="o">(</span>0.00/0/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.12:9527        172.19.0.15:41074       ESTABLISHED -                    off <span class="o">(</span>0.00/0/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.12:9527        172.19.0.15:41058       ESTABLISHED -                    off <span class="o">(</span>0.00/0/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.12:9527        172.19.0.15:41064       ESTABLISHED -                    off <span class="o">(</span>0.00/0/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.12:9527        172.19.0.15:41060       ESTABLISHED -                    off <span class="o">(</span>0.00/0/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.12:9527        172.19.0.15:41048       ESTABLISHED -                    off <span class="o">(</span>0.00/0/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.12:9527        172.19.0.15:41106       ESTABLISHED -                    off <span class="o">(</span>0.00/0/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.12:9527        172.19.0.15:41082       ESTABLISHED -                    off <span class="o">(</span>0.00/0/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.12:9527        172.19.0.15:41094       ESTABLISHED -                    off <span class="o">(</span>0.00/0/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">$ ss -atnp <span class="p">|</span> grep -E <span class="s2">&#34;Recv-Q|9527&#34;</span>
+</span></span><span class="line"><span class="cl">State  Recv-Q Send-Q Local Address:Port    Peer Address:Port Process
+</span></span><span class="line"><span class="cl">LISTEN <span class="m">9</span>      <span class="m">8</span>        172.19.0.12:9527         0.0.0.0:*     users:<span class="o">((</span><span class="s2">&#34;python3&#34;</span>,pid<span class="o">=</span>123347,fd<span class="o">=</span>3<span class="o">))</span>
+</span></span><span class="line"><span class="cl">ESTAB  <span class="m">0</span>      <span class="m">0</span>        172.19.0.12:9527     172.19.0.15:41088
+</span></span><span class="line"><span class="cl">ESTAB  <span class="m">0</span>      <span class="m">0</span>        172.19.0.12:9527     172.19.0.15:41074
+</span></span><span class="line"><span class="cl">ESTAB  <span class="m">0</span>      <span class="m">0</span>        172.19.0.12:9527     172.19.0.15:41058
+</span></span><span class="line"><span class="cl">ESTAB  <span class="m">0</span>      <span class="m">0</span>        172.19.0.12:9527     172.19.0.15:41064
+</span></span><span class="line"><span class="cl">ESTAB  <span class="m">0</span>      <span class="m">0</span>        172.19.0.12:9527     172.19.0.15:41060
+</span></span><span class="line"><span class="cl">ESTAB  <span class="m">0</span>      <span class="m">0</span>        172.19.0.12:9527     172.19.0.15:41048
+</span></span><span class="line"><span class="cl">ESTAB  <span class="m">0</span>      <span class="m">0</span>        172.19.0.12:9527     172.19.0.15:41106
+</span></span><span class="line"><span class="cl">ESTAB  <span class="m">0</span>      <span class="m">0</span>        172.19.0.12:9527     172.19.0.15:41082
+</span></span><span class="line"><span class="cl">ESTAB  <span class="m">0</span>      <span class="m">0</span>        172.19.0.12:9527     172.19.0.15:41094
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># node3</span>
+</span></span><span class="line"><span class="cl">$ sudo netstat -anpo <span class="p">|</span> grep -E <span class="s2">&#34;Recv-Q|9527&#34;</span>
+</span></span><span class="line"><span class="cl">Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name     Timer
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.15:41082       172.19.0.12:9527        ESTABLISHED 125328/python3       off <span class="o">(</span>0.00/0/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.15:41064       172.19.0.12:9527        ESTABLISHED 125328/python3       off <span class="o">(</span>0.00/0/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.15:41074       172.19.0.12:9527        ESTABLISHED 125328/python3       off <span class="o">(</span>0.00/0/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.15:41094       172.19.0.12:9527        ESTABLISHED 125328/python3       off <span class="o">(</span>0.00/0/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.15:41088       172.19.0.12:9527        ESTABLISHED 125328/python3       off <span class="o">(</span>0.00/0/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.15:41058       172.19.0.12:9527        ESTABLISHED 125328/python3       off <span class="o">(</span>0.00/0/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">1</span> 172.19.0.15:41114       172.19.0.12:9527        SYN_SENT    125328/python3       on <span class="o">(</span>4.72/4/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.15:41048       172.19.0.12:9527        ESTABLISHED 125328/python3       off <span class="o">(</span>0.00/0/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.15:41106       172.19.0.12:9527        ESTABLISHED 125328/python3       off <span class="o">(</span>0.00/0/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.15:41060       172.19.0.12:9527        ESTABLISHED 125328/python3       off <span class="o">(</span>0.00/0/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">$ ss -atnp <span class="p">|</span> grep -E <span class="s2">&#34;Recv-Q|9527&#34;</span>
+</span></span><span class="line"><span class="cl">State  Recv-Q Send-Q Local Address:Port    Peer Address:Port Process
+</span></span><span class="line"><span class="cl">ESTAB    <span class="m">0</span>      <span class="m">0</span>        172.19.0.15:41082    172.19.0.12:9527  users:<span class="o">((</span><span class="s2">&#34;python3&#34;</span>,pid<span class="o">=</span>125328,fd<span class="o">=</span>8<span class="o">))</span>
+</span></span><span class="line"><span class="cl">ESTAB    <span class="m">0</span>      <span class="m">0</span>        172.19.0.15:41064    172.19.0.12:9527  users:<span class="o">((</span><span class="s2">&#34;python3&#34;</span>,pid<span class="o">=</span>125328,fd<span class="o">=</span>6<span class="o">))</span>
+</span></span><span class="line"><span class="cl">ESTAB    <span class="m">0</span>      <span class="m">0</span>        172.19.0.15:41074    172.19.0.12:9527  users:<span class="o">((</span><span class="s2">&#34;python3&#34;</span>,pid<span class="o">=</span>125328,fd<span class="o">=</span>7<span class="o">))</span>
+</span></span><span class="line"><span class="cl">ESTAB    <span class="m">0</span>      <span class="m">0</span>        172.19.0.15:41094    172.19.0.12:9527  users:<span class="o">((</span><span class="s2">&#34;python3&#34;</span>,pid<span class="o">=</span>125328,fd<span class="o">=</span>10<span class="o">))</span>
+</span></span><span class="line"><span class="cl">ESTAB    <span class="m">0</span>      <span class="m">0</span>        172.19.0.15:41088    172.19.0.12:9527  users:<span class="o">((</span><span class="s2">&#34;python3&#34;</span>,pid<span class="o">=</span>125328,fd<span class="o">=</span>9<span class="o">))</span>
+</span></span><span class="line"><span class="cl">ESTAB    <span class="m">0</span>      <span class="m">0</span>        172.19.0.15:41058    172.19.0.12:9527  users:<span class="o">((</span><span class="s2">&#34;python3&#34;</span>,pid<span class="o">=</span>125328,fd<span class="o">=</span>4<span class="o">))</span>
+</span></span><span class="line"><span class="cl">SYN-SENT <span class="m">0</span>      <span class="m">1</span>        172.19.0.15:41114    172.19.0.12:9527  users:<span class="o">((</span><span class="s2">&#34;python3&#34;</span>,pid<span class="o">=</span>125328,fd<span class="o">=</span>12<span class="o">))</span>
+</span></span><span class="line"><span class="cl">ESTAB    <span class="m">0</span>      <span class="m">0</span>        172.19.0.15:41048    172.19.0.12:9527  users:<span class="o">((</span><span class="s2">&#34;python3&#34;</span>,pid<span class="o">=</span>125328,fd<span class="o">=</span>3<span class="o">))</span>
+</span></span><span class="line"><span class="cl">ESTAB    <span class="m">0</span>      <span class="m">0</span>        172.19.0.15:41106    172.19.0.12:9527  users:<span class="o">((</span><span class="s2">&#34;python3&#34;</span>,pid<span class="o">=</span>125328,fd<span class="o">=</span>11<span class="o">))</span>
+</span></span><span class="line"><span class="cl">ESTAB    <span class="m">0</span>      <span class="m">0</span>        172.19.0.15:41060    172.19.0.12:9527  users:<span class="o">((</span><span class="s2">&#34;python3&#34;</span>,pid<span class="o">=</span>125328,fd<span class="o">=</span>5<span class="o">))</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>我们来分析下统计结果：</p>
+<ol>
+<li>
+<p>node2 有 9 个 ESTABLISHED 状态的 socket。</p>
+</li>
+<li>
+<p>node3 有 9 个 ESTABLISHED 状态的 socket；1 个 SYN_SENT 状态的 socket，计时器显示器正在被重传。由此我们可以知道，当全连接队列被占满后，即使半连接队列不满，也会拒绝新的连接，将 SYN 包 Drop 掉。（从 v4.10 版本开始，参考 <a class="link" href="https://github.com/torvalds/linux/commit/5ea8ea2cb7f1d0db15762c9b0bb9e7330425a071"  target="_blank" rel="noopener"
+    >提交</a>）</p>
+</li>
+<li>
+<p>node2 的最大全连接队列长度为 8，但实际有 9 个 ESTABLISHED 状态的 socket。这是因为 Linux 内核的判断全连接队列的逻辑是 &gt; 而不是 &gt;=。5.15.0-130-generic 内核代码如下：</p>
+</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// 源码地址
+</span></span></span><span class="line"><span class="cl"><span class="c1">// https://elixir.bootlin.com/linux/v5.15.130/source/include/net/sock.h#L980
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cm">/* Note: If you think the test should be:
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *	return READ_ONCE(sk-&gt;sk_ack_backlog) &gt;= READ_ONCE(sk-&gt;sk_max_ack_backlog);
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Then please take a look at commit 64a146513f8f (&#34;[NET]: Revert incorrect accept queue backlog changes.&#34;)
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kr">inline</span> <span class="kt">bool</span> <span class="nf">sk_acceptq_is_full</span><span class="p">(</span><span class="k">const</span> <span class="k">struct</span> <span class="n">sock</span> <span class="o">*</span><span class="n">sk</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nf">READ_ONCE</span><span class="p">(</span><span class="n">sk</span><span class="o">-&gt;</span><span class="n">sk_ack_backlog</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nf">READ_ONCE</span><span class="p">(</span><span class="n">sk</span><span class="o">-&gt;</span><span class="n">sk_max_ack_backlog</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>之所以这样做，是为了避免在 backlog 设置为 0 时，依然可以有一个连接进入全连接队列，具体可以查看以下 commit 信息：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">https://github.com/torvalds/linux/commit/64a146513f8f12ba204b7bf5cb7e9505594ead42
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[NET]: Revert incorrect accept queue backlog changes.
+</span></span><span class="line"><span class="cl">This reverts two changes:
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">8488df8
+</span></span><span class="line"><span class="cl">248f067
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">A backlog value of N really does mean allow &#34;N + 1&#34; connections
+</span></span><span class="line"><span class="cl">to queue to a listening socket.  This allows one to specify
+</span></span><span class="line"><span class="cl">&#34;0&#34; as the backlog and still get 1 connection.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Noticed by Gerrit Renker and Rick Jones.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Signed-off-by: David S. Miller &lt;davem@davemloft.net&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li>查看服务端 Listen 状态的 socket 时，Recv-Q 显示为 9，表示当前全连接队列长度为 9，Send-Q 显示为 8，表示全连接队列最大长度为 8。而 netstat 的攻击结果，Recv-Q 显示为 9，但 Send-Q 显示为 0。根据原文是因为 netstat 的数据源问题，作者最终推荐优先使用 ss 命令，这里不在做进一步的调研。</li>
+</ol>
+<p>关于半连接、全连接队列的分析可以参考笔者的另一篇文章<a class="link" href="https://zouyingjie.github.io/posts/TCP%e5%8d%8a%e8%bf%9e%e6%8e%a5%e9%98%9f%e5%88%97%e5%85%a8%e8%bf%9e%e6%8e%a5%e9%98%9f%e5%88%97%e5%ae%9e%e6%88%98%e5%88%86%e6%9e%90/"  target="_blank" rel="noopener"
+    >【动手实验】TCP半连接队列、全连接队列实战分析</a>，这里不在赘述。</p>
+<h2 id="连接关闭">连接关闭
+</h2><p>分析完了 TCP 连接建立的过程，我们再来分析下 TCP 连接关闭的过程。</p>
+<p>我们继续使用 nc 作为工具，首先启动服务端和客户端。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># node2 使用 nc 启动服务端
+</span></span><span class="line"><span class="cl">$ nc -k -l 172.19.0.12  9527
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># node3 使用 nc 启动客户端
+</span></span><span class="line"><span class="cl">$ nc 172.19.0.12 9527
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>完成后查看服务端和客户端的状态信息：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># node2 服务端</span>
+</span></span><span class="line"><span class="cl">$ ss -atnp <span class="p">|</span> grep -E <span class="s2">&#34;Recv-Q|9527&#34;</span>
+</span></span><span class="line"><span class="cl">State  Recv-Q Send-Q Local Address:Port    Peer Address:Port Process
+</span></span><span class="line"><span class="cl">LISTEN <span class="m">0</span>      <span class="m">1</span>        172.19.0.12:9527         0.0.0.0:*     users:<span class="o">((</span><span class="s2">&#34;nc&#34;</span>,pid<span class="o">=</span>147133,fd<span class="o">=</span>3<span class="o">))</span>
+</span></span><span class="line"><span class="cl">ESTAB  <span class="m">0</span>      <span class="m">0</span>        172.19.0.12:9527     172.19.0.15:42526 users:<span class="o">((</span><span class="s2">&#34;nc&#34;</span>,pid<span class="o">=</span>147133,fd<span class="o">=</span>4<span class="o">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># node3 客户端</span>
+</span></span><span class="line"><span class="cl">$ ss -atnp <span class="p">|</span> grep -E <span class="s2">&#34;Recv-Q|9527&#34;</span>
+</span></span><span class="line"><span class="cl">State  Recv-Q Send-Q Local Address:Port    Peer Address:Port Process
+</span></span><span class="line"><span class="cl">ESTAB  <span class="m">0</span>      <span class="m">0</span>        172.19.0.15:42526    172.19.0.12:9527  users:<span class="o">((</span><span class="s2">&#34;nc&#34;</span>,pid<span class="o">=</span>149072,fd<span class="o">=</span>3<span class="o">))</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="正常关闭">正常关闭
+</h3><p>我们首先在 node2 执行抓包，然后在客户端按照 ctrl+c 关闭连接，然后执行 netstat 命令查看服务端的状态信息：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># node2 抓包</span>
+</span></span><span class="line"><span class="cl">$ sudo tcpdump -s0 -X -nn <span class="s2">&#34;tcp port 9527&#34;</span> -w tcp-handshake-03.pcap --print
+</span></span><span class="line"><span class="cl">tcpdump: listening on eth0, link-type EN10MB <span class="o">(</span>Ethernet<span class="o">)</span>, snapshot length <span class="m">262144</span> bytes
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># node2 服务端</span>
+</span></span><span class="line"><span class="cl">Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name     Timer
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.12:9527        0.0.0.0:*               LISTEN      147133/nc            off <span class="o">(</span>0.00/0/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.12:9527        172.19.0.15:41492       ESTABLISHED 147133/nc            off <span class="o">(</span>0.00/0/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># node3 客户端</span>
+</span></span><span class="line"><span class="cl">$ sudo netstat -anpo <span class="p">|</span> grep Recv-Q<span class="p">;</span> sudo netstat -anpo <span class="p">|</span> grep <span class="m">9527</span>
+</span></span><span class="line"><span class="cl">Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name     Timer
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.15:41492       172.19.0.12:9527        TIME_WAIT   -                    timewait <span class="o">(</span>58.92/0/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">$ sudo netstat -anpo <span class="p">|</span> grep Recv-Q<span class="p">;</span> sudo netstat -anpo <span class="p">|</span> grep <span class="m">9527</span>
+</span></span><span class="line"><span class="cl">Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name     Timer
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.15:41492       172.19.0.12:9527        TIME_WAIT   -                    timewait <span class="o">(</span>47.42/0/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">$ sudo netstat -anpo <span class="p">|</span> grep Recv-Q<span class="p">;</span> sudo netstat -anpo <span class="p">|</span> grep <span class="m">9527</span>
+</span></span><span class="line"><span class="cl">Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name     Timer
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.15:41492       172.19.0.12:9527        TIME_WAIT   -                    timewait <span class="o">(</span>36.56/0/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">$ sudo netstat -anpo <span class="p">|</span> grep Recv-Q<span class="p">;</span> sudo netstat -anpo <span class="p">|</span> grep <span class="m">9527</span>
+</span></span><span class="line"><span class="cl">Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name     Timer
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.15:41492       172.19.0.12:9527        TIME_WAIT   -                    timewait <span class="o">(</span>24.22/0/0<span class="o">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>抓包结果如图：</p>
+<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/tcp-handshake-05.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>我们来简要分析下上述过程：</p>
+<ol>
+<li>
+<p>连接断开的很快，从抓包结果可以看出耗时大约 0.0019s，因此服务端执行 netstat 已经查不到连接了。</p>
+</li>
+<li>
+<p>四次握手只有 3 个包，因为服务端没有数据需要处理，所以在对客户端的 FIN 进行 ACK 时，把 FIN 也捎带上了。</p>
+</li>
+<li>
+<p>客户端收到了服务端的 FIN 并发送了 ACK 后进入 TIME_WAIT 状态，从 netstat 输出结果看有一个定时器正在执行，当定时器到时间后连接会完全关闭。Linux 默认 MSL（Maximum Segment Lifetime）为 30s，所以默认的 TIME_WAIT 时间为 2*MSL=60s，这样做有两个好处：</p>
+</li>
+</ol>
+<ul>
+<li>旧连接的端口在 60s 内无法被再次使用</li>
+<li>超过 60s 后旧连接的包都会消失，新的连接如果使用相同的端口，不会被旧数据污染</li>
+</ul>
+<p>上面是正常关闭的情况，接下来我们利用 iptables 拦截相关的包，来观察下 FIN_WAIT1，FIN_WAIT2，CLOSING，LAST_ACK 状态的 socket。</p>
+<h3 id="fin_wait1">FIN_WAIT1
+</h3>
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>
+        
+            <a href="/tags/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/">动手实验</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+     
+    
+        
+    <script
+    src="https://giscus.app/client.js"
+    data-repo="zouyingjie/zouyingjie.github.io"
+    data-repo-id="R_kgDONIBCAw"
+    data-category="Announcements"
+    data-category-id="DIC_kwDONIBCA84Cj2UX"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="light"
+    data-lang="zh-CN"
+    data-loading=""
+    crossorigin="anonymous"
+    async
+></script>
+<script>
+    function setGiscusTheme(theme) {
+        let giscus = document.querySelector("iframe.giscus-frame");
+        if (giscus) {
+            giscus.contentWindow.postMessage(
+                {
+                    giscus: {
+                        setConfig: {
+                            theme: theme,
+                        },
+                    },
+                },
+                "https://giscus.app"
+            );
+        }
+    }
+
+    (function () {
+        addEventListener("message", (e) => {
+            if (event.origin !== "https://giscus.app") return;
+            handler();
+        });
+        window.addEventListener("onColorSchemeChange", handler);
+
+        function handler() {
+            if (document.documentElement.dataset.scheme === "light") {
+                setGiscusTheme('light');
+            } else {
+                setGiscusTheme('dark_dimmed');
+            }
+        }
+    })();
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2019 - 
+        
+        2025 寻雾启示
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.29.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.0056c078ee69815d3b7dae5e3894779b40af6b45a8f4a39b6028710dca291c2d.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

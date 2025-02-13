@@ -43,7 +43,7 @@ params:
       name: "Twitter"
       url: "https://x.com/ixiaowenz"
   footer:
-    since: 2007
+    since: 2019
     customText:
   dateFormat:
     published: Jan 02, 2006

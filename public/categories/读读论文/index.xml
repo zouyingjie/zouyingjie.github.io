@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>读读论文 on 寻雾启示</title>
+        <link>http://localhost:1313/categories/%E8%AF%BB%E8%AF%BB%E8%AE%BA%E6%96%87/</link>
+        <description>Recent content in 读读论文 on 寻雾启示</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <lastBuildDate>Fri, 10 Jan 2025 21:07:27 +0800</lastBuildDate><atom:link href="http://localhost:1313/categories/%E8%AF%BB%E8%AF%BB%E8%AE%BA%E6%96%87/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>【读点论文】What’s Really New with NewSQL?</title>
+        <link>http://localhost:1313/posts/newsql%E8%AE%BA%E6%96%87/</link>
+        <pubDate>Fri, 10 Jan 2025 21:07:27 +0800</pubDate>
+        
+        <guid>http://localhost:1313/posts/newsql%E8%AE%BA%E6%96%87/</guid>
+        <description>&lt;h2 id=&#34;数据库发展简史&#34;&gt;数据库发展简史
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;数据库的诞生&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;1960年代：IBM为了支持阿波罗计划，开发了IMS，开启了数据库时代。IMS引入了“代码与数据分离”的思想，让开发者可以专注于操作数据而非底层实现。&lt;/li&gt;
+&lt;li&gt;1970年代：关系型数据库登场，IBM的System R和加州大学的INGRES是先驱。随后，Oracle等公司将关系型数据库推向商用市场。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;1980-1990年代的创新与开源崛起&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;1980年代：IBM发布DB2，Sybase和Informix等公司进入市场，推动关系型数据库普及。&lt;/li&gt;
+&lt;li&gt;1990年代：开源数据库项目兴起，MySQL和PostgreSQL成为后来者的标杆，分别起源于ISAM和Postgres。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;互联网推动数据库革新（2000年代）&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;互联网应用对高并发和高可用的需求，让传统数据库成为瓶颈。&lt;/li&gt;
+&lt;li&gt;初步解决方案：通过“分片中间件”将单节点数据库分布到多个服务器中，提升扩展性。Google和eBay是先行者，但这种方法对复杂查询支持有限。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;4&#34;&gt;
+&lt;li&gt;NoSQL 的崛起&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;背景：传统关系型数据库过于关注一致性，难以满足互联网的扩展需求。&lt;/li&gt;
+&lt;li&gt;特点：放弃强事务支持，采用最终一致性和多样化的数据模型（如键值、文档、图数据库）。&lt;/li&gt;
+&lt;li&gt;代表：Google的BigTable、Amazon的Dynamo，以及后来的Cassandra和MongoDB等开源系统。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;5&#34;&gt;
+&lt;li&gt;NoSQL 的局限与 NewSQL 的诞生&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;问题：许多企业应用（如金融系统）无法妥协一致性需求，而 NoSQL 让开发者需额外处理数据不一致问题。&lt;/li&gt;
+&lt;li&gt;NewSQL：结合传统数据库的事务支持和 NoSQL 的高扩展性，提供更均衡的解决方案。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;小结&#34;&gt;小结
+&lt;/h3&gt;&lt;p&gt;数据库技术从集中式系统到分布式解决方案，从关系型到多样化模型，不断演变以满足性能、可用性和一致性的不同需求。如今，NoSQL和NewSQL为开发者提供了更多选择，应根据具体场景灵活应用。&lt;/p&gt;
+&lt;h3 id=&#34;newsql-的分类&#34;&gt;NewSQL 的分类
+&lt;/h3&gt;&lt;p&gt;NewSQL 大致可以分为三类：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;采用新的架构，从零开发的数据库&lt;/li&gt;
+&lt;li&gt;基于透明中间层实现的 NewSQL&lt;/li&gt;
+&lt;li&gt;云厂商提供的 NewSQL 数据库&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

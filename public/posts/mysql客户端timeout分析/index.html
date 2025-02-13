@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="动手实验">
+<title>【动手实验】MySQL 客户端 SocketTimeout 问题抓包分析</title>
+
+<link rel='canonical' href='http://localhost:1313/posts/mysql%E5%AE%A2%E6%88%B7%E7%AB%AFtimeout%E5%88%86%E6%9E%90/'>
+
+<link rel="stylesheet" href="/scss/style.min.6a538462a5b07a9b5e41eaaf70b78b9a19378364a05f79bed5b4bc01a31d2e87.css"><meta property='og:title' content="【动手实验】MySQL 客户端 SocketTimeout 问题抓包分析">
+<meta property='og:description' content="动手实验">
+<meta property='og:url' content='http://localhost:1313/posts/mysql%E5%AE%A2%E6%88%B7%E7%AB%AFtimeout%E5%88%86%E6%9E%90/'>
+<meta property='og:site_name' content='寻雾启示'>
+<meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:tag' content='计算机网络' /><meta property='article:tag' content='动手实验' /><meta property='article:published_time' content='2023-09-02T09:17:14&#43;00:00'/><meta property='article:modified_time' content='2023-09-02T09:17:14&#43;00:00'/>
+<meta name="twitter:site" content="@iamshaynez">
+    <meta name="twitter:creator" content="@iamshaynez"><meta name="twitter:title" content="【动手实验】MySQL 客户端 SocketTimeout 问题抓包分析">
+<meta name="twitter:description" content="动手实验">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "light");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hue8ac1b12d28d2f82755e78ff12ac0e80_107847_300x0_resize_box_3.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">😈</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">寻雾启示</a></h1>
+            <h2 class="site-description">So you have to trust that the dots will somehow connect in your future</h2>
+        </div>
+    </header><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-messages" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M21 14l-3 -3h-7a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1h9a1 1 0 0 1 1 1v10" />
+  <path d="M14 15v2a1 1 0 0 1 -1 1h-7l-3 3v-10a1 1 0 0 1 1 -1h2" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/page/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='https://architecture-notes.tech/' target="_blank">
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>云原生</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/page/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='https://x.com/BoyYingjiezou1' target="_blank">
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                
+                <span>X(Twitter)</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#实验准备">实验准备</a>
+      <ol>
+        <li><a href="#服务端环境准备">服务端环境准备</a></li>
+        <li><a href="#客户端环境">客户端环境</a></li>
+      </ol>
+    </li>
+    <li><a href="#实验一正常查询数据">实验一：正常查询数据</a></li>
+    <li><a href="#实验二查询时-sleep10">实验二：查询时 sleep(10)</a></li>
+    <li><a href="#实验三sleep10-但查询不到数据">实验三：sleep(10) 但查询不到数据</a></li>
+    <li><a href="#简要总结">简要总结</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" >
+                计算机网络
+            </a>
+        
+            <a href="/categories/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/" >
+                动手实验
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/posts/mysql%E5%AE%A2%E6%88%B7%E7%AB%AFtimeout%E5%88%86%E6%9E%90/">【动手实验】MySQL 客户端 SocketTimeout 问题抓包分析</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            动手实验
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Sep 02, 2023</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    5 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="实验准备">实验准备
+</h2><h3 id="服务端环境准备">服务端环境准备
+</h3><ul>
+<li>服务器信息</li>
+</ul>
+<p>阿里云 99 大洋白嫖机</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">[</span>root@t01 ~<span class="o">]</span><span class="c1"># cat /proc/version</span>
+</span></span><span class="line"><span class="cl">Linux version 5.10.134-18.al8.x86_64 <span class="o">(</span>mockbuild@h87c01383.na61<span class="o">)</span> <span class="o">(</span>gcc <span class="o">(</span>GCC<span class="o">)</span> 10.2.1 <span class="m">20200825</span> <span class="o">(</span>Alibaba 10.2.1-3.8 2.32<span class="o">)</span>, GNU ld version 2.35-12.3.al8<span class="o">)</span> <span class="c1">#1 SMP Fri Dec 13 16:56:53 CST 2024</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>安装 JDK， docker， tshark</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">​yum install -y java-1.8.0-openjdk.x86_64 java-1.8.0-openjdk-devel.x86_64  podman-docker.noarch wireshark
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>启动 MySQL</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="o">[</span>root@t01 ~<span class="o">]</span><span class="c1">#  docker run -it -d --net=host -e MYSQL_ROOT_PASSWORD=123 --name=mysql mysql:8.0.28</span>
+</span></span><span class="line"><span class="cl">Emulate Docker CLI using podman. Create /etc/containers/nodocker to quiet msg.
+</span></span><span class="line"><span class="cl">233c8ca518d0e8feef367995aee656fffb65b6a2f16a589d2e765f06dad96828
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[</span>root@t01 ~<span class="o">]</span><span class="c1"># docker  ps</span>
+</span></span><span class="line"><span class="cl">Emulate Docker CLI using podman. Create /etc/containers/nodocker to quiet msg.
+</span></span><span class="line"><span class="cl">CONTAINER ID  IMAGE                           COMMAND     CREATED         STATUS         PORTS       NAMES
+</span></span><span class="line"><span class="cl">233c8ca518d0  docker.io/library/mysql:8.0.28  mysqld      <span class="m">11</span> seconds ago  Up <span class="m">12</span> seconds              mysql
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[</span>root@t01 ~<span class="o">]</span><span class="c1"># docker exec -it mysql sh</span>
+</span></span><span class="line"><span class="cl">Emulate Docker CLI using podman. Create /etc/containers/nodocker to quiet msg.
+</span></span><span class="line"><span class="cl"><span class="c1"># mysql -uroot -p</span>
+</span></span><span class="line"><span class="cl">Enter password:
+</span></span><span class="line"><span class="cl">Welcome to the MySQL monitor.  Commands end with <span class="p">;</span> or <span class="se">\g</span>.
+</span></span><span class="line"><span class="cl">Your MySQL connection id is <span class="m">8</span>
+</span></span><span class="line"><span class="cl">Server version: 8.0.28 MySQL Community Server - GPL
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Copyright <span class="o">(</span>c<span class="o">)</span> 2000, 2022, Oracle and/or its affiliates.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Oracle is a registered trademark of Oracle Corporation and/or its
+</span></span><span class="line"><span class="cl">affiliates. Other names may be trademarks of their respective
+</span></span><span class="line"><span class="cl">owners.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Type <span class="s1">&#39;help;&#39;</span> or <span class="s1">&#39;\h&#39;</span> <span class="k">for</span> help. Type <span class="s1">&#39;\c&#39;</span> to clear the current input statement.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">mysql&gt; <span class="se">\s</span>
+</span></span><span class="line"><span class="cl">--------------
+</span></span><span class="line"><span class="cl">mysql  Ver 8.0.28 <span class="k">for</span> Linux on x86_64 <span class="o">(</span>MySQL Community Server - GPL<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Connection id:		<span class="m">8</span>
+</span></span><span class="line"><span class="cl">Current database:
+</span></span><span class="line"><span class="cl">Current user:		root@localhost
+</span></span><span class="line"><span class="cl">SSL:			Not in use
+</span></span><span class="line"><span class="cl">Current pager:		stdout
+</span></span><span class="line"><span class="cl">Using outfile:		<span class="s1">&#39;&#39;</span>
+</span></span><span class="line"><span class="cl">Using delimiter:	<span class="p">;</span>
+</span></span><span class="line"><span class="cl">Server version:		8.0.28 MySQL Community Server - GPL
+</span></span><span class="line"><span class="cl">Protocol version:	<span class="m">10</span>
+</span></span><span class="line"><span class="cl">Connection:		Localhost via UNIX socket
+</span></span><span class="line"><span class="cl">Server characterset:	utf8mb4
+</span></span><span class="line"><span class="cl">Db     characterset:	utf8mb4
+</span></span><span class="line"><span class="cl">Client characterset:	latin1
+</span></span><span class="line"><span class="cl">Conn.  characterset:	latin1
+</span></span><span class="line"><span class="cl">UNIX socket:		/var/run/mysqld/mysqld.sock
+</span></span><span class="line"><span class="cl">Binary data as:		Hexadecimal
+</span></span><span class="line"><span class="cl">Uptime:			<span class="m">23</span> sec
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Threads: <span class="m">2</span>  Questions: <span class="m">5</span>  Slow queries: <span class="m">0</span>  Opens: <span class="m">117</span>  Flush tables: <span class="m">3</span>  Open tables: <span class="m">36</span>  Queries per second avg: 0.217
+</span></span><span class="line"><span class="cl">--------------
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>初始化 MySQL 密码、数据库</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">CREATE</span><span class="w"> </span><span class="k">DATABASE</span><span class="w"> </span><span class="n">test</span><span class="w"> </span><span class="nb">CHARACTER</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">utf8mb4</span><span class="w"> </span><span class="k">COLLATE</span><span class="w"> </span><span class="n">utf8mb4_unicode_ci</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">ALTER</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="s1">&#39;root&#39;</span><span class="o">@</span><span class="s1">&#39;%&#39;</span><span class="w"> </span><span class="n">IDENTIFIED</span><span class="w"> </span><span class="k">WITH</span><span class="w"> </span><span class="n">mysql_native_password</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">&#39;123&#39;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="s1">&#39;test&#39;</span><span class="o">@</span><span class="s1">&#39;%&#39;</span><span class="w">  </span><span class="n">IDENTIFIED</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">&#39;123&#39;</span><span class="p">;</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">GRANT</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">PRIVILEGES</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">test</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">test</span><span class="o">@</span><span class="s1">&#39;%&#39;</span><span class="p">;</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">FLUSH</span><span class="w"> </span><span class="k">PRIVILEGES</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">#</span><span class="w"> </span><span class="err">创建表</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">t_user</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">(</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">id</span><span class="w">        </span><span class="nb">bigint</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span><span class="w"> </span><span class="n">unsigned</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="n">auto_increment</span><span class="w"> </span><span class="k">primary</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;primary key&#39;</span><span class="p">,</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">name</span><span class="w">      </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">64</span><span class="p">)</span><span class="w">         </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;user name&#39;</span><span class="p">,</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">age</span><span class="w">       </span><span class="n">tinyint</span><span class="w"> </span><span class="n">unsigned</span><span class="w">    </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;年龄&#39;</span><span class="p">,</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">gender</span><span class="w">    </span><span class="n">tinyint</span><span class="w"> </span><span class="n">unsigned</span><span class="w">    </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;性别, 0 男，1 女&#39;</span><span class="p">,</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">create_at</span><span class="w"> </span><span class="n">datetime</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w">         </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="k">current_timestamp</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;record create date&#39;</span><span class="p">,</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">update_at</span><span class="w"> </span><span class="n">datetime</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w">         </span><span class="k">not</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="k">current_timestamp</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="k">update</span><span class="w"> </span><span class="k">current_timestamp</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;record update date&#39;</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">)</span><span class="w"> </span><span class="n">engine</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">innodb</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">default</span><span class="w"> </span><span class="n">charset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">utf8mb4</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">collate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">utf8mb4_unicode_ci</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;用户表&#39;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">#</span><span class="w"> </span><span class="err">插入数据</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">t_user</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">age</span><span class="p">)</span><span class="w"> </span><span class="k">values</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;tom&#34;</span><span class="p">,</span><span class="w"> </span><span class="mi">18</span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>执行查询</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">mysql</span><span class="o">&gt;</span><span class="w">  </span><span class="k">select</span><span class="w"> </span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">t_user</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">Empty</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span><span class="w"> </span><span class="n">sec</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w">  </span><span class="k">select</span><span class="w"> </span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">t_user</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+</span><span class="c1">-----------+----+------+
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">|</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+</span><span class="c1">-----------+----+------+
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">|</span><span class="w">         </span><span class="mi">0</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="mi">1</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">tom</span><span class="w">  </span><span class="o">|</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+</span><span class="c1">-----------+----+------+
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">1</span><span class="w"> </span><span class="k">row</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="p">(</span><span class="mi">10</span><span class="p">.</span><span class="mi">00</span><span class="w"> </span><span class="n">sec</span><span class="p">)</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>能查到数据时，sleep 生效</li>
+<li>数据不存在时，sleep 不生效</li>
+</ul>
+<p><strong>服务端抓包命令</strong></p>
+<p>这里用 tshark 进行抓包，命令如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"> sudo tshark -i lo   -f <span class="s2">&#34;port 3306&#34;</span>   -T fields -e frame.number -e frame.time_delta -e tcp.srcport -e tcp.dstport -e _ws.col.Info -e mysql.query -w /tmp/test01.pcapng
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>该命令的含义是：</p>
+<ul>
+<li>-i lo 指定抓取的网卡为 lo，即本地回环网卡</li>
+<li>-f &ldquo;port 3306&rdquo; 指定抓取的端口为 3306，即 MySQL 端口</li>
+<li>-T fields 指定输出格式为字段</li>
+<li>-e frame.number -e frame.time_delta -e tcp.srcport -e tcp.dstport -e _ws.col.Info -e mysql.query 指定输出字段</li>
+<li>-w /tmp/test01.pcapng 指定输出文件为 /tmp/test01.pcapng</li>
+</ul>
+<h3 id="客户端环境">客户端环境
+</h3><ul>
+<li>下载依赖 <a class="link" href="https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.45/"  target="_blank" rel="noopener"
+    >mysql-connector-java-5.1.45.jar</a></li>
+<li>客户端代码：<a class="link" href="https://github.com/zouyingjie/labs/blob/main/mysql-socket-timeout/Test.java"  target="_blank" rel="noopener"
+    >Test.java</a></li>
+</ul>
+<p>准备好环境后，执行客户端代码访问 MySQL，抓包分析网络通信过程。</p>
+<h2 id="实验一正常查询数据">实验一：正常查询数据
+</h2><p>客户端执行如下命令</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">java -cp .:./mysql-connector-java-5.1.45.jar Test <span class="s2">&#34;jdbc:mysql://172.17.150.182:3306/test?useSSL=false&amp;useServerPrepStmts=true&amp;cachePrepStmts=true&amp;connectTimeout=500&amp;socketTimeout=1700&#34;</span> <span class="nb">test</span> <span class="m">123</span> <span class="s2">&#34;select  id from t_user where id= ?&#34;</span> <span class="m">1</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>上述 JDBC 连接中各个参数的含义：</p>
+<ul>
+<li><code>useSSL=false</code>：禁用 SSL 加密</li>
+<li><code>useServerPrepStmts=true</code>：启用服务器端预处理语句</li>
+<li><code>cachePrepStmts=true</code>：启用预处理语句缓存</li>
+<li><code>connectTimeout=500</code>：连接超时时间，单位为毫秒</li>
+<li><code>socketTimeout=1700</code>：socket 超时时间，单位为毫秒，也就是客户端等待 MySQL 返回结果的最大时间，这里我们设置为 1.7s</li>
+</ul>
+<p>下面分析抓包结果。首先是 TCP 的三次握手，三次握手成功后，MySQL Server 向客户端发送 Greeting 信息，除了基本的版本、状态信息，还有 salt 字段，用于后续的密码校验。</p>
+<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/mysql-sockettimeout-01.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>客户端响应 ACK 后会发送 Login 请求，可以看到数据库、用户名、密码信息。密码基于 md5、sha1 算法以及 greeting 请求的盐进行了加密。</p>
+<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/mysql-sockettimeout-02.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>如果校验失败会报 1045 错误，提示 <code>Access denied for user xxx</code>。下图是一个登录失败的抓包示例：</p>
+<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/mysql-sockettimeout-05.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="在这里插入图片描述"
+	
+	
+></p>
+<p>登录成功后，会开始执行查询，在 Prepare Statement 前会执行一系列的准备语句。比如图中的一个请求执行的是 <code>set autocommit = 1</code>语句。</p>
+<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/mysql-sockettimeout-03.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>上述一系列语句执行完成后，就会执行 Prepare Statement，会向 MySQL 发 prepareStatement 请求，然后在发送参数执行 Execute Statement 请求。</p>
+<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/mysql-sockettimeout-04.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>在代码中我们执行了两次查询，分别调用 <code>conn.prepareStatement(sql);</code> 和 <code>stmt2.executeQuery();</code> ，但抓包显示通信过程只有一次 prepareStatement 请求和两次 Execute Statement 请求。这说明预处理语句缓存已生效，查看 JDBC 代码应该是下面这段代码的作用：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="na">cachePrepStmts</span><span class="p">.</span><span class="na">getValue</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">ParseInfo</span><span class="w"> </span><span class="n">pStmtInfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">cachedPreparedStatementParams</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="n">nativeSql</span><span class="p">);</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pStmtInfo</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">pStmt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ClientPreparedStatement</span><span class="p">.</span><span class="na">getInstance</span><span class="p">(</span><span class="n">getMultiHostSafeProxy</span><span class="p">(),</span><span class="w"> </span><span class="n">nativeSql</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">database</span><span class="p">);</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="na">cachedPreparedStatementParams</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="n">nativeSql</span><span class="p">,</span><span class="w"> </span><span class="n">pStmt</span><span class="p">.</span><span class="na">getParseInfo</span><span class="p">());</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">pStmt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ClientPreparedStatement</span><span class="p">.</span><span class="na">getInstance</span><span class="p">(</span><span class="n">getMultiHostSafeProxy</span><span class="p">(),</span><span class="w"> </span><span class="n">nativeSql</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="na">database</span><span class="p">,</span><span class="w"> </span><span class="n">pStmtInfo</span><span class="p">);</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>第二次查询结束后 TCP 连接三次挥手断开。</p>
+<h2 id="实验二查询时-sleep10">实验二：查询时 sleep(10)
+</h2><p>这次我们将查询命令改为 <code>select sleep(10), id from t_user where id = ?</code> 且 ID 传 1，按照开始的测试 sleep 会生效，因此查询应该会超时。因此执行是报如下错误：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">java -cp .:./mysql-connector-java-5.1.45.jar Test <span class="s2">&#34;jdbc:mysql://172.17.150.182:3306/test?useSSL=false&amp;useServerPrepStmts=true&amp;cachePrepStmts=true&amp;connectTimeout=500&amp;socketTimeout=1700&#34;</span> <span class="nb">test</span> <span class="m">123</span> <span class="s2">&#34;select sleep(10) id from t_user where id= ?&#34;</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">The last packet successfully received from the server was 1,704 milliseconds ago.  The last packet sent successfully to the server was 1,704 milliseconds ago.
+</span></span><span class="line"><span class="cl">	at sun.reflect.NativeConstructorAccessorImpl.newInstance0<span class="o">(</span>Native Method<span class="o">)</span>
+</span></span><span class="line"><span class="cl">	at sun.reflect.NativeConstructorAccessorImpl.newInstance<span class="o">(</span>NativeConstructorAccessorImpl.java:62<span class="o">)</span>
+</span></span><span class="line"><span class="cl">	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance<span class="o">(</span>DelegatingConstructorAccessorImpl.java:45<span class="o">)</span>
+</span></span><span class="line"><span class="cl">	at java.lang.reflect.Constructor.newInstance<span class="o">(</span>Constructor.java:423<span class="o">)</span>
+</span></span><span class="line"><span class="cl">	at com.mysql.jdbc.Util.handleNewInstance<span class="o">(</span>Util.java:425<span class="o">)</span>
+</span></span><span class="line"><span class="cl">	at com.mysql.jdbc.SQLError.createCommunicationsException<span class="o">(</span>SQLError.java:990<span class="o">)</span>
+</span></span><span class="line"><span class="cl">	at com.mysql.jdbc.MysqlIO.reuseAndReadPacket<span class="o">(</span>MysqlIO.java:3559<span class="o">)</span>
+</span></span><span class="line"><span class="cl">	at com.mysql.jdbc.MysqlIO.reuseAndReadPacket<span class="o">(</span>MysqlIO.java:3459<span class="o">)</span>
+</span></span><span class="line"><span class="cl">	at com.mysql.jdbc.MysqlIO.checkErrorPacket<span class="o">(</span>MysqlIO.java:3900<span class="o">)</span>
+</span></span><span class="line"><span class="cl">	at com.mysql.jdbc.MysqlIO.sendCommand<span class="o">(</span>MysqlIO.java:2527<span class="o">)</span>
+</span></span><span class="line"><span class="cl">	at com.mysql.jdbc.ServerPreparedStatement.serverExecute<span class="o">(</span>ServerPreparedStatement.java:1283<span class="o">)</span>
+</span></span><span class="line"><span class="cl">	at com.mysql.jdbc.ServerPreparedStatement.executeInternal<span class="o">(</span>ServerPreparedStatement.java:783<span class="o">)</span>
+</span></span><span class="line"><span class="cl">	at com.mysql.jdbc.PreparedStatement.executeQuery<span class="o">(</span>PreparedStatement.java:1966<span class="o">)</span>
+</span></span><span class="line"><span class="cl">	at Test.main<span class="o">(</span>Test.java:21<span class="o">)</span>
+</span></span><span class="line"><span class="cl">Caused by: java.net.SocketTimeoutException: Read timed out
+</span></span><span class="line"><span class="cl">	at java.net.SocketInputStream.socketRead0<span class="o">(</span>Native Method<span class="o">)</span>
+</span></span><span class="line"><span class="cl">	at java.net.SocketInputStream.socketRead<span class="o">(</span>SocketInputStream.java:116<span class="o">)</span>
+</span></span><span class="line"><span class="cl">	at java.net.SocketInputStream.read<span class="o">(</span>SocketInputStream.java:171<span class="o">)</span>
+</span></span><span class="line"><span class="cl">	at java.net.SocketInputStream.read<span class="o">(</span>SocketInputStream.java:141<span class="o">)</span>
+</span></span><span class="line"><span class="cl">	at com.mysql.jdbc.util.ReadAheadInputStream.fill<span class="o">(</span>ReadAheadInputStream.java:101<span class="o">)</span>
+</span></span><span class="line"><span class="cl">	at com.mysql.jdbc.util.ReadAheadInputStream.readFromUnderlyingStreamIfNecessary<span class="o">(</span>ReadAheadInputStream.java:144<span class="o">)</span>
+</span></span><span class="line"><span class="cl">	at com.mysql.jdbc.util.ReadAheadInputStream.read<span class="o">(</span>ReadAheadInputStream.java:174<span class="o">)</span>
+</span></span><span class="line"><span class="cl">	at com.mysql.jdbc.MysqlIO.readFully<span class="o">(</span>MysqlIO.java:3008<span class="o">)</span>
+</span></span><span class="line"><span class="cl">	at com.mysql.jdbc.MysqlIO.reuseAndReadPacket<span class="o">(</span>MysqlIO.java:3469<span class="o">)</span>
+</span></span><span class="line"><span class="cl">	... <span class="m">7</span> more
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>分析抓包信息，前期的握手、登录 prepareStatement 和 executeStatement 都和正常查询时一致。但是因为设置了 sleep(10)，MySQL 会等 10s 才会返回结果。而我们客户端设置的超时时间是 1.7s，从 Wireshark 中可以看到，客户端在 0.117s 发送了 executeStatement 请求，数据没有返回后，在 1.84s 客户端向服务端发送了 FIN 请求，并在 MySQL 返回 ACK 发送了 RST 包断开连接。</p>
+<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/mysql-sockettimeout-06.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<h2 id="实验三sleep10-但查询不到数据">实验三：sleep(10) 但查询不到数据
+</h2><p>这里将传递的 ID 改为 10，数据库中是没有这条数据的，因此 sleep(10) 不会生效，查询会正常执行，</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">java -cp .:./mysql-connector-java-5.1.45.jar Test <span class="s2">&#34;jdbc:mysql://172.17.150.182:3306/test?useSSL=false&amp;useServerPrepStmts=true&amp;cachePrepStmts=true&amp;connectTimeout=500&amp;socketTimeout=1700&#34;</span> <span class="nb">test</span> <span class="m">123</span> <span class="s2">&#34;select sleep(10), id from t_user where id= ?&#34;</span> <span class="m">10</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>抓包结果和实验一基本一致，唯一区别就是执行 executeStatement 请求后，因为查不到数据，MySQL 返回的数据大小不一致。
+<img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/mysql-sockettimeout-07.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<h2 id="简要总结">简要总结
+</h2><ul>
+<li>
+<p>中间件连接问题，本质上都是 TCP/IP 的通信问题，抓包之下一切无所遁形。</p>
+</li>
+<li>
+<p>做技术当然要对很多具体的知识点做掌握，但更重要的是底层内功的修炼，可以提高自己在不熟悉的问题场景下蹚出一条路的能力。</p>
+</li>
+</ul>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>
+        
+            <a href="/tags/%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C/">动手实验</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+     
+    
+        
+    <script
+    src="https://giscus.app/client.js"
+    data-repo="zouyingjie/zouyingjie.github.io"
+    data-repo-id="R_kgDONIBCAw"
+    data-category="Announcements"
+    data-category-id="DIC_kwDONIBCA84Cj2UX"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="light"
+    data-lang="zh-CN"
+    data-loading=""
+    crossorigin="anonymous"
+    async
+></script>
+<script>
+    function setGiscusTheme(theme) {
+        let giscus = document.querySelector("iframe.giscus-frame");
+        if (giscus) {
+            giscus.contentWindow.postMessage(
+                {
+                    giscus: {
+                        setConfig: {
+                            theme: theme,
+                        },
+                    },
+                },
+                "https://giscus.app"
+            );
+        }
+    }
+
+    (function () {
+        addEventListener("message", (e) => {
+            if (event.origin !== "https://giscus.app") return;
+            handler();
+        });
+        window.addEventListener("onColorSchemeChange", handler);
+
+        function handler() {
+            if (document.documentElement.dataset.scheme === "light") {
+                setGiscusTheme('light');
+            } else {
+                setGiscusTheme('dark_dimmed');
+            }
+        }
+    })();
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2019 - 
+        
+        2025 寻雾启示
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.29.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.0056c078ee69815d3b7dae5e3894779b40af6b45a8f4a39b6028710dca291c2d.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

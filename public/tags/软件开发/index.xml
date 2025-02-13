@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>软件开发 on 寻雾启示</title>
+        <link>http://localhost:1313/tags/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/</link>
+        <description>Recent content in 软件开发 on 寻雾启示</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <lastBuildDate>Sat, 02 Sep 2023 09:17:14 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>软件版本命名那些事</title>
+        <link>http://localhost:1313/posts/%E8%BD%AF%E4%BB%B6%E7%89%88%E6%9C%AC%E5%91%BD%E5%90%8D%E9%82%A3%E4%BA%9B%E4%BA%8B/</link>
+        <pubDate>Sat, 02 Sep 2023 09:17:14 +0000</pubDate>
+        
+        <guid>http://localhost:1313/posts/%E8%BD%AF%E4%BB%B6%E7%89%88%E6%9C%AC%E5%91%BD%E5%90%8D%E9%82%A3%E4%BA%9B%E4%BA%8B/</guid>
+        <description>&lt;p&gt;在软件开发中，我们需要不断的迭代版本，以满足用户的需求。每次发布版本时，我们都需要给版本一个命名，以便于用户识别和区分。&lt;/p&gt;
+&lt;p&gt;严格来说，每个版本都是软件和开发者之间的一个契约，它代表着软件变更的整体信息，比如有何变更，变更的影响，需不需要立即升级，从而让大家在更新软件时有据可依。&lt;/p&gt;
+&lt;p&gt;本篇文章介绍下常用的版本命名方式，以便我们在日常开发中能够更好的选择合适的版本命名方式。&lt;/p&gt;
+&lt;h2 id=&#34;日历化calendar-versioning&#34;&gt;日历化（Calendar Versioning）
+&lt;/h2&gt;&lt;h2 id=&#34;语义化版本&#34;&gt;语义化版本
+&lt;/h2&gt;</description>
+        </item>
+        
+    </channel>
+</rss>

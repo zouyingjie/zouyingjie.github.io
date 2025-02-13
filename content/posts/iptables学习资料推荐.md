@@ -2,11 +2,11 @@
 title: 【资料推荐】一些学习iptables的优质材料
 date: 2023-09-02 09:17:14
 tags:
-- iptables
+- 资料推荐
 - 计算机网络
 categories:
 - 计算机网络
-- iptables
+- 资料推荐
 description: 推荐一些学习 iptables 的优质材料，包括入门介绍、深入原理、NAT 等。
 
 ---
