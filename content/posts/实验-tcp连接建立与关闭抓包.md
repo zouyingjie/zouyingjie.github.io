@@ -10,7 +10,7 @@ categories:
 description: 握个手，好朋友
 ---
 
-本篇是基于[知识星球程序员踩坑案例分享](https://wx.zsxq.com/group/15552551584552)中的作业进行的复现和总结，对 TCP 连接的建立和关闭进行抓包分析和理论总结， 原文参见[TCP 连接的建立和关闭 —— 强烈建议新手看看](https://articles.zsxq.com/id_ppf2tv11zc64.html)。
+本文是基于[知识星球程序员踩坑案例分享](https://wx.zsxq.com/group/15552551584552)中的作业进行的复现和总结，借此加深对 TCP 协议的理解， 原文参见[TCP 连接的建立和关闭 —— 强烈建议新手看看](https://articles.zsxq.com/id_ppf2tv11zc64.html)。
 
 ## 实验环境
 
@@ -78,7 +78,7 @@ netstat 命令的各个参数含义如下：
 
 ## 连接建立
 
-在客户端请求 node2 之前，我们先在 node2 开启 tcpdump 抓包：
+在客户端请求 node2 之前，我们先在 node2 开启抓包：
 
 ```bash
 # ubuntu @ node2 in ~ [10:38:33]
@@ -101,7 +101,7 @@ tcpdump: listening on eth0, link-type EN10MB (Ethernet), snapshot length 262144 
 $ nc 172.19.0.12 9527
 ```
 
-我们分别在 node2 和 node3 上使用 netstat 命令查看 socket 的连接状态：
+然后分别在 node2 和 node3 上使用 netstat 命令查看 socket 的连接状态：
 
 ```bash
 # node2
@@ -210,6 +210,7 @@ net.ipv4.tcp_window_scaling = 1
 前文抓包我们看到的是 LISTEN 和 ESTABLISHED 状态的 socket，除了这两种状态，连接建立时还会经历 SYN-SENT 和 SYN-RECV 状态。
 
 ![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/tcp-handshake-state.png)
+
 图片来自 [TCP/IP Guide](http://www.tcpipguide.com/free/t_TCPOperationalOverviewandtheTCPFiniteStateMachineF-2.htm)
 
 这里通过 iptables 拦截握手包来看下 SYN-SENT 和 SYN-RECV 状态的 socket，首先在 node2 上使用 iptables 规则，将访问 9527 的端口包丢弃掉，命令如下：
@@ -284,7 +285,7 @@ tcp        0      1 172.19.0.15:44004       172.19.0.12:9527        SYN_SENT    
 
 对于超时计时器，a 表示当前计时器剩余时间，b 表示当前计时器重传次数，c 表示已发送的保活探测次数，比如命令中一行时 `(1.72/2/0)`，1.72 表示在等 1.72 秒进行重传，2 表示已经重传了两次。
 
-node2 使用 iptables 屏蔽了所有 9527 端口的包，因此 node2 是没有收到过 SYN 包的，因此不会有任何 socket 信息。
+node2 使用 iptables 屏蔽了所有 9527 端口的包，因此不会有任何 socket 信息。
 
 ### SYN-RECV 状态抓包
 
@@ -329,7 +330,7 @@ tcp        0      0 172.19.0.12:9527        172.19.0.15:48803       SYN_RECV    
 
 ### SYN Flood 攻击
 
-上面实验可以看到在 SYN-ACK 包重传期间，始终会占用服务器的资源。如果有恶意攻击者不断发送 SYN 包，同时 SYN-ACK 拒绝接收 SYN-ACK 包，服务器就会有大量处于 SYN-RECV 状态的连接消耗资源，这里简要解释下其原理。
+上面实验可以看到在 SYN-ACK 包重传期间，始终会占用服务器的资源。如果有恶意攻击者不断发送 SYN 包，同时拒绝接收 SYN-ACK 包，服务器就会有大量处于 SYN-RECV 状态的连接消耗资源，这里简要解释下其原理。
 
 在三次握手过程中，Linux 会维护两个队列分别是：
 
@@ -380,7 +381,7 @@ net.ipv4.tcp_syncookies = 1
 socket 的队列长度可以在调用 listen 系统调试时设置：
 
 ```c
-listen(server_fd, 128);  // 128 表示 backlog 长度，也就是半连接队列长度
+listen(server_fd, 128);  // 128 表示 backlog 长度
 ```
 
 然后内核的计算方法是：
@@ -634,7 +635,7 @@ Signed-off-by: David S. Miller <davem@davemloft.net>
 
 4. 查看服务端 Listen 状态的 socket 时，Recv-Q 显示为 9，表示当前全连接队列长度为 9，Send-Q 显示为 8，表示全连接队列最大长度为 8。而 netstat 的攻击结果，Recv-Q 显示为 9，但 Send-Q 显示为 0。根据原文是因为 netstat 的数据源问题，作者最终推荐优先使用 ss 命令，这里不在做进一步的调研。
 
-关于半连接、全连接队列的分析可以参考笔者的另一篇文章[【动手实验】TCP半连接队列、全连接队列实战分析](https://zouyingjie.github.io/posts/TCP半连接队列全连接队列实战分析/)，这里不在赘述。
+关于半连接、全连接队列的分析可以参考另一篇实验笔记[【动手实验】TCP半连接队列、全连接队列实战分析](https://zouyingjie.github.io/posts/TCP半连接队列全连接队列实战分析/)，这里不再赘述。
 
 ## 连接关闭
 
@@ -713,12 +714,266 @@ tcp        0      0 172.19.0.15:41492       172.19.0.12:9527        TIME_WAIT   
 
 3. 客户端收到了服务端的 FIN 并发送了 ACK 后进入 TIME_WAIT 状态，从 netstat 输出结果看有一个定时器正在执行，当定时器到时间后连接会完全关闭。Linux 默认 MSL（Maximum Segment Lifetime）为 30s，所以默认的 TIME_WAIT 时间为 2*MSL=60s，这样做有两个好处：
 
-- 旧连接的端口在 60s 内无法被再次使用
-- 超过 60s 后旧连接的包都会消失，新的连接如果使用相同的端口，不会被旧数据污染
+   - 旧连接的端口在 60s 内无法被再次使用
+   - 超过 60s 后旧连接的包都会消失，新的连接如果使用相同的端口，不会被旧数据污染
+
+上面是正常关闭的情况，接下来我们利用 iptables 拦截相关的包，来观察下其他状态的 socket。
+
+#### 深入理解 TIME_WAIT 状态
 
 
 
+### FIN_WAIT_1 状态
 
-上面是正常关闭的情况，接下来我们利用 iptables 拦截相关的包，来观察下 FIN_WAIT1，FIN_WAIT2，CLOSING，LAST_ACK 状态的 socket。
+我们使用 iptalbes 拦截第一个 FIN 包，然后看下服务端和客户端的状态信息：
 
-### FIN_WAIT1
+```shell
+# node2
+$ nc -k -l 172.19.0.12  9527
+
+# node3
+$ nc 172.19.0.12 9527
+
+# 在 node2设置规则，将目标端口为 9527 的 FIN 包丢弃
+sudo iptables -A INPUT -p tcp --dport 9527 --tcp-flags FIN FIN -j DROP
+
+# 在 node2 开启抓包
+$ sudo tcpdump -s0 -X -nn "tcp port 9527" -w tcp-handshake-FIN1-01.pcap --print
+
+# 在两台服务器执行命令，查看 socket 状态
+$ while true; do sudo netstat -anpo | grep 9527; sleep 1; done
+```
+
+命令都执行后，我们在 node3 按下 ctrl+c 关闭连接，查看 node3 的链接可以看到进入了 FIN_WAIT1 状态。node2 因为 FIN 包被丢弃，所以还是 ESTABLISHED 状态。
+
+
+```bash
+$ while true; do sudo netstat -anpo | grep 9527; sleep 1; done
+tcp        0      0 172.19.0.15:53072       172.19.0.12:9527        ESTABLISHED 546891/nc            off (0.00/0/0)
+
+tcp        0      0 172.19.0.15:53072       172.19.0.12:9527        ESTABLISHED 546891/nc            off (0.00/0/0)
+tcp        0      1 172.19.0.15:53072       172.19.0.12:9527        FIN_WAIT1   -                    on (0.36/1/0)
+tcp        0      1 172.19.0.15:53072       172.19.0.12:9527        FIN_WAIT1   -                    on (0.17/2/0)
+tcp        0      1 172.19.0.15:53072       172.19.0.12:9527        FIN_WAIT1   -                    on (0.80/3/0)
+tcp        0      1 172.19.0.15:53072       172.19.0.12:9527        FIN_WAIT1   -                    on (3.08/4/0)
+...
+tcp        0      1 172.19.0.15:53072       172.19.0.12:9527        FIN_WAIT1   -                    on (0.35/7/0)
+tcp        0      1 172.19.0.15:53072       172.19.0.12:9527        FIN_WAIT1   -                    on (0.00/7/0)
+tcp        0      1 172.19.0.15:53072       172.19.0.12:9527        FIN_WAIT1   -                    on (51.56/8/0)
+tcp        0      1 172.19.0.15:53072       172.19.0.12:9527        FIN_WAIT1   -                    on (50.54/8/0)
+tcp        0      1 172.19.0.15:53072       172.19.0.12:9527        FIN_WAIT1   -                    on (49.52/8/0)
+...
+tcp        0      1 172.19.0.15:53072       172.19.0.12:9527        FIN_WAIT1   -                    on (0.61/8/0)
+tcp        0      1 172.19.0.15:53072       172.19.0.12:9527        FIN_WAIT1   -                    on (0.00/8/0)
+```
+
+node3 使用 ``ss -s`` 命令统计，可以看到有 1 个 orphaned 状态的 socket。
+
+```bash
+$ ss -s
+Total: 192
+TCP:   10 (estab 6, closed 0, orphaned 1, timewait 0)
+
+Transport Total     IP        IPv6
+RAW	  1         0         1
+UDP	  6         4         2
+TCP	  10        9         1
+INET	  17        13        4
+FRAG	  0         0         0
+
+```
+下面是抓包结果
+
+![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/tcp-handshake-fin-01.png)
+
+可以看到 FIN 包重传了 8 次，一共发了 9 个包。这个的重传次数是由内核参数 ``net.ipv4.tcp_orphan_retries`` 控制的，该参数会控制连接关闭时所有的超时重传次数，默认为 0。其计算逻辑是：
+
+- 如果为 0，则重传 8 次
+- 如果不为 0，则重传次数为该参数的值。可以将该值调小来减少重传次数，提高性能。
+
+当超时重传次数达到上限后，内核将连接关闭并清除定时器。
+```C
+//源码地址：https://elixir.bootlin.com/linux/v5.15.130/source/net/ipv4/tcp_timer.c#L139
+// 如果 net.ipv4.tcp_orphan_retries 是 0，则重传次数为 8。
+/**
+ *  tcp_orphan_retries() - Returns maximal number of retries on an orphaned socket
+ *  @sk:    Pointer to the current socket.
+ *  @alive: bool, socket alive state
+ */
+static int tcp_orphan_retries(struct sock *sk, bool alive)
+{
+	int retries = READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_orphan_retries); /* May be zero. */
+
+	/* We know from an ICMP that something is wrong. */
+	if (sk->sk_err_soft && !alive)
+		retries = 0;
+
+	/* However, if socket sent something recently, select some safe
+	 * number of retries. 8 corresponds to >100 seconds with minimal
+	 * RTO of 200msec. */
+	if (retries == 0 && alive)
+		retries = 8;
+	return retries;
+}
+
+
+// 源码地址： https://elixir.bootlin.com/linux/v5.15.130/source/net/ipv4/tcp.c#L4450
+// 将 state 设置为 TCP_CLOSE 状态，并清除发送定时器
+void tcp_done(struct sock *sk)
+{
+	struct request_sock *req;
+
+	/* We might be called with a new socket, after
+	 * inet_csk_prepare_forced_close() has been called
+	 * so we can not use lockdep_sock_is_held(sk)
+	 */
+	req = rcu_dereference_protected(tcp_sk(sk)->fastopen_rsk, 1);
+
+	if (sk->sk_state == TCP_SYN_SENT || sk->sk_state == TCP_SYN_RECV)
+		TCP_INC_STATS(sock_net(sk), TCP_MIB_ATTEMPTFAILS);
+
+	tcp_set_state(sk, TCP_CLOSE);
+	tcp_clear_xmit_timers(sk);
+	if (req)
+		reqsk_fastopen_remove(sk, req, false);
+
+	WRITE_ONCE(sk->sk_shutdown, SHUTDOWN_MASK);
+
+	if (!sock_flag(sk, SOCK_DEAD))
+		sk->sk_state_change(sk);
+	else
+		inet_csk_destroy_sock(sk);
+}
+```
+
+内核还有一个参数 ``net.ipv4.tcp_max_orphans`` 控制了孤儿 socket（也就是调用了 clone() 后的不再属于任意进程的 socket，通常处于 TIME_WAIT，LAST_ACK、CLOSE_WAIT状态） 的最大数量。当孤儿进程的数量超过阈值后，对这些连接操作不系统不会在走
+正常的 FIN-ACK 结束流程，而是直接发 RST 重置连接。
+
+关于 orphan socket 的细节可以参考另一篇实验：
+### FIN_WAIT_2 状态
+
+
+我们将 node2 的iptables 清理后，在重启服务端和客户端，然后在 node3 添加 iptables 拦截 node2 发来的 FIN 包。
+
+```bash
+# node2 清理 iptables
+sudo iptables -F
+
+# node2 重启服务端和客户端
+$ nc -k -l 172.19.0.12  9527
+
+# node3
+$ nc 172.19.0.12 9527
+
+# 在 node3 设置规则，将源端口为 9527 的 FIN 包丢弃
+sudo iptables -A INPUT -p tcp --sport 9527 --tcp-flags FIN FIN -j DROP
+
+# node2 开启抓包
+$ sudo tcpdump -s0 -X -nn "tcp port 9527" -w tcp-handshake-FIN2-01.pcap --print
+
+# 在两台服务器执行命令，查看 socket 状态
+$ while true; do sudo netstat -anpo | grep 9527; sleep 1; done
+```
+执行上述命令后，在 node3 按下 ctrl+c 关闭连接，可以看到 node2 服务端进入 LAST_ACK 状态，node3 客户端进入 FIN_WAIT2 状态。
+
+```bash
+# node2 服务端
+tcp        0      0 172.19.0.12:9527        172.19.0.15:55942       ESTABLISHED 579852/nc            off (0.00/0/0)
+tcp        0      0 172.19.0.12:9527        0.0.0.0:*               LISTEN      579852/nc            off (0.00/0/0)
+tcp        0      0 172.19.0.12:9527        172.19.0.15:55942       ESTABLISHED 579852/nc            off (0.00/0/0)
+tcp        0      0 172.19.0.12:9527        0.0.0.0:*               LISTEN      579852/nc            off (0.00/0/0)
+tcp        0      1 172.19.0.12:9527        172.19.0.15:55942       LAST_ACK    -                    on (0.18/1/0)
+tcp        0      1 172.19.0.12:9527        172.19.0.15:55942       LAST_ACK    -                    on (0.00/2/0)
+tcp        0      1 172.19.0.12:9527        172.19.0.15:55942       LAST_ACK    -                    on (0.62/3/0)
+tcp        0      1 172.19.0.12:9527        172.19.0.15:55942       LAST_ACK    -                    on (0.27/6/0)
+tcp        0      1 172.19.0.12:9527        172.19.0.15:55942       LAST_ACK    -                    on (25.62/7/0)
+
+
+tcp        0      1 172.19.0.12:9527        172.19.0.15:55942       LAST_ACK    -                    on (1.32/8/0)
+tcp        0      1 172.19.0.12:9527        172.19.0.15:55942       LAST_ACK    -                    on (0.30/8/0)
+
+tcp        0      1 172.19.0.12:9527        172.19.0.15:55942       LAST_ACK    -                    on (0.00/8/0)
+tcp        0      0 172.19.0.12:9527        0.0.0.0:*               LISTEN      579852/nc            off (0.00/0/0)
+tcp        0      0 172.19.0.12:9527        0.0.0.0:*               LISTEN      579852/nc            off (0.00/0/0)
+tcp        0      0 172.19.0.12:9527        0.0.0.0:*               LISTEN      579852/nc            off (0.00/0/0)
+tcp        0      0 172.19.0.12:9527        0.0.0.0:*               LISTEN      579852/nc            off (0.00/0/0)
+tcp        0      0 172.19.0.12:9527        0.0.0.0:*               LISTEN      579852/nc            off (0.00/0/0)
+
+# node3 客户端
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        ESTABLISHED 582121/nc            off (0.00/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        ESTABLISHED 582121/nc            off (0.00/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        ESTABLISHED 582121/nc            off (0.00/0/0)
+tcp        0      1 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT1   -                    on (0.14/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (59.12/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (58.11/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (57.09/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (56.07/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (55.05/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (54.03/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (53.01/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (52.00/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (50.98/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (49.96/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (48.94/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (47.92/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (46.90/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (45.88/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (44.86/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (43.84/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (42.82/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (41.81/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (40.79/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (39.77/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (38.75/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (37.73/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (36.71/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (35.69/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (34.67/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (33.65/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (32.63/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (31.61/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (30.59/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (29.57/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (28.56/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (27.54/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (26.52/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (25.50/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (24.48/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (23.46/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (22.44/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (21.42/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (20.40/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (19.38/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (18.36/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (17.34/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (16.33/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (15.31/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (14.29/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (13.27/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (12.25/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (11.23/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (10.21/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (9.19/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (8.18/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (7.16/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (6.14/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (5.12/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (4.10/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (3.08/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (2.06/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (1.04/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (0.02/0/0)
+tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   -                    timewait (0.00/0/0)
+
+```
+
+下面是抓包结果：
+
+![tcp-handshake-fin2-01](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/tcp-handshake-fin2-01.png)
+
+我们来简单分析下：
+
+1. 服务端一直处于 LAST_ACK 状态，说明 FIN 包已发送，但一直没有收到客户端的 ACK 包。
+2. 客户端一直处于 FIN_WAIT2 状态，说明客户端已经收到了服务端的 ACK 包，但迟迟没收到服务端的 FIN 包。说明我们的 iptables 拦截生效了。
+3. 客户端进入 FIN_WAIT2 状态后，有一个 60s 的计时器在运行。这是有内核参数 ``net.ipv4.tcp_fin_timeout`` 控制的，默认是 60s。超过后会自动关闭连接，不会进入 TIME_WAIT 状态。
+4. 服务端重传了 

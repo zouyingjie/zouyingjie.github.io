@@ -92,6 +92,11 @@
     <changefreq>always</changefreq>
     <priority>0.5</priority>
   </url><url>
+    <loc>http://localhost:1313/posts/tcp%E5%AD%A4%E5%84%BFsocket%E7%9A%84%E4%BA%A7%E7%94%9F%E4%B8%8E%E6%B6%88%E4%BA%A1/</loc>
+    <lastmod>2023-09-02T09:17:14+00:00</lastmod>
+    <changefreq>always</changefreq>
+    <priority>0.5</priority>
+  </url><url>
     <loc>http://localhost:1313/posts/%E5%AE%9E%E9%AA%8C-tcp%E8%BF%9E%E6%8E%A5%E5%BB%BA%E7%AB%8B%E4%B8%8E%E5%85%B3%E9%97%AD%E6%8A%93%E5%8C%85/</loc>
     <lastmod>2023-09-02T09:17:14+00:00</lastmod>
     <changefreq>always</changefreq>
@@ -103,6 +108,16 @@
     <priority>0.5</priority>
   </url><url>
     <loc>http://localhost:1313/posts/iptables%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99%E6%8E%A8%E8%8D%90/</loc>
+    <lastmod>2023-09-02T09:17:14+00:00</lastmod>
+    <changefreq>always</changefreq>
+    <priority>0.5</priority>
+  </url><url>
+    <loc>http://localhost:1313/tags/tcp/</loc>
+    <lastmod>2023-09-02T09:17:14+00:00</lastmod>
+    <changefreq>always</changefreq>
+    <priority>0.5</priority>
+  </url><url>
+    <loc>http://localhost:1313/categories/tcp/</loc>
     <lastmod>2023-09-02T09:17:14+00:00</lastmod>
     <changefreq>always</changefreq>
     <priority>0.5</priority>

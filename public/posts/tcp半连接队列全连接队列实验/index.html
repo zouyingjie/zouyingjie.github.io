@@ -223,6 +223,7 @@
             <nav id="TableOfContents">
   <ol>
     <li><a href="#实验环境">实验环境</a></li>
+    <li><a href="#全连接半连接队列">全连接半连接队列</a></li>
     <li><a href="#全连接队列实战">全连接队列实战</a>
       <ol>
         <li><a href="#全连接队列长度控制">全连接队列长度控制</a></li>
@@ -302,7 +303,7 @@
 
 
                 <time class="article-time--reading">
-                    3 minute read
+                    8 minute read
                 </time>
             </div>
         
@@ -320,17 +321,46 @@
     <p>本文是对 <a class="link" href="https://www.51cto.com/article/687595.html"  target="_blank" rel="noopener"
     >从一次线上问题说起，详解 TCP 半连接队列、全连接队列</a> 这篇文章的实验复现和总结，借此加深对 TCP 半连接队列、全连接队列的理解。</p>
 <h2 id="实验环境">实验环境
-</h2><h2 id="全连接队列实战">全连接队列实战
+</h2><p>两台腾讯云服务器 node2（172.19.0.12） 和 node3（172.19.0.15）配置为 2C4G，Ubuntu 系统，内核版本 5.15.0-130-generic 。</p>
+<h2 id="全连接半连接队列">全连接半连接队列
+</h2><p>在 TCP 三次握手过程中，Linux 会维护两个队列分别是：</p>
+<ul>
+<li>SYN Queue 半连接队列</li>
+<li>Accept Queue 全连接队列</li>
+</ul>
+<p>三次握手过程中，两个队列作用如下：</p>
+<ul>
+<li>客户端向服务端发送 SYN 包，客户端进入 SYN_SENT 状态</li>
+<li>服务端收到 SYN 包后，进入 SYN_RECV 状态，内核将连接信息放入 SYN Queue 队列，然后向客户端发送 SYN+ACK 包</li>
+<li>客户端收到 SYN-ACK 包后，发送 ACK 包，客户端进入 ESTABLISHED 状态</li>
+<li>服务端收到 ACK 包后，将连接从 SYN Queue 队列中取出移到 Accept Queue 队列，Server 端进入 ESTABLISHED。</li>
+<li>服务端应用程序调用 accept 函数处理数据，连接从 accept 队列移除。</li>
+</ul>
+<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/tcp-synqueue-01.jpg"
+	
+	
+	
+	loading="lazy"
+	
+	
+>
+图片来自：<a class="link" href="https://www.51cto.com/article/687595.html"  target="_blank" rel="noopener"
+    >从一次线上问题说起，详解 TCP 半连接队列、全连接队列
+</a></p>
+<h2 id="全连接队列实战">全连接队列实战
 </h2><h3 id="全连接队列长度控制">全连接队列长度控制
 </h3><p>TCP 半连接队列的长度计算公式为：</p>
 <blockquote>
 <p>min(somaxconn, backlog)</p>
 </blockquote>
 <ul>
-<li><strong>somaxconn</strong> 是系统内核参数 <code>net.core.somaxconn</code> ，默认值为 4096</li>
-<li><strong>backlog</strong> 是 TCP 的 listen 函数 <code>int listen(int sockfd, int backlog)</code> 的 backlog 参数。在 Golang 中使用的就是 net.core.somaxconn 的值。</li>
+<li><strong>somaxconn</strong> 是 Linux 内核参数 <code>net.core.somaxconn</code> ，默认值为 4096。</li>
+<li><strong>backlog</strong> 是 listen 函数 <code>int listen(int sockfd, int backlog)</code> 的 backlog 参数。在 Golang 中使用的就是该陈述的值。</li>
 </ul>
-<p>下面我们修改 somaxconn 的值，启动服务后使用 <code>ss -lnt</code> 命令查看全连接队列的长度。下面是实验代码：</p>
+<p>下面我们修改 somaxconn 的值，然后运行实验代码查看全连接队列的情况。</p>
+<ul>
+<li>服务端实验代码</li>
+</ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -411,10 +441,14 @@
 </div>
 </div><p>这里简单解释下 ss 命令输出的含义：</p>
 <ul>
-<li>对于 Listen 状态的 socket，Recv-Q 表示当前全连接队列的长度，也就是已经完成三次握手，等待应用层调用 accept 的 TCP 连接；Send-Q 表示全连接队列的最大长度。</li>
-<li>对于非 Listen 状态的 socket，Recv-Q 表示已经收到但尚未被应用读取的<strong>字节数</strong>；Send-Q 表示已发送但尚未收到确认的字节数。</li>
+<li>
+<p>对于 Listen 状态的 socket，Recv-Q 表示当前全连接队列的长度，也就是已经完成三次握手，等待应用层调用 accept 的 TCP 连接数；Send-Q 表示全连接队列的最大长度。</p>
+</li>
+<li>
+<p>对于非 Listen 状态的 socket，Recv-Q 表示已经收到但尚未被应用读取的<strong>字节数</strong>；Send-Q 表示已发送但尚未收到确认的字节数。</p>
+</li>
 </ul>
-<p>再次修改 somaxconn 为 1024 重启服务后，查看全连接队列的长度：</p>
+<p>再次修改 somaxconn 为 1024 重启服务后，查看全连接队列的长度已经变成了 1024。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -440,7 +474,7 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="全连接队列溢出">全连接队列溢出
-</h3><p>下面我们让服务端只 Listen 端口但不执行 accept() 处理连接，看看全连接队列溢出时会发生什么。</p>
+</h3><p>下面我们让服务端只 Listen 端口但不执行 accept() 处理数据，模拟全连接队列溢出的情况。</p>
 <ul>
 <li>服务端代码</li>
 </ul>
@@ -467,12 +501,10 @@
 </span><span class="lnt">19
 </span><span class="lnt">20
 </span><span class="lnt">21
-</span><span class="lnt">22
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-golang" data-lang="golang"><span class="line"><span class="cl"><span class="c1">// server 端监听 8888 tcp 端口 
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span> 
-</span></span><span class="line"><span class="cl"><span class="kn">package</span> <span class="nx">main</span> 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kn">package</span> <span class="nx">main</span> 
 </span></span><span class="line"><span class="cl"> 
 </span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="p">(</span> 
 </span></span><span class="line"><span class="cl">  <span class="s">&#34;log&#34;</span> 
@@ -497,6 +529,7 @@
 </div><ul>
 <li>客户端代码</li>
 </ul>
+<p>和原实验相比加了 <code>time.Sleep(500 * time.Millisecond)</code> 一行代码，让连接一个个建立，可以更精准的复现全连接队列已满的情况。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -553,6 +586,7 @@
 </span><span class="lnt">52
 </span><span class="lnt">53
 </span><span class="lnt">54
+</span><span class="lnt">55
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-golang" data-lang="golang"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nx">main</span> 
@@ -594,6 +628,7 @@
 </span></span><span class="line"><span class="cl">  <span class="c1">// 并发请求 10 次服务端，连接建立成功后发送数据
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span> 
 </span></span><span class="line"><span class="cl">    <span class="nx">wg</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> 
+</span></span><span class="line"><span class="cl">    <span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="mi">500</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Millisecond</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="k">go</span> <span class="nf">establishConn</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> 
 </span></span><span class="line"><span class="cl">  <span class="p">}</span> 
 </span></span><span class="line"><span class="cl"> 
@@ -611,7 +646,7 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>为了验证全队列溢出，我们先将全连接队列的最大长度设置为 5：</p>
+</div><p>我们先将全连接队列的最大长度设置为 5：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -626,7 +661,102 @@
 </span></span><span class="line"><span class="cl"><span class="m">5</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>运行服务端和客户端后，实验结果付下：</p>
+</div><p>运行服务端和客户端后，查看全连接队列情况：</p>
+<ul>
+<li>服务端 socket 情况</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ ss -ant <span class="p">|</span> grep -E <span class="s2">&#34;Recv|8888&#34;</span>
+</span></span><span class="line"><span class="cl">State      Recv-Q Send-Q        Local Address:Port            Peer Address:Port Process
+</span></span><span class="line"><span class="cl">LISTEN     <span class="m">6</span>      <span class="m">5</span>                         *:8888                       *:*
+</span></span><span class="line"><span class="cl">ESTAB      <span class="m">11</span>     <span class="m">0</span>      <span class="o">[</span>::ffff:172.19.0.12<span class="o">]</span>:8888    <span class="o">[</span>::ffff:172.19.0.15<span class="o">]</span>:40148
+</span></span><span class="line"><span class="cl">ESTAB      <span class="m">11</span>     <span class="m">0</span>      <span class="o">[</span>::ffff:172.19.0.12<span class="o">]</span>:8888    <span class="o">[</span>::ffff:172.19.0.15<span class="o">]</span>:40162
+</span></span><span class="line"><span class="cl">ESTAB      <span class="m">11</span>     <span class="m">0</span>      <span class="o">[</span>::ffff:172.19.0.12<span class="o">]</span>:8888    <span class="o">[</span>::ffff:172.19.0.15<span class="o">]</span>:40128
+</span></span><span class="line"><span class="cl">ESTAB      <span class="m">11</span>     <span class="m">0</span>      <span class="o">[</span>::ffff:172.19.0.12<span class="o">]</span>:8888    <span class="o">[</span>::ffff:172.19.0.15<span class="o">]</span>:40132
+</span></span><span class="line"><span class="cl">ESTAB      <span class="m">11</span>     <span class="m">0</span>      <span class="o">[</span>::ffff:172.19.0.12<span class="o">]</span>:8888    <span class="o">[</span>::ffff:172.19.0.15<span class="o">]</span>:40110
+</span></span><span class="line"><span class="cl">ESTAB      <span class="m">11</span>     <span class="m">0</span>      <span class="o">[</span>::ffff:172.19.0.12<span class="o">]</span>:8888    <span class="o">[</span>::ffff:172.19.0.15<span class="o">]</span>:40112
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>客户端 socket 情况</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ ss -ant <span class="p">|</span> grep -E <span class="s2">&#34;Recv|8888&#34;</span>
+</span></span><span class="line"><span class="cl">State      Recv-Q Send-Q Local Address:Port    Peer Address:Port Process
+</span></span><span class="line"><span class="cl">ESTAB      <span class="m">0</span>      <span class="m">0</span>        172.19.0.15:40132    172.19.0.12:8888
+</span></span><span class="line"><span class="cl">ESTAB      <span class="m">0</span>      <span class="m">0</span>        172.19.0.15:40162    172.19.0.12:8888
+</span></span><span class="line"><span class="cl">ESTAB      <span class="m">0</span>      <span class="m">0</span>        172.19.0.15:40148    172.19.0.12:8888
+</span></span><span class="line"><span class="cl">SYN-SENT   <span class="m">0</span>      <span class="m">1</span>        172.19.0.15:51906    172.19.0.12:8888
+</span></span><span class="line"><span class="cl">ESTAB      <span class="m">0</span>      <span class="m">0</span>        172.19.0.15:40112    172.19.0.12:8888
+</span></span><span class="line"><span class="cl">ESTAB      <span class="m">0</span>      <span class="m">0</span>        172.19.0.15:40128    172.19.0.12:8888
+</span></span><span class="line"><span class="cl">SYN-SENT   <span class="m">0</span>      <span class="m">1</span>        172.19.0.15:51912    172.19.0.12:8888
+</span></span><span class="line"><span class="cl">SYN-SENT   <span class="m">0</span>      <span class="m">1</span>        172.19.0.15:40176    172.19.0.12:8888
+</span></span><span class="line"><span class="cl">ESTAB      <span class="m">0</span>      <span class="m">0</span>        172.19.0.15:40110    172.19.0.12:8888
+</span></span><span class="line"><span class="cl">SYN-SENT   <span class="m">0</span>      <span class="m">1</span>        172.19.0.15:51926    172.19.0.12:8888
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>客户端日志输出</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ go run client.go
+</span></span><span class="line"><span class="cl">2025/02/19 11:14:22 0, dial success
+</span></span><span class="line"><span class="cl">2025/02/19 11:14:22 1, dial success
+</span></span><span class="line"><span class="cl">2025/02/19 11:14:23 2, dial success
+</span></span><span class="line"><span class="cl">2025/02/19 11:14:23 3, dial success
+</span></span><span class="line"><span class="cl">2025/02/19 11:14:24 4, dial success
+</span></span><span class="line"><span class="cl">2025/02/19 11:14:24 5, dial success
+</span></span><span class="line"><span class="cl">2025/02/19 11:14:30 6, dial error: dial tcp 172.19.0.12:8888: i/o timeout
+</span></span><span class="line"><span class="cl">2025/02/19 11:14:30 7, dial error: dial tcp 172.19.0.12:8888: i/o timeout
+</span></span><span class="line"><span class="cl">2025/02/19 11:14:31 8, dial error: dial tcp 172.19.0.12:8888: i/o timeout
+</span></span><span class="line"><span class="cl">2025/02/19 11:14:31 9, dial error: dial tcp 172.19.0.12:8888: i/o timeout
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>我们来分析下上述结果：</p>
+<ol>
+<li>服务端 Listen 状态的 socket 显示 Send-Q 为 5，表示该 socket 的全连接队列最大值为 5；Recv-Q 为 6，表示当前 accept queue 数量为 6，我们看有 6 条 ESTAB 状态的连接，符合观察结果。Linux 内核的判断依据是 &gt; 而不是 &gt;=，所以实际的连接数为比队列的最大值多 1 个。5.15.0-130-generic 内核代码如下：</li>
+</ol>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -653,7 +783,7 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>之所以这样做，是为了避免在 backlog 设置为 0 时，依然可以有一个连接进入全连接队列，具体可以查看以下 commit 信息：</p>
+</div><p>之所以这样做，是为了保证在 backlog 设置为 0 时，依然可以有一个连接进入全连接队列，具体可以查看以下 commit 信息：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -673,21 +803,284 @@
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">https://github.com/torvalds/linux/commit/64a146513f8f12ba204b7bf5cb7e9505594ead42
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="nl">https</span><span class="p">:</span><span class="c1">//github.com/torvalds/linux/commit/64a146513f8f12ba204b7bf5cb7e9505594ead42
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="n">NET</span><span class="p">]</span><span class="o">:</span> <span class="n">Revert</span> <span class="n">incorrect</span> <span class="n">accept</span> <span class="n">queue</span> <span class="n">backlog</span> <span class="n">changes</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="n">This</span> <span class="n">reverts</span> <span class="n">two</span> <span class="nl">changes</span><span class="p">:</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">[NET]: Revert incorrect accept queue backlog changes.
-</span></span><span class="line"><span class="cl">This reverts two changes:
+</span></span><span class="line"><span class="cl"><span class="mi">8488</span><span class="n">df8</span>
+</span></span><span class="line"><span class="cl"><span class="mf">248f</span><span class="mo">067</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">8488df8
-</span></span><span class="line"><span class="cl">248f067
+</span></span><span class="line"><span class="cl"><span class="n">A</span> <span class="n">backlog</span> <span class="n">value</span> <span class="n">of</span> <span class="n">N</span> <span class="n">really</span> <span class="n">does</span> <span class="n">mean</span> <span class="n">allow</span> <span class="s">&#34;N + 1&#34;</span> <span class="n">connections</span>
+</span></span><span class="line"><span class="cl"><span class="n">to</span> <span class="n">queue</span> <span class="n">to</span> <span class="n">a</span> <span class="n">listening</span> <span class="n">socket</span><span class="p">.</span>  <span class="n">This</span> <span class="n">allows</span> <span class="n">one</span> <span class="n">to</span> <span class="n">specify</span>
+</span></span><span class="line"><span class="cl"><span class="s">&#34;0&#34;</span> <span class="n">as</span> <span class="n">the</span> <span class="n">backlog</span> <span class="n">and</span> <span class="n">still</span> <span class="n">get</span> <span class="mi">1</span> <span class="n">connection</span><span class="p">.</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">A backlog value of N really does mean allow &#34;N + 1&#34; connections
-</span></span><span class="line"><span class="cl">to queue to a listening socket.  This allows one to specify
-</span></span><span class="line"><span class="cl">&#34;0&#34; as the backlog and still get 1 connection.
+</span></span><span class="line"><span class="cl"><span class="n">Noticed</span> <span class="n">by</span> <span class="n">Gerrit</span> <span class="n">Renker</span> <span class="n">and</span> <span class="n">Rick</span> <span class="n">Jones</span><span class="p">.</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">Noticed by Gerrit Renker and Rick Jones.
+</span></span><span class="line"><span class="cl"><span class="n">Signed</span><span class="o">-</span><span class="n">off</span><span class="o">-</span><span class="nl">by</span><span class="p">:</span> <span class="n">David</span> <span class="n">S</span><span class="p">.</span> <span class="n">Miller</span> <span class="o">&lt;</span><span class="n">davem</span><span class="err">@</span><span class="n">davemloft</span><span class="p">.</span><span class="n">net</span><span class="o">&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>客户端有 6 个 ESTAB 状态的 socket，另外还有 4 个 SYN-SENT 状态的 socket，客户端报错 timeout。我们只改了全连接队列大小为 5，半连接队列大小依然为默认的 <code>net.ipv4.tcp_max_syn_backlog=256</code>，所以第 6 个请连接建立后 Accept Queue 就满了，但 SYN Queue 还没有满，按理说从第 7 个请求开始服务端可以接收 SYN 但不能在处理客户端的 ACK 进入 Accept Queue，服务端会有 4 条 SYN-RECV 状态的连接。但实际情况是服务端不存在，因为当 Accept Queue 被占满时，即使 SYN Queue 没有满，Linux 内核也会将新来的 SYN 请求丢弃掉。源码如下：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// 源码地址：https://elixir.bootlin.com/linux/v5.15.130/source/net/ipv4/tcp_input.c#L6848
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">tcp_conn_request</span><span class="p">(</span><span class="k">struct</span> <span class="n">request_sock_ops</span> <span class="o">*</span><span class="n">rsk_ops</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		     <span class="k">const</span> <span class="k">struct</span> <span class="n">tcp_request_sock_ops</span> <span class="o">*</span><span class="n">af_ops</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		     <span class="k">struct</span> <span class="n">sock</span> <span class="o">*</span><span class="n">sk</span><span class="p">,</span> <span class="k">struct</span> <span class="n">sk_buff</span> <span class="o">*</span><span class="n">skb</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl"> <span class="c1">// ... 代码省略
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">	<span class="n">syncookies</span> <span class="o">=</span> <span class="nf">READ_ONCE</span><span class="p">(</span><span class="n">net</span><span class="o">-&gt;</span><span class="n">ipv4</span><span class="p">.</span><span class="n">sysctl_tcp_syncookies</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">Signed-off-by: David S. Miller &lt;davem@davemloft.net&gt;
+</span></span><span class="line"><span class="cl">	<span class="cm">/* TW buckets are converted to open requests without
+</span></span></span><span class="line"><span class="cl"><span class="cm">	 * limitations, they conserve resources and peer is
+</span></span></span><span class="line"><span class="cl"><span class="cm">	 * evidently real one.
+</span></span></span><span class="line"><span class="cl"><span class="cm">	 */</span>
+</span></span><span class="line"><span class="cl">   <span class="c1">// 强制启用 SYN cookie 或者半连接队列已满
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>   <span class="c1">// !isn 表示是一个新的请求连接建立的 SYN
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="k">if</span> <span class="p">((</span><span class="n">syncookies</span> <span class="o">==</span> <span class="mi">2</span> <span class="o">||</span> <span class="nf">inet_csk_reqsk_queue_is_full</span><span class="p">(</span><span class="n">sk</span><span class="p">))</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">isn</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 这里表示是否启用 SYN cookie 机制；如果不开启，则直接 drop，如果开启，则继续执行。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="n">want_cookie</span> <span class="o">=</span> <span class="nf">tcp_syn_flood_action</span><span class="p">(</span><span class="n">sk</span><span class="p">,</span> <span class="n">rsk_ops</span><span class="o">-&gt;</span><span class="n">slab_name</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">want_cookie</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">			<span class="k">goto</span> <span class="n">drop</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 如果 accept queue 满了则 drop
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="k">if</span> <span class="p">(</span><span class="nf">sk_acceptq_is_full</span><span class="p">(</span><span class="n">sk</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nf">NET_INC_STATS</span><span class="p">(</span><span class="nf">sock_net</span><span class="p">(</span><span class="n">sk</span><span class="p">),</span> <span class="n">LINUX_MIB_LISTENOVERFLOWS</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="k">goto</span> <span class="n">drop</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">bool</span> <span class="nf">tcp_syn_flood_action</span><span class="p">(</span><span class="k">const</span> <span class="k">struct</span> <span class="n">sock</span> <span class="o">*</span><span class="n">sk</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">proto</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">struct</span> <span class="n">request_sock_queue</span> <span class="o">*</span><span class="n">queue</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nf">inet_csk</span><span class="p">(</span><span class="n">sk</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">icsk_accept_queue</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">msg</span> <span class="o">=</span> <span class="s">&#34;Dropping request&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="k">struct</span> <span class="n">net</span> <span class="o">*</span><span class="n">net</span> <span class="o">=</span> <span class="nf">sock_net</span><span class="p">(</span><span class="n">sk</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="kt">bool</span> <span class="n">want_cookie</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">u8</span> <span class="n">syncookies</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="n">syncookies</span> <span class="o">=</span> <span class="nf">READ_ONCE</span><span class="p">(</span><span class="n">net</span><span class="o">-&gt;</span><span class="n">ipv4</span><span class="p">.</span><span class="n">sysctl_tcp_syncookies</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 开启 SYN Cookie 机制
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#ifdef CONFIG_SYN_COOKIES
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>	<span class="k">if</span> <span class="p">(</span><span class="n">syncookies</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">msg</span> <span class="o">=</span> <span class="s">&#34;Sending cookies&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">		<span class="n">want_cookie</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">		<span class="nf">__NET_INC_STATS</span><span class="p">(</span><span class="nf">sock_net</span><span class="p">(</span><span class="n">sk</span><span class="p">),</span> <span class="n">LINUX_MIB_TCPREQQFULLDOCOOKIES</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span> <span class="k">else</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>    <span class="c1">// 没有启用 syncookies，统计丢弃包的数量
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="nf">__NET_INC_STATS</span><span class="p">(</span><span class="nf">sock_net</span><span class="p">(</span><span class="n">sk</span><span class="p">),</span> <span class="n">LINUX_MIB_TCPREQQFULLDROP</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">// 如果启用了 SYN cookie 机制，发送警告
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">queue</span><span class="o">-&gt;</span><span class="n">synflood_warned</span> <span class="o">&amp;&amp;</span> <span class="n">syncookies</span> <span class="o">!=</span> <span class="mi">2</span> <span class="o">&amp;&amp;</span>
+</span></span><span class="line"><span class="cl">	    <span class="nf">xchg</span><span class="p">(</span><span class="o">&amp;</span><span class="n">queue</span><span class="o">-&gt;</span><span class="n">synflood_warned</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="nf">net_info_ratelimited</span><span class="p">(</span><span class="s">&#34;%s: Possible SYN flooding on port %d. %s.  Check SNMP counters.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">				     <span class="n">proto</span><span class="p">,</span> <span class="n">sk</span><span class="o">-&gt;</span><span class="n">sk_num</span><span class="p">,</span> <span class="n">msg</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="n">want_cookie</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>从代码中可以推测出 <code>net.ipv4.tcp_syncookies</code> 参数值的含义和 Linux 的处理机制：</p>
+<ul>
+<li>2：强制开启 SYN Cookie 机制，发送警告</li>
+<li>1：当半连接队列满时，开启 SYN Cookie 机制，发送警告</li>
+<li>0：不开启 SYN Cookie 机制，并统计丢弃包的数量</li>
+</ul>
+<p>回到我们的实验环境，<code>net.ipv4.tcp_syncookies</code> 设置为 1 并且半连接队列没满，因此不会开启 SYN Cookie 机器，继续往后执行时会因为 Accept Queue 满了将包丢弃。可以通过 <code>netstat -s</code> 命令查看丢弃包的数量。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ date<span class="p">;</span>netstat -s <span class="p">|</span> grep -i <span class="s2">&#34;SYNs to LISTEN&#34;</span>
+</span></span><span class="line"><span class="cl">Wed Feb <span class="m">19</span> 12:05:51 PM CST <span class="m">2025</span>
+</span></span><span class="line"><span class="cl">    <span class="m">1289</span> SYNs to LISTEN sockets dropped
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">$ date<span class="p">;</span>netstat -s <span class="p">|</span> grep -i <span class="s2">&#34;SYNs to LISTEN&#34;</span>
+</span></span><span class="line"><span class="cl">Wed Feb <span class="m">19</span> 12:06:05 PM CST <span class="m">2025</span>
+</span></span><span class="line"><span class="cl">    <span class="m">1301</span> SYNs to LISTEN sockets dropped
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>可以看到有 12 个 SYN 包被 DROP 了，查看抓包情况可以看到，我们 4 个请求连接超时，每个请求传了 3 次 SYN（一次发起 + 两次重传）。</p>
+<p><img src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/tcp-syn-queue-01.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>查看客户端 socket 状态能够看到重传计时器在工作，这里重传了两次和默认的 <code>net.ipv4.tcp_syn_retries = 6</code> 有出入，是因为代码 <code>conn, err := net.DialTimeout(&quot;tcp&quot;, &quot;172.19.0.12:8888&quot;, time.Second*5)</code>设置了 5s 超时，操作系统的默认重传间隔大约为 1s、2s、4s、8s、16s、32s，第 3 次重传会发生在 7s 以后，客户端已经主动断开连接了。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ sudo netstat -anpo <span class="p">|</span> grep -E <span class="s2">&#34;Recv-Q|8888&#34;</span>
+</span></span><span class="line"><span class="cl">Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name     Timer
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.15:57384       172.19.0.12:8888        ESTABLISHED 3123924/client       keepalive <span class="o">(</span>7.57/0/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.15:57388       172.19.0.12:8888        ESTABLISHED 3123924/client       keepalive <span class="o">(</span>8.07/0/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.15:60276       172.19.0.12:8888        ESTABLISHED 3123924/client       keepalive <span class="o">(</span>9.58/0/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">1</span> 172.19.0.15:60304       172.19.0.12:8888        SYN_SENT    3123924/client       on <span class="o">(</span>0.08/1/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">1</span> 172.19.0.15:60286       172.19.0.12:8888        SYN_SENT    3123924/client       on <span class="o">(</span>2.60/2/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.15:60270       172.19.0.12:8888        ESTABLISHED 3123924/client       keepalive <span class="o">(</span>9.08/0/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.15:60280       172.19.0.12:8888        ESTABLISHED 3123924/client       keepalive <span class="o">(</span>10.08/0/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">1</span> 172.19.0.15:60292       172.19.0.12:8888        SYN_SENT    3123924/client       on <span class="o">(</span>3.11/2/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">0</span> 172.19.0.15:57398       172.19.0.12:8888        ESTABLISHED 3123924/client       keepalive <span class="o">(</span>8.57/0/0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">tcp        <span class="m">0</span>      <span class="m">1</span> 172.19.0.15:60294       172.19.0.12:8888        SYN_SENT    3123924/client       on <span class="o">(</span>3.62/2/0<span class="o">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>服务端 6 条 ESTAB 状态的 socket，RECV_Q 的值为 11，与客户端发送的数据 <code>[]byte(&quot;hello world&quot;)</code> 数据长度一致，因为我们的没有执行 accept 接收数据，所以 RECV_Q 会展示这部分数据的大小；</li>
+<li>客户端 6 条 ESTAB 状态的 socket，其 RECV_Q 和 SEND_Q 均为 0；而 4 条 SYN-SENT 状态的 SEND-Q 为 1，是因为 SYN 包没有收到 ACK 包。由此我们可以再次总结下 ss 的展示含义：</li>
+</ol>
+<p><strong>对于 LISTEN 状态的 socket</strong></p>
+<ul>
+<li>Recv-Q：表示当前全连接队列的大小，即已完成三次握手等待应用程序 accept() 的 TCP 连接数。</li>
+<li>Send-Q：全连接队列的最大长度，即全连接队列所能容纳的 socket 数量。</li>
+</ul>
+<p><strong>对于非 LISTEN 状态的 socket</strong></p>
+<ul>
+<li>Recv-Q：表示已被接收但尚未执行 accept 被应用程序读取的数据字节数，通常在服务端能观察到。</li>
+<li>Send-Q：表示已经发送但尚未收到 ACK 确认的字节数。</li>
+</ul>
+<p>内核代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// https://elixir.bootlin.com/linux/v5.15.130/source/net/ipv4/tcp_diag.c#L18
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">static</span> <span class="kt">void</span> <span class="nf">tcp_diag_get_info</span><span class="p">(</span><span class="k">struct</span> <span class="n">sock</span> <span class="o">*</span><span class="n">sk</span><span class="p">,</span> <span class="k">struct</span> <span class="n">inet_diag_msg</span> <span class="o">*</span><span class="n">r</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">			      <span class="kt">void</span> <span class="o">*</span><span class="n">_info</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">struct</span> <span class="n">tcp_info</span> <span class="o">*</span><span class="n">info</span> <span class="o">=</span> <span class="n">_info</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="nf">inet_sk_state_load</span><span class="p">(</span><span class="n">sk</span><span class="p">)</span> <span class="o">==</span> <span class="n">TCP_LISTEN</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// LISTEN 状态的连接
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 当前已完成三次握手但未被 accept 的连接数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="n">r</span><span class="o">-&gt;</span><span class="n">idiag_rqueue</span> <span class="o">=</span> <span class="nf">READ_ONCE</span><span class="p">(</span><span class="n">sk</span><span class="o">-&gt;</span><span class="n">sk_ack_backlog</span><span class="p">);</span> 
+</span></span><span class="line"><span class="cl">    <span class="c1">// 最大队列长度
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="n">r</span><span class="o">-&gt;</span><span class="n">idiag_wqueue</span> <span class="o">=</span> <span class="nf">READ_ONCE</span><span class="p">(</span><span class="n">sk</span><span class="o">-&gt;</span><span class="n">sk_max_ack_backlog</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">sk</span><span class="o">-&gt;</span><span class="n">sk_type</span> <span class="o">==</span> <span class="n">SOCK_STREAM</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 非 LISTEN 状态的普通连接
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="k">const</span> <span class="k">struct</span> <span class="n">tcp_sock</span> <span class="o">*</span><span class="n">tp</span> <span class="o">=</span> <span class="nf">tcp_sk</span><span class="p">(</span><span class="n">sk</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// TCP 读队列，即接收缓冲区中未被应用层读取的数据量，单位是字节
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="n">r</span><span class="o">-&gt;</span><span class="n">idiag_rqueue</span> <span class="o">=</span> <span class="kt">max_t</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="nf">READ_ONCE</span><span class="p">(</span><span class="n">tp</span><span class="o">-&gt;</span><span class="n">rcv_nxt</span><span class="p">)</span> <span class="o">-</span>
+</span></span><span class="line"><span class="cl">					     <span class="nf">READ_ONCE</span><span class="p">(</span><span class="n">tp</span><span class="o">-&gt;</span><span class="n">copied_seq</span><span class="p">),</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// TCP 写队列，即已经发送但尚未被对方 ACK 确认的数据量，单位是字节
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="n">r</span><span class="o">-&gt;</span><span class="n">idiag_wqueue</span> <span class="o">=</span> <span class="nf">READ_ONCE</span><span class="p">(</span><span class="n">tp</span><span class="o">-&gt;</span><span class="n">write_seq</span><span class="p">)</span> <span class="o">-</span> <span class="n">tp</span><span class="o">-&gt;</span><span class="n">snd_una</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="n">info</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="nf">tcp_get_info</span><span class="p">(</span><span class="n">sk</span><span class="p">,</span> <span class="n">info</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="半连接队列实战">半连接队列实战
