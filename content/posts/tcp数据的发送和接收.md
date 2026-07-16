@@ -1,6 +1,7 @@
 ---
 title: 【动手实验】TCP 数据的发送与接收抓包分析
 date: 2023-09-02 09:17:14
+draft: true
 tags:
   - 计算机网络
   - 动手实验
@@ -553,5 +554,4 @@ $ sysctl -w net.ipv4.tcp_congestion_control=bbr net.core.default_qdisc=fq
 net.core.default_qdisc=fq
 net.ipv4.tcp_congestion_control=bbr
 ```
-
 
