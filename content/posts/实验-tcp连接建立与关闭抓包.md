@@ -147,7 +147,7 @@ tcpdump: listening on eth0, link-type EN10MB (Ethernet), snapshot length 262144 
 
 首先回顾下 TCP 协议头格式：
 
-![](https://nmap.org/book/images/hdr/MJB-TCP-Header-800x564.png)
+![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/tcp-header-01.png)
 
 图片来自 [TCP/IP Reference](https://nmap.org/book/tcpip-ref.html)
 
@@ -166,9 +166,12 @@ $ ip -4 addr
 
 ```
 
-- **SACK（Selective Acknowledgment）**  选择性确认。用来告知对方自己可以接收的 TCP 数据包的序列号范围，从而减少传输的数据量，提高传输效率。
+- **SACK（Selective Acknowledgment）**  选择性确认。在 [RFC 2018](https://datatracker.ietf.org/doc/html/rfc2018) 确定的机制，必须在握手时确认是否支持。TCP 最开始是按顺序响应的，比如有 1、2、3、4 共 4 个包，如果 2 没有收到，那即使 3、4 收到了也不会响应 ACK，这可能导致客户端不断重传 3、4 号包，对网络造成不必要的负载。SACK 解决了这一问题，可以让服务端响应 3、4 包，客户端只需要重传 2 号包就可以了。
 
-在 Linux 内核中，使用 ``net.ipv4.tcp_sack`` 参数来控制是否开启 SACK ，默认是开启的，可以通过 ``sysctl net.ipv4.tcp_sack`` 命令查看：
+![](http://www.tcpipguide.com/free/diagrams/tcpswretranssack.png)
+图片来自 [TCP/IP Guide](http://www.tcpipguide.com/free/t_TCPNonContiguousAcknowledgmentHandlingandSelective-4.htm)
+
+在 Linux 内核中，使用 ``net.ipv4.tcp_sack`` 参数来控制是否开启 SACK ，默认开启。
 
 ```bash
 $ sysctl net.ipv4.tcp_sack
@@ -194,7 +197,7 @@ net.ipv4.tcp_timestamps = 1
 
 ![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/tcp-wscale-02.png)
 
-需要注意的是，WScale 只会在携带这个选项的包之后生效，因此发送第一个 SYN 包时是没有生效的，在第三次握手时该选项才生效，可以看到 window 值为 463，而计算后的 window 值为 463 * (2^7) = 463 * 128 = 59264。
+需要注意的是，WScale 只会在携带这个选项的包之后生效，因此发送第一个 SYN 包时是没有生效的，在第三次握手时该选项才生效，可以看到 window 值为 463，而计算后的 window 值为 463 * (2^7) = 463 * 128 = 59264，和 Wireshark 中显示的 window 值一致。
 
 ![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/tcp-wscale-03.png)
 
@@ -207,7 +210,7 @@ net.ipv4.tcp_window_scaling = 1
 
 ### SYN-SENT 状态抓包
 
-前文抓包我们看到的是 LISTEN 和 ESTABLISHED 状态的 socket，除了这两种状态，连接建立时还会经历 SYN-SENT 和 SYN-RECV 状态。
+前文抓包我们看到的是 LISTEN 和 ESTABLISHED 状态的 socket，除了这两种状态，连接建立时客户端、服务端还会分别经历 SYN-SENT 和 SYN-RECV 状态。
 
 ![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/tcp-handshake-state.png)
 
@@ -237,9 +240,9 @@ $ sysctl net.ipv4.tcp_syn_retries
 net.ipv4.tcp_syn_retries = 6
 ```
 
-重传的超时 RTO 时间初始值通常在 1s 左右，按照指数级增长，因此重传时间间隔大约为 1s、2s、4s、8s、16s、32s。从抓包中也可以看到，在 1.02，3.03，7.726s，15.15，31.58，65.11s 发生了重传，因此默认情况下，一个 TCP 连接的超时时间会大于 64s。
+重传的超时 RTO 时间初始值通常在 1s 左右，按照指数级增长，因此重传时间间隔大约为 1s、2s、4s、8s、16s、32s。从抓包中也可以看到，在 1.02，3.03，7.726s，15.15，31.58，65.11s 发生了重传，因此默认情况下，一个 TCP 连接建立的超时时间会大于 64s。
 
-在重传期间，查看 node3 的 netstat 信息可以看到 SYN-SENT 状态的 socket，表示连接正在等待 SYN 包的响应。
+在重传期间，查看客户端的 netstat 信息可以看到 SYN-SENT 状态的 socket，表示连接正在等待 SYN 包的响应。
 
 ```
 # ubuntu @ node3 in ~ [16:26:35] C:130
@@ -278,10 +281,10 @@ tcp        0      1 172.19.0.15:44004       172.19.0.12:9527        SYN_SENT    
 tcp        0      1 172.19.0.15:44004       172.19.0.12:9527        SYN_SENT    3066236/nc           on (31.74/5/0)
 ```
 最后一列是 Timer 计时器，格式为 ``timer(a/b/c)``，timer取值有四种
-- on 超时计时器
-- off 没有计时器
-- keepalive keepalive 计时器
-- timewait TIME_WAIT 计时器
+- on： 超时计时器
+- off： 没有计时器
+- keepalive： keepalive 计时器
+- timewait： TIME_WAIT 计时器
 
 对于超时计时器，a 表示当前计时器剩余时间，b 表示当前计时器重传次数，c 表示已发送的保活探测次数，比如命令中一行时 `(1.72/2/0)`，1.72 表示在等 1.72 秒进行重传，2 表示已经重传了两次。
 
@@ -330,75 +333,16 @@ tcp        0      0 172.19.0.12:9527        172.19.0.15:48803       SYN_RECV    
 
 ### SYN Flood 攻击
 
-上面实验可以看到在 SYN-ACK 包重传期间，始终会占用服务器的资源。如果有恶意攻击者不断发送 SYN 包，同时拒绝接收 SYN-ACK 包，服务器就会有大量处于 SYN-RECV 状态的连接消耗资源，这里简要解释下其原理。
+上面实验可以看到在 SYN-ACK 包重传期间，始终有 socket 在占用服务器的资源。如果有恶意攻击者不断发送 SYN 包，同时拒绝接收 SYN-ACK 或者故意不响应 ACK，服务器就会有大量处于 SYN-RECV 状态的连接消耗资源。这里的原理是在三次握手时，Linux 内核维护了半连接队列（SYN Queue）和全连接队列（Accept Queue），大量 SYN-RECV 状态的 socket 会占满 SYN Queue 队列，导致服务器无法正常处理新的 SYN 包，这就是 SYN Flood 攻击。
 
-在三次握手过程中，Linux 会维护两个队列分别是：
+Linux 内核提供了 ``net.ipv4.tcp_syncookies`` 参数来应对 SYN Flood 攻击，当该参数开启时，如果队列已满，内核会计算一个 Cookies 值作为 SYN-ACK 包的序列号返回，客户端收到后会在 ACK 中使用 Cookie+1 作为序列号进行响应，服务端只有在检查 ACK 包的序列号正确后才会建立连接。这样如果有 SYN Flood 攻击，服务端每次都只计算 cookie 进行响应，不会真的占用半连接队列，从而达到服务拒绝的目的。
 
-- SYN Queue 半连接队列
-- Accept Queue 全连接队列
-
-三次握手过程中，两个队列作用如下：
-
-- 客户端向服务端发送 SYN 包
-- 服务端收到 SYN 包后，将 socket 信息放入 SYN Queue 队列，然后发送 SYN-ACK 包
-- 客户端收到 SYN-ACK 包后，发送 ACK 包，客户端进入 ESTABLISHED 状态
-- 服务端收到 ACK 包后，将 socket 状态变为 ESTABLISHED，并从 SYN Queue 队列中移除放入 Accept Queue 队列
-
-![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/tcp-synqueue-01.jpg)
-图片来自：[从一次线上问题说起，详解 TCP 半连接队列、全连接队列
-](https://www.51cto.com/article/687595.html)
+关于半连接队列全连接队列的更详细介绍可以以参考笔者的另一篇文章 [【动手实验】TCP半连接队列、全连接队列实战分析](https://blog.csdn.net/Ahri_J/article/details/145948397)，这里不在赘述。
 
 
-![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/syn-queue-02.jpeg)
+**PS：原实验用了 nc 验证 SYN Queue 的队列长度，但笔者在做实验时发现 nc 的 SYN-Queue 默认长度为 1，无法复现实验中的效果。**
 
-图片来自[Cloudflare Blog: SYN Packet Handling in the Wild](https://blog.cloudflare.com/syn-packet-handling-in-the-wild/?utm_source=chatgpt.com/)
-
-如果服务器收到大量的 SYN 包，同时 SYN-ACK 包没有被正常接收，就会有大量处于 SYN-RECV 状态的 socket 占满 SYN Queue 队列，导致无法正常处理新的 SYN 包，这就是所谓的 SYN Flood 攻击。
-
-![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/syn-queue-03.jpeg)
-
-图片来自[Cloudflare Blog: SYN Packet Handling in the Wild](https://blog.cloudflare.com/syn-packet-handling-in-the-wild/?utm_source=chatgpt.com/)
-
-这里有几个内核参数需要了解下：
-
-- ``net.ipv4.tcp_max_syn_backlog``：SYN Queue 队列的最大长度，默认值为 256。表示收到 SYN 包但尚未完成三次握手的 socket 数量，也就是处于 SYN-RECV 状态的 socket 最大数量。
-
-- ``net.core.somaxconn``：Accept Queue 队列的最大长度，默认值为 4096。表示已经完成三次握手处于 ESTABLISHED 状态但还未被应用层 accept 的 socket 最大数量。
-
-- ``net.ipv4.tcp_syncookies`` 表示是否开启 SYN Cookie 机制，默认值为 1 表示开启。
-  
-```bash
-$ sysctl net.ipv4.tcp_max_syn_backlog
-net.ipv4.tcp_max_syn_backlog = 256
-
-$ sysctl net.core.somaxconn
-net.core.somaxconn = 4096
-
-$ sysctl net.ipv4.tcp_syncookies
-net.ipv4.tcp_syncookies = 1
-```
-
-socket 的队列长度可以在调用 listen 系统调试时设置：
-
-```c
-listen(server_fd, 128);  // 128 表示 backlog 长度
-```
-
-然后内核的计算方法是：
-
-> min_syn_queue = min(backlog, net.core.somaxconn, net.ipv4.tcp_max_syn_backlog)
->
-> min_accept_queue = min(backlog, net.core.somaxconn)
-
-这里我们修改下 node2 默认的最大队列长度看下包是怎么被处理的。
-
-**原实验用了 nc 验证 SYN Queue 的队列长度，但笔者在做实验时发现 nc 的 SYN-Queue 默认长度为 1，无法复现实验中的效果。**
-```bash
-$ ss -ltn
-State    Recv-Q   Send-Q     Local Address:Port      Peer Address:Port   Process
-LISTEN   0        1            172.19.0.12:9526           0.0.0.0:*
-```
-在 ChatGPT 帮助下了解到，对于网络 socket 来说，nc 在调用 listen 时，默认的 backlog 长度为 1，因此无法复现实验中的效果。查看 nc 的源码也可以验证这一点。
+在 ChatGPT 帮助下了解到，对于网络 socket 来说，nc 在调用 listen 时，默认的 backlog 长度为 1，因此无法复现实验中的效果。查看 nc 的源码也可以验证这一点。因此如果要做类似的实验，最好用其他工具，比如 Python、Go 等语言做服务端。
 
 ```c
 // 源码地址
@@ -425,226 +369,40 @@ local_listen(const char *host, const char *port, struct addrinfo hints)
 }
 ```
 
-基于 nc 的问题，后续操作我们使用 python 程序作为服务端的实现。
+### 为什么需要三次握手？
 
-```python
-import socket
-import time 
+实验完成了这里多扯一句三次握手的目的，网络上的资料大部分都会提到三次握手的目的是客户端、服务端同步序列号、窗口大小、MSS、SACK 等信息，其实这部分在前两次握手就已经完成了。三次握手最重要的原因在 RFC 里写的很清楚，主要是为了是**防止历史的重复连接初始化造成的混乱问题，防止使用 TCP 协议通信的双方建立了错误的连接。**。
 
-def start_server(host, port, backlog):
-    print(f"Starting server on {host}:{port} with backlog {backlog}")
-    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server.bind((host, port))
-    # 只 listen，不做 accept，让全连接队列占满
-    server.listen(backlog)
+> The principal reason for the three-way handshake is to prevent old duplicate connection initiations from causing confusion.
+> 
+>  [RFC9293](https://datatracker.ietf.org/doc/html/rfc9293)
 
-    while True:
-        time.sleep(1)
+ TCP 是半开、全双工通信的，通信双方要互相建立连接才行，所谓的三次握手本质上是完成四步操作：
 
-if __name__ == '__main__':
-    # backlog 长度为 8
-    start_server('172.19.0.12', 9527, 8)
-```
-首先我们修改下 node2 的参数，关闭 SYN Cookie 机制，修改队列的最大长度
+- 客户端请求建立连接；服务端响应确认。
+- 服务端请求建立连接，客户端响应确认。
 
+我们将主动请求建立连接的一方称为发起方，被动建立连接的一方称为接收方。连接建立时，发起方的 SYN 请求和接收方的 ACK 响应是必不可少的，但除此之外，发起方必须要确认接收方的的响应是否正确，因此 TCP 引入了三次握手和 RST 机制来完成这一确认操作：
 
-```bash
-$ sudo sysctl -w net.ipv4.tcp_syncookies=0 net.ipv4.tcp_max_syn_backlog=4 net.core.somaxconn=8
-net.ipv4.tcp_syncookies = 0 # 关闭 SYN Cookie 机制
-net.ipv4.tcp_max_syn_backlog = 4 # 最大半连接队列长度为 4
-net.core.somaxconn = 8 # 最大全连接队列长度为 8
-```
+- 如果接收方响应正确。则接收方发送 ACK 消息，完成正常的第三次握手。
+- 如果接收方响应错误，则接收方发送 RST 消息中断连接。
 
-启动服务端程序后，使用 nmap 命令循环发送 SYN 包，命令如下：
+无论发送方返回 ACK 还是 RST 消息，都至少需要一次发起方到接收方的通信，这才是三次握手最重要的目的。
 
-```bash
-# 在 node2 启动服务端
-$ python3 server.py
-Starting server on 172.19.0.12:9527 with backlog 8
+下面是 RFC9293 中的例子：
 
-# 在 node3 使用 nmap 命令发送 SYN 包
-while true; do sudo  nmap -sS 172.19.0.12 -p 9527; done
-```
+![](https://img.draveness.me/tcp-recovery-from-old-duplicate-syn.png)
 
-此时在 node2 可以看到 SYN-RECV 状态的 socket 数量为 4，表示半连接队列被占满。
+图片来自：[为什么 TCP 建立连接需要三次握手](https://draveness.me/whys-the-design-tcp-three-way-handshake/)
 
-```bash
-$ ss -nlt state syn-recv
-Recv-Q     Send-Q         Local Address:Port         Peer Address:Port     Process
-0          0                172.19.0.12:9527          172.19.0.15:58404
-0          0                172.19.0.12:9527          172.19.0.15:62220
-0          0                172.19.0.12:9527          172.19.0.15:37746
-0          0                172.19.0.12:9527          172.19.0.15:54045
-```
+客户端发送第一次 SYN 后响应超时，又发送了一次 SYN，然而服务端响应了首次的 SYN，客户端收到 ACK 后检查到序列号不对，此时返回 RST 包中断连接，然后重新执行三次握手过程。
 
-使用 netstat -s 命令可以看到被丢弃的 syn 包
-
-```bash
-# ubuntu @ node2 in ~ [11:57:24]
-$ sudo netstat -s | grep -E "LISTEN|overflowed"
-    352 SYNs to LISTEN sockets dropped
-
-# ubuntu @ node2 in ~ [11:57:27]
-$ sudo netstat -s | grep -E "LISTEN|overflowed"
-    354 SYNs to LISTEN sockets dropped
-
-# ubuntu @ node2 in ~ [11:57:28]
-$ sudo netstat -s | grep -E "LISTEN|overflowed"
-    363 SYNs to LISTEN sockets dropped
-```
-
-接下来我们使用测试脚本验证下 Accept Queue 队列的限制情况。测试脚本会发起 10 次请求，打满全连接队列。
-
-```python
-import socket
-import time
-
-def connect_and_hold(host, port, count):
-    cli_list = []
-    try:
-        # 连接 10 次
-        for i in range(count):
-            cli = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            cli.connect((host, port))
-            cli_list.append(cli)
-    except Exception as e:
-        print(f"Failed to connect: {e}")
-
-    while True:
-        time.sleep(1)
-
-if __name__ == '__main__':
-    connect_and_hold('172.19.0.12', 9527, 10)
-```
-
-首先我们需要清理下 node3 的 iptables 规则，将之前添加的 DROP ACK 包的规则删除，从而可以让客户端能够发起第三次握手。 命令如下
-
-```bash
-# node3  清理 iptables
-$ sudo iptables -D INPUT -p tcp --sport 9527 -j DROP
-
-# 在 node2 启动服务端
-$ python3 server.py
-Starting server on 172.19.0.12:9527 with backlog 8
-
-# 在 node3 启动客户端
-$ python3 client.py
-
-# 分别执行 netstat 命令统计 socket 数量
-$ sudo netstat -anpo | grep -E "Recv-Q|9527"
-
-```
-下面是 node2、node3 的 netstat 统计结果：
-
-```bash
-# node2
-$ sudo netstat -anpo | grep -E "Recv-Q|9527"
-Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name     Timer
-tcp        9      0 172.19.0.12:9527        0.0.0.0:*               LISTEN      123347/python3       off (0.00/0/0)
-tcp        0      0 172.19.0.12:9527        172.19.0.15:41088       ESTABLISHED -                    off (0.00/0/0)
-tcp        0      0 172.19.0.12:9527        172.19.0.15:41074       ESTABLISHED -                    off (0.00/0/0)
-tcp        0      0 172.19.0.12:9527        172.19.0.15:41058       ESTABLISHED -                    off (0.00/0/0)
-tcp        0      0 172.19.0.12:9527        172.19.0.15:41064       ESTABLISHED -                    off (0.00/0/0)
-tcp        0      0 172.19.0.12:9527        172.19.0.15:41060       ESTABLISHED -                    off (0.00/0/0)
-tcp        0      0 172.19.0.12:9527        172.19.0.15:41048       ESTABLISHED -                    off (0.00/0/0)
-tcp        0      0 172.19.0.12:9527        172.19.0.15:41106       ESTABLISHED -                    off (0.00/0/0)
-tcp        0      0 172.19.0.12:9527        172.19.0.15:41082       ESTABLISHED -                    off (0.00/0/0)
-tcp        0      0 172.19.0.12:9527        172.19.0.15:41094       ESTABLISHED -                    off (0.00/0/0)
-
-$ ss -atnp | grep -E "Recv-Q|9527"
-State  Recv-Q Send-Q Local Address:Port    Peer Address:Port Process
-LISTEN 9      8        172.19.0.12:9527         0.0.0.0:*     users:(("python3",pid=123347,fd=3))
-ESTAB  0      0        172.19.0.12:9527     172.19.0.15:41088
-ESTAB  0      0        172.19.0.12:9527     172.19.0.15:41074
-ESTAB  0      0        172.19.0.12:9527     172.19.0.15:41058
-ESTAB  0      0        172.19.0.12:9527     172.19.0.15:41064
-ESTAB  0      0        172.19.0.12:9527     172.19.0.15:41060
-ESTAB  0      0        172.19.0.12:9527     172.19.0.15:41048
-ESTAB  0      0        172.19.0.12:9527     172.19.0.15:41106
-ESTAB  0      0        172.19.0.12:9527     172.19.0.15:41082
-ESTAB  0      0        172.19.0.12:9527     172.19.0.15:41094
-
-# node3
-$ sudo netstat -anpo | grep -E "Recv-Q|9527"
-Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name     Timer
-tcp        0      0 172.19.0.15:41082       172.19.0.12:9527        ESTABLISHED 125328/python3       off (0.00/0/0)
-tcp        0      0 172.19.0.15:41064       172.19.0.12:9527        ESTABLISHED 125328/python3       off (0.00/0/0)
-tcp        0      0 172.19.0.15:41074       172.19.0.12:9527        ESTABLISHED 125328/python3       off (0.00/0/0)
-tcp        0      0 172.19.0.15:41094       172.19.0.12:9527        ESTABLISHED 125328/python3       off (0.00/0/0)
-tcp        0      0 172.19.0.15:41088       172.19.0.12:9527        ESTABLISHED 125328/python3       off (0.00/0/0)
-tcp        0      0 172.19.0.15:41058       172.19.0.12:9527        ESTABLISHED 125328/python3       off (0.00/0/0)
-tcp        0      1 172.19.0.15:41114       172.19.0.12:9527        SYN_SENT    125328/python3       on (4.72/4/0)
-tcp        0      0 172.19.0.15:41048       172.19.0.12:9527        ESTABLISHED 125328/python3       off (0.00/0/0)
-tcp        0      0 172.19.0.15:41106       172.19.0.12:9527        ESTABLISHED 125328/python3       off (0.00/0/0)
-tcp        0      0 172.19.0.15:41060       172.19.0.12:9527        ESTABLISHED 125328/python3       off (0.00/0/0)
-
-$ ss -atnp | grep -E "Recv-Q|9527"
-State  Recv-Q Send-Q Local Address:Port    Peer Address:Port Process
-ESTAB    0      0        172.19.0.15:41082    172.19.0.12:9527  users:(("python3",pid=125328,fd=8))
-ESTAB    0      0        172.19.0.15:41064    172.19.0.12:9527  users:(("python3",pid=125328,fd=6))
-ESTAB    0      0        172.19.0.15:41074    172.19.0.12:9527  users:(("python3",pid=125328,fd=7))
-ESTAB    0      0        172.19.0.15:41094    172.19.0.12:9527  users:(("python3",pid=125328,fd=10))
-ESTAB    0      0        172.19.0.15:41088    172.19.0.12:9527  users:(("python3",pid=125328,fd=9))
-ESTAB    0      0        172.19.0.15:41058    172.19.0.12:9527  users:(("python3",pid=125328,fd=4))
-SYN-SENT 0      1        172.19.0.15:41114    172.19.0.12:9527  users:(("python3",pid=125328,fd=12))
-ESTAB    0      0        172.19.0.15:41048    172.19.0.12:9527  users:(("python3",pid=125328,fd=3))
-ESTAB    0      0        172.19.0.15:41106    172.19.0.12:9527  users:(("python3",pid=125328,fd=11))
-ESTAB    0      0        172.19.0.15:41060    172.19.0.12:9527  users:(("python3",pid=125328,fd=5))
-```
-
-我们来分析下统计结果：
-
-1. node2 有 9 个 ESTABLISHED 状态的 socket。
-
-2. node3 有 9 个 ESTABLISHED 状态的 socket；1 个 SYN_SENT 状态的 socket，计时器显示器正在被重传。由此我们可以知道，当全连接队列被占满后，即使半连接队列不满，也会拒绝新的连接，将 SYN 包 Drop 掉。（从 v4.10 版本开始，参考 [提交](https://github.com/torvalds/linux/commit/5ea8ea2cb7f1d0db15762c9b0bb9e7330425a071)）
-
-3. node2 的最大全连接队列长度为 8，但实际有 9 个 ESTABLISHED 状态的 socket。这是因为 Linux 内核的判断全连接队列的逻辑是 > 而不是 >=。5.15.0-130-generic 内核代码如下：
-
-```c
-// 源码地址
-// https://elixir.bootlin.com/linux/v5.15.130/source/include/net/sock.h#L980
-/* Note: If you think the test should be:
- *	return READ_ONCE(sk->sk_ack_backlog) >= READ_ONCE(sk->sk_max_ack_backlog);
- * Then please take a look at commit 64a146513f8f ("[NET]: Revert incorrect accept queue backlog changes.")
- */
-static inline bool sk_acceptq_is_full(const struct sock *sk)
-{
-	return READ_ONCE(sk->sk_ack_backlog) > READ_ONCE(sk->sk_max_ack_backlog);
-}
-```
-
-之所以这样做，是为了避免在 backlog 设置为 0 时，依然可以有一个连接进入全连接队列，具体可以查看以下 commit 信息：
-
-```
-https://github.com/torvalds/linux/commit/64a146513f8f12ba204b7bf5cb7e9505594ead42
-
-[NET]: Revert incorrect accept queue backlog changes.
-This reverts two changes:
-
-8488df8
-248f067
-
-A backlog value of N really does mean allow "N + 1" connections
-to queue to a listening socket.  This allows one to specify
-"0" as the backlog and still get 1 connection.
-
-Noticed by Gerrit Renker and Rick Jones.
-
-Signed-off-by: David S. Miller <davem@davemloft.net>
-```
-
-4. 查看服务端 Listen 状态的 socket 时，Recv-Q 显示为 9，表示当前全连接队列长度为 9，Send-Q 显示为 8，表示全连接队列最大长度为 8。而 netstat 的攻击结果，Recv-Q 显示为 9，但 Send-Q 显示为 0。根据原文是因为 netstat 的数据源问题，作者最终推荐优先使用 ss 命令，这里不在做进一步的调研。
-
-关于半连接、全连接队列的分析可以参考另一篇实验笔记[【动手实验】TCP半连接队列、全连接队列实战分析](https://zouyingjie.github.io/posts/TCP半连接队列全连接队列实战分析/)，这里不再赘述。
 
 ## 连接关闭
 
-分析完了 TCP 连接建立的过程，我们再来分析下 TCP 连接关闭的过程。
+分析完了 TCP 连接建立的过程，我们再来分析下 TCP 连接关闭的过程。我们继续使用 nc 作为工具，首先启动服务端和客户端。
 
-
-我们继续使用 nc 作为工具，首先启动服务端和客户端。
-
-```
+```bash
 # node2 使用 nc 启动服务端
 $ nc -k -l 172.19.0.12  9527
 
@@ -712,16 +470,148 @@ tcp        0      0 172.19.0.15:41492       172.19.0.12:9527        TIME_WAIT   
 
 2. 四次握手只有 3 个包，因为服务端没有数据需要处理，所以在对客户端的 FIN 进行 ACK 时，把 FIN 也捎带上了。
 
-3. 客户端收到了服务端的 FIN 并发送了 ACK 后进入 TIME_WAIT 状态，从 netstat 输出结果看有一个定时器正在执行，当定时器到时间后连接会完全关闭。Linux 默认 MSL（Maximum Segment Lifetime）为 30s，所以默认的 TIME_WAIT 时间为 2*MSL=60s，这样做有两个好处：
+3. 客户端收到了服务端的 FIN 并发送了 ACK 后进入 TIME_WAIT 状态，从 netstat 输出结果看有一个 60s 的timewait 定时器正在执行。
 
-   - 旧连接的端口在 60s 内无法被再次使用
-   - 超过 60s 后旧连接的包都会消失，新的连接如果使用相同的端口，不会被旧数据污染
+关于 TIME_WAIT 我们来做进一步的分析。
 
-上面是正常关闭的情况，接下来我们利用 iptables 拦截相关的包，来观察下其他状态的 socket。
+#### TIME_WAIT 状态处理
 
-#### 深入理解 TIME_WAIT 状态
+TIME_WAIT 主要是为了解决两个问题：
 
+1. 防止前一个连接的延迟发送的 Segment 被使用相同四元组的连接接收。
 
+我们看下面图中的例子，第一个连接服务端发送的 SEQ=3 因为某些原因丢失，服务端执行了重传后客户端接收并断开了连接进入 TIME_WAIT 状态。此时如果 TIME_WAIT 时间过短，很快又和服务端建立了另一个使用相同四元组的连接，而此时之前丢失的 SEQ=3 包又发送来了，造成 TCP 状态的紊乱。
+
+![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/tcp-timewait-01.png)
+图片来源：[Coping with the TCP TIME-WAIT state on busy Linux servers](https://vincent.bernat.ch/en/blog/2014-tcp-time-wait-state-linux)
+
+2. 确保远端已经关闭连接
+
+当被动关闭的一方发送 FIN 后会进入 LAST_ACK 状态等待对端的 ACK。如果没有 TIME_WAIT 状态，服务端处于 LAST_ACK 状态时，客户端可能会使用相同的四元组来新建连接，因为新的连接会使用新的序列号，与之前的不匹配，服务端会认为新连接错误，从而返回 RST 包中止连接。
+
+![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/tcp-timewait-02.png)
+图片来源：[Coping with the TCP TIME-WAIT state on busy Linux servers](https://vincent.bernat.ch/en/blog/2014-tcp-time-wait-state-linux)
+
+TIME_WAIT 状态的 socket 本身也会带来问题，主要是端口占用，可能导致服务器无法建立新的连接。TIME_WAIT 状态只会在主动断开连接的一方出现，在收到对方的 FIN 包后进入该状态。Linux 默认的 MSL（Maximum Segment Lifetime, 最大报文生存时间） 为 30s，因此默认的 TIME_WAIT 时间为 2* MSL = 60s。在这期间端口是一直被占用的，服务器是根据四元组来识别 socket 的，因此在这 1 分钟内，服务器不能在建立相同的连接。
+
+Linux 开放给应用使用的端口大约在 3 万个左右，受 ``sysctl net.ipv4.ip_local_port_range`` 的影响。假设我们可以使用全部的可用接口，在大量连接执行正常断开的流程下，我们只能支持每秒 500 条连接建立。但实际情况是服务端程序往往只会监听若干固定端口，并且收到的流量可能是通过几台 LoadBalancer 转发过来的，因此实际能支持的四元组数量是有限的。
+
+```bash
+$ sysctl net.ipv4.ip_local_port_range
+net.ipv4.ip_local_port_range = 32768	60999
+```
+Linux 内核提供了以下参数来影响 TIME_WAIT 状态的处理：
+
+1. ``net.ipv4.ip_local_port_range``：可以通过该参数来扩大可用端口范围，让服务器可以创建更多的连接。
+   
+2. ``net.ipv4.tcp_timestamps``：[RFC 7323](https://www.rfc-editor.org/rfc/rfc7323) 引入的时间戳机制。其定义了一个 Timestamp 的 option，包含两个值：value，发送方当前的时间戳；echo，对端响应的最新时间戳。
+
+![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/tcp-timewait-03.png)
+
+3. ``net.ipv4.tcp_tw_recycle``：开启后，如果某个远端发来的包的时间戳，小于上次发过来的时间戳，会将这些包丢掉。开启后理论上是可以解决上面提到的第一个问题的，旧的包发来时被发现其 timestamp 小于新连接发来的 timestamp，会被丢掉。但理想很丰满，现实很骨感，该参数要求 timestamp 必须是单调递增的。这在 LB/NAT 环境下是无法得到保证的，因为无法共享时间戳时钟。在 4.12 版本之后该配置已经被移除，因此在生产环境中，任何情况下都不在建议开启这个选项。
+
+4. ``net.ipv4.tcp_tw_reuse:`` 将处于 TIME_WAIT 状态的 socket 用于主动建立新的 socket 连接，其允许内核复用超过 1s 的 TIME_WAT socket 被复用（仅适用于主动建立连接，被动建立连接的一方这个选项没啥用）。
+
+5. ``net.ipv4.tcp_max_tw_buckets``：内核允许的状态为 TIME_WAIT 的最大连接数。超过该数字后，新的 TIME_WAIT 会被立即销毁。
+
+```bash
+$ sysctl net.ipv4.tcp_timestamps net.ipv4.tcp_tw_reuse net.ipv4.tcp_max_tw_buckets net.ipv4.tcp_tw_recycle
+net.ipv4.tcp_timestamps = 1
+net.ipv4.tcp_tw_reuse = 2 # 0 - disable, 1 - global enable, 2 - enable for loopback traffic only
+net.ipv4.tcp_max_tw_buckets = 4096
+sysctl: cannot stat /proc/sys/net/ipv4/tcp_tw_recycle: No such file or directory
+```
+
+下面做实验来看下上述参数的效果：
+
+```python
+# 服务端 启动服务
+$ nc -k -l 172.19.0.12  9527
+
+# 客户端程序
+# 不断打开并关闭连接
+import socket
+
+def connect_and_immediately_disconnect(host, port, count):
+    try:
+        for i in range(count):
+            cli = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            cli.connect((host, port))
+            cli.close()
+    except Exception as e:
+        print(f"Failed to connect: {e}")
+
+if __name__ == '__main__':
+    connect_and_immediately_disconnect('172.19.0.12', 9527, 70000)
+```
+
+先将 tcp_max_tw_buckets 调到 100 万，执行程序，结果如下，最终客户端报了 ``Cannot assign requested address`` 表示没有地址可用，客户端有 
+28232 个 TIME_WAIT 状态的 socket，与 ip_local_port_range 的计算范围一致。
+
+```sh
+$ sysctl net.ipv4.ip_local_port_range
+net.ipv4.ip_local_port_range = 32768	60999
+
+$ sudo netstat -anpo | grep 9527 | grep timewait | wc -l
+28232
+
+$ python3 client.py
+Failed to connect: [Errno 99] Cannot assign requested address
+
+```
+
+现在我们将 ``net.ipv4.tcp_tw_reuse`` 设置为全局有效后再次执行程序，可以看到 TIME_WAIT 状态的数量会稳定在一万多条，客户端没有报错，执行完成后正常退出。
+
+```bash
+# 修改客户端 tcp_tw_reuse
+sudo sysctl -w net.ipv4.tcp_tw_reuse=1
+
+$ sudo netstat -anpo | grep 9527 | grep timewait | wc -l
+10967
+
+$ sudo netstat -anpo | grep 9527 | grep timewait | wc -l
+13921
+
+$ sudo netstat -anpo | grep 9527 | grep timewait | wc -l
+14070
+
+$ sudo netstat -anpo | grep 9527 | grep timewait | wc -l
+14070
+```
+
+我们将 tcp_tw_reuse 关闭并调整 tcp_max_tw_buckets 为 5000 重复实验：
+
+```bash
+$ sudo sysctl -w net.ipv4.tcp_tw_reuse=2 net.ipv4.tcp_max_tw_buckets=5000
+```
+
+再次执行客户端程序后会发现 TIME_WAIT 状态的 socket 不会超过 5000，超过阈值后的 socket 会被清理并统计，可以通过 ``netstat -s`` 命令查看：
+
+```bash
+$ sudo netstat -anpo | grep 9527 | grep timewait | wc -l
+4996
+
+$ netstat -s | grep TCPTimeWaitOverflow
+    TCPTimeWaitOverflow: 65008
+```
+
+这里我们总结下 TIME_WAIT 的处理：
+
+1. TIME_WAIT 是为了保证通信的可靠性而存在的，这也是为什么 Linux 内核不支持修改 60s 限制的原因。
+
+> The TIME_WAIT state is our friend and is there to help us (i.e., to let old duplicate segments expire in the network). Instead of trying to avoid the state, we should understand it.  -- 《Unix programming》
+
+2. 在服务端，永远不要开启 ``net.ipv4.tcp_tw_recycle``，新的内核版本已废弃；旧的版本在 LB/NAT 环境下会将正常包丢弃，导致问题。
+
+3. ``net.ipv4.tcp_tw_reuse`` 仅对主动断开和发起的一方有效，可以理解为只对客户端有效，服务端大部分都是被动建立连接，因此对其意义不大。
+
+4. 客户端还可以设置 0 延迟关闭的方式，此时会发送 RST 直接终止连接，不走正常的断开流程，也就不会进入 TIME_WAIT 状态，对于探活类应用非常拥有。但服务端永远不要设置，否则客户端会收到 ``connnection reset by peer`` 的错误。
+
+5. 服务端尽量不要主动断开连接，将 TIME_WAIT 留在客户端，不然会耗费更多的资源，并且调优方式有限。
+
+6. 如果可以尽量使用长连接的方式。
+
+上面分析了正常关闭的流程，下面我们再来看下各个状态的情况。
 
 ### FIN_WAIT_1 状态
 
@@ -846,12 +736,14 @@ void tcp_done(struct sock *sk)
 }
 ```
 
-内核还有一个参数 ``net.ipv4.tcp_max_orphans`` 控制了孤儿 socket（也就是调用了 clone() 后的不再属于任意进程的 socket，通常处于 TIME_WAIT，LAST_ACK、CLOSE_WAIT状态） 的最大数量。当孤儿进程的数量超过阈值后，对这些连接操作不系统不会在走
-正常的 FIN-ACK 结束流程，而是直接发 RST 重置连接。
+这里的控制参数是 ``tcp_orphan_retries``，使用 orphan 代表而不是像连接建立时的参数``tcp_syn_retries``、``tcp_synack_retries``，明确按包类型区分。原因是 Linux 将执行关闭 的 socket 视为 orphan（孤儿）socket，处于 FIN-WAIT-1、FIN-WAIT-2、LAST-ACK、CLOSING 状态的 socket 都可能属于 orphan socket。
 
-关于 orphan socket 的细节可以参考另一篇实验：
+内核还有一个参数 ``net.ipv4.tcp_max_orphans`` 用来控制 orphan socket 的最大数量。当该状态的 socket 数量超过阈值后，Linux 内核将不会走正常的四次挥手流程，而是直接发送 RST 信息终止连接。
+
+关于 orphan socket 的详细讨论可以参考笔者另一篇实验 [TCP orphan socket 的产生与消亡](https://blog.csdn.net/Ahri_J/article/details/146089453?spm=1001.2014.3001.5501)，这里不再赘述。
+
+
 ### FIN_WAIT_2 状态
-
 
 我们将 node2 的iptables 清理后，在重启服务端和客户端，然后在 node3 添加 iptables 拦截 node2 发来的 FIN 包。
 
@@ -975,5 +867,182 @@ tcp        0      0 172.19.0.15:55942       172.19.0.12:9527        FIN_WAIT2   
 
 1. 服务端一直处于 LAST_ACK 状态，说明 FIN 包已发送，但一直没有收到客户端的 ACK 包。
 2. 客户端一直处于 FIN_WAIT2 状态，说明客户端已经收到了服务端的 ACK 包，但迟迟没收到服务端的 FIN 包。说明我们的 iptables 拦截生效了。
-3. 客户端进入 FIN_WAIT2 状态后，有一个 60s 的计时器在运行。这是有内核参数 ``net.ipv4.tcp_fin_timeout`` 控制的，默认是 60s。超过后会自动关闭连接，不会进入 TIME_WAIT 状态。
-4. 服务端重传了 
+3. 客户端进入 FIN_WAIT2 状态后，有一个 60s 的 timewait 计时器在运行。这是由内核参数 ``net.ipv4.tcp_fin_timeout`` 控制的，默认是 60s。超过后会自动关闭连接，不会进入 TIME_WAIT 状态。
+
+### 连接保活
+
+TCP 通信需要建立连接，这里的连接并不是真的在通信双方之间有一个通路，而是双方各自维护一个 TCB 来管理状态数据。在这种情况下，如果一方挂了并且没有数据传输，那另一方是感知不到的，其连接可能会一直存在，造成不必要的资源浪费。
+
+为了解决这个问题 TCP 也设计了保活机制，内核有三个参数与该机制有关：
+
+```bash
+$ sysctl net.ipv4.tcp_keepalive_time net.ipv4.tcp_keepalive_probes net.ipv4.tcp_keepalive_intvl
+net.ipv4.tcp_keepalive_time = 7200
+net.ipv4.tcp_keepalive_probes = 9
+net.ipv4.tcp_keepalive_intvl = 75
+
+```
+
+- **net.ipv4.tcp_keepalive_time**：最后一次数据发送到发送第一个探活包的间隔时长，默认为 7200s。也就是说如果超过了 7200s 没有发送数据，TCP 就会发送一个探活包。
+- **net.ipv4.tcp_keepalive_probes**：允许探活包没有回应的最大次数，默认为 9。也就是说如果发送了 9 次探活包后依然没有得到响应，那么 TCP 就会考虑连接已经失效，会通知应用层中断连接。
+- **net.ipv4.tcp_keepalive_intvl**：在第一个探测包发送后，在没有数据传输的情况下，每个探测包的发送频率，默认 75s。即每 75s 发送一个探测包。
+
+我们来做实验验证一下，这里先将上述参数的值调小一些，方便我们观察实验结果。我们将首个探测包的发送时间改为最后一次发送数据 10s 后，并且探测包的时间间隔为 5s，超过 5 次后就断开连接。
+
+客户端先发送一次数据，然后休眠 30 s，在发送一次数据，然后休眠 200s。
+
+```bash
+$ sudo sysctl -w net.ipv4.tcp_keepalive_time=10 net.ipv4.tcp_keepalive_intvl=5 net.ipv4.tcp_keepalive_probes=5
+net.ipv4.tcp_keepalive_time = 10
+net.ipv4.tcp_keepalive_intvl = 5
+net.ipv4.tcp_keepalive_probes = 5
+```
+
+- 服务端代码
+
+```python
+import socket
+import time
+import os
+
+# 创建服务器端用于测试
+def start_server():
+    server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    server_sock.bind(('172.19.0.15', 8888))
+    server_sock.listen(1)
+    print("Server listening on 172.19.0.15:8888...")
+
+    conn, addr = server_sock.accept()
+    print(f"Connection from {addr}")
+
+    while True:
+        data = conn.recv(1024)
+        if not data:
+            break
+        print(f"Received: {data.decode('utf-8')}")
+
+
+if __name__ == "__main__":
+    start_server()
+```
+
+- 客户端代码
+
+
+```Python
+import socket
+import time
+import os
+
+
+# 客户端代码，启用 TCP 保活
+def start_client():
+    # 创建 socket
+    client_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    # 启用 SO_KEEPALIVE
+    client_sock.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
+
+
+    # 连接到服务器
+    client_sock.connect(('172.19.0.15', 8888))
+    print("Connected to server")
+
+    # 发送第一次 "hello world"
+    client_sock.send("hello world".encode('utf-8'))
+    print("Sent first 'hello world'")
+
+    # 休眠 28 秒
+    time.sleep(28)
+
+    # 发送第二次 "hello world"
+    client_sock.send("hello world".encode('utf-8'))
+    print("Sent second 'hello world'")
+
+    # 休眠 200 秒
+    print("Sleeping for 200 seconds...")
+    time.sleep(200)
+
+    # 关闭连接
+    client_sock.close()
+    print("Connection closed")
+
+
+if __name__ == "__main__":
+    # 启动客户端
+    start_client()
+
+```
+启动程序，完成第二次数据传输中用 iptables 将 ACK 包连接来伪造探活失败的场景，
+
+```bash
+# 服务端执行
+$ sudo iptables -A INPUT -p tcp --dport 8888  -j DROP
+```
+socket 状态抓包结果如下：
+
+```sh
+$ sudo netstat -anpo | grep -E "Recv-Q|8888"
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name     Timer
+tcp        0      0 172.19.0.12:38224       172.19.0.15:8888        ESTABLISHED 3276657/python3      keepalive (0.12/0/4)
+
+# ubuntu @ node2 in ~/labs/syn-queue-lab [12:38:09]
+$ sudo netstat -anpo | grep -E "Recv-Q|8888"
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name     Timer
+tcp        0      0 172.19.0.12:38224       172.19.0.15:8888        ESTABLISHED 3276657/python3      keepalive (4.13/0/5)
+```
+
+![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/tcp-keepalive-01.png)
+
+- 在第 10s 客户端发送了探活包，其数据长度为 0，这是第一次休眠时的探活检测。
+- 在第 28s 客户端发送了第二次数据，之后从第 38s 开始，每 10s 发送一次探活包。由此可以知道探活包的 ACK 也被视作正常的数据收发，探活检测会根据 ``net.ipv4.tcp_keepalive_time``的值来确定。
+- 从第 68s 开始，我们在服务端设置了 iptables 规则拦截探活包，之后开始每隔 5s 发送一次探活包，这里开始受 ``net.ipv4.tcp_keepalive_intvl`` 参数的控制。
+- 连续 5 个探活包没有收到响应后，客户端发送了 RST 包中断连接，说明 ``net.ipv4.tcp_keepalive_intvl = 5`` 的改动已经生效。
+
+**PS：最开始使用的是 Golang 程序，但发现修改系统设置并不生效，探活包的发送时间间隔一直是 15s。**
+
+```bash
+$ sudo netstat -anpo | grep -E "Recv-Q|8888"
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name     Timer
+tcp        0      0 172.19.0.12:46706       172.19.0.15:8888        ESTABLISHED 3270763/client       keepalive (0.12/0/0)
+
+# ubuntu @ node2 in ~/labs/syn-queue-lab [12:25:07]
+$ sudo netstat -anpo | grep -E "Recv-Q|8888"
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name     Timer
+tcp        0      0 172.19.0.12:46706       172.19.0.15:8888        ESTABLISHED 3270763/client       keepalive (14.77/0/0)
+```
+经过调查后发现原因是 Golang 的 net ``net.DialTimeout`` 创建连接时默认设置了 15s，如果想修改必须获取到 TCPConn 对象后自行修改。
+
+```Go
+// 源码地址：https://github.com/golang/go/blob/bc5f4a555e933e6861d12edba4c2d87ef6caf8e6/src/net/dial.go#L19
+
+const (
+	// defaultTCPKeepAliveIdle is a default constant value for TCP_KEEPIDLE.
+	// See go.dev/issue/31510 for details.
+	defaultTCPKeepAliveIdle = 15 * time.Second
+
+	// defaultTCPKeepAliveInterval is a default constant value for TCP_KEEPINTVL.
+	// It is the same as defaultTCPKeepAliveIdle, see go.dev/issue/31510 for details.
+	defaultTCPKeepAliveInterval = 15 * time.Second
+
+	// defaultTCPKeepAliveCount is a default constant value for TCP_KEEPCNT.
+	defaultTCPKeepAliveCount = 9
+
+	// For the moment, MultiPath TCP is used by default with listeners, if
+	// available, but not with dialers.
+	// See go.dev/issue/56539
+	defaultMPTCPEnabledListen = true
+	defaultMPTCPEnabledDial   = false
+)
+```
+
+
+
+## 总结
+
+作为程序员，虽然接触到的网络知识基本逃不过 [RFC1180： A TCP/IP Tutorial](https://www.rfc-editor.org/rfc/rfc1180) 的范畴，但这确实是最让人头大的知识点之一。作为将《TCP/IP Guide》、《TCP/IP 详解（英文版）》以及主要 RFC 都读过的踩坑者，只能无奈的感慨，光读这些是资料顶多可以让我们勉强了解，但要想在实际工作中面对遇到的问题手到擒来，还远远不够。
+
+网络知识的学习至少涉及到三方面内容：RFC 定义的协议原理、操作系统的具体实现、命令工具的使用。而每一部分学习起来都不容易，RFC 理论的枯燥，操作系统不同版本实现机制的繁杂，命令工具各种参数的琐碎，都让人望而却步。最好的方式就是做实验，将三者统一起来，通过动手实验，尤其是做生产级别的故障排查类实验，可以帮助我们熟悉工具的使用，验证系统的实现，并通过实验结果加深对理论的理解，做到全面而深刻的学习。
+
+

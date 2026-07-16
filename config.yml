@@ -1,143 +1,117 @@
-baseURL: https://zouyingjie.github.io
-languageCode: en-us
-title: 寻雾启示
-theme: "hugo-theme-stack"
+baseURL: "http://localhost:1313/"
+languageCode: "zh-cn"
+defaultContentLanguage: "zh"
+title: "寻雾启示"
+theme: "PaperMod"
 hasCJKLanguage: true
 enableEmoji: true
+enableRobotsTXT: true
 
 pagination:
-    pagerSize: 3
+  pagerSize: 7
+
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON
 
 menu:
   main:
-    - name: "Home"
-      url: "/"
-      weight: 2
-      identifier: "/"
-      params:
-        icon: "messages"
-
+    - name: "归档"
+      url: "/archives/"
+      weight: 10
+    - name: "分类"
+      url: "/categories/"
+      weight: 20
+    - name: "标签"
+      url: "/tags/"
+      weight: 30
+    - name: "搜索"
+      url: "/search/"
+      weight: 40
+    - name: "关于"
+      url: "/about/"
+      weight: 50
     - name: "云原生"
       url: "https://architecture-notes.tech/"
-      weight: 5
-      params:
-        icon: "link"
-        newTab: true
-    - name: "X(Twitter)"
-      url: "https://x.com/BoyYingjiezou1"
-      weight: 19
-      params:
-        icon: "brand-twitter"
-        newTab: true
+      weight: 60
 
 params:
-  description: So you have to trust that the dots will somehow connect in your future
+  env: "production"
+  author: "寻雾"
+  description: "记录软件工程、分布式系统、云原生与 AI 的学习、实践与思考。"
+  keywords:
+    - "软件工程"
+    - "分布式系统"
+    - "云原生"
+    - "AI"
   mainSections:
     - posts
-  featuredImageField: "image"
-  rssFullContent: true
-  customCSS:
-    - "css/custom.css"
-  social:
-    - identifier: "twitter"
-      name: "Twitter"
-      url: "https://x.com/ixiaowenz"
-  footer:
-    since: 2019
-    customText:
-  dateFormat:
-    published: Jan 02, 2006
-    lastUpdated: Jan 02, 2006 15:04 MST
-  sidebar:
-    compact: false
-    emoji: "😈"
-    subtitle: "So you have to trust that the dots will somehow connect in your future"
-    avatar:
-      enabled: true
-      local: true
-      src: "/img/avatar.png"
-  article:
-    math: false
-    toc: true
-    readingTime: true
-    license:
-      enabled: true
-      default: "Licensed under CC BY-NC-SA 4.0"
-  comments:
-    enabled: true
-    provider: "giscus"
-    giscus:
-      src: "https://giscus.app/client.js"
-      repo: "zouyingjie/zouyingjie.github.io"
-      repoId: "R_kgDONIBCAw"
-      category: "Announcements"
-      categoryId: "DIC_kwDONIBCA84Cj2UX"
-      mapping: "pathname"
-      inputPosition: "bottom"
-      lang: "zh-CN"
-  widgets:
-    homepage:
-      - type: search
-      - type: categories
-        params:
-          limit: 20
-      - type: archives
-        params:
-          limit: 20
-      - type: tag-cloud
-        params:
-          limit: 30
-    page:
-      - type: toc
-  opengraph:
-    twitter:
-      # Your Twitter username
-      site: iamshaynez
 
-      # Available values: summary, summary_large_image
-      card: summary_large_image
-  colorScheme:
-    # Display toggle
-    toggle: true
+  defaultTheme: "light"
+  disableThemeToggle: false
+  ShowReadingTime: true
+  ShowShareButtons: false
+  ShowPostNavLinks: true
+  ShowBreadCrumbs: true
+  ShowCodeCopyButtons: true
+  ShowWordCount: false
+  ShowRssButtonInSectionTermList: true
+  ShowToc: true
+  TocOpen: false
+  comments: true
+  DateFormat: "2006-01-02"
 
-    # Available values: auto, light, dark
-    default: light
+  homeInfoParams:
+    Title: "👋 你好，我是寻雾"
+    Content: "记录软件工程、分布式系统、云原生与 AI 的学习、实践与思考。"
 
-  imageProcessing:
-    cover:
-      enabled: true
-    content:
-      enabled: true
+  socialIcons:
+    - name: "github"
+      url: "https://github.com/zouyingjie"
+    - name: "x"
+      url: "https://x.com/BoyYingjiezou1"
+    - name: "rss"
+      url: "/index.xml"
+
+  assets:
+    favicon: "/favicon.ico"
+
+  fuseOpts:
+    isCaseSensitive: false
+    shouldSort: true
+    location: 0
+    distance: 1000
+    threshold: 0.4
+    minMatchCharLength: 0
+    keys:
+      - title
+      - permalink
+      - summary
+      - content
+
+taxonomies:
+  category: "categories"
+  tag: "tags"
+
 sitemap:
-  changefreq: always
-  filename: sitemap.xml
+  changefreq: "weekly"
+  filename: "sitemap.xml"
   priority: 0.5
-
-related:
-  includeNewer: true
-  threshold: 60
-  toLower: false
-  indices:
-    - name: tags
-      weight: 100
-
-    - name: categories
-      weight: 200
 
 markup:
   goldmark:
     renderer:
-      ## Set to true if you have HTML content inside Markdown
       unsafe: true
   tableOfContents:
+    startLevel: 2
     endLevel: 4
     ordered: true
-    startLevel: 2
   highlight:
     noClasses: false
     codeFences: true
     guessSyntax: true
-    lineNoStart: 1
     lineNos: true
     lineNumbersInTable: true
     tabWidth: 4

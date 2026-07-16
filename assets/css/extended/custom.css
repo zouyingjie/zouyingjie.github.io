@@ -1,0 +1,191 @@
+:root {
+    --main-width: 820px;
+    --nav-width: 1040px;
+    --gap: 24px;
+    --radius: 8px;
+    --theme: rgb(248, 249, 250);
+    --entry: rgb(255, 255, 255);
+    --primary: rgb(31, 35, 40);
+    --secondary: rgb(105, 116, 124);
+    --tertiary: rgb(220, 226, 230);
+    --content: rgb(39, 45, 50);
+    --code-bg: rgb(246, 248, 250);
+    --code-block-bg: rgb(247, 248, 249);
+    --border: rgb(226, 230, 234);
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC",
+        "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    letter-spacing: 0;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+.post-content {
+    font-family: "LXGW WenKai Screen", "Noto Serif SC", "Source Han Serif SC",
+        "Songti SC", serif;
+    font-size: 18px;
+    line-height: 1.9;
+}
+
+.post-content code,
+.post-content pre,
+.post-content kbd,
+.post-content samp {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+.home-info {
+    min-height: 150px;
+    margin: 24px 0 28px;
+}
+
+.home-info .entry-header h1 {
+    font-size: 30px;
+    font-weight: 680;
+    letter-spacing: 0;
+}
+
+.home-info .entry-content {
+    color: var(--secondary);
+    font-size: 15px;
+    line-height: 1.75;
+}
+
+.home-info .entry-content p {
+    color: rgb(86, 96, 104);
+    font-size: 16px;
+}
+
+.post-entry {
+    padding: 22px 24px;
+    margin-bottom: 18px;
+    border-color: rgba(31, 35, 40, 0.09);
+    box-shadow: 0 1px 2px rgba(31, 35, 40, 0.035);
+}
+
+.entry-header h2 {
+    font-size: 21px;
+    font-weight: 600;
+    line-height: 1.38;
+    letter-spacing: 0;
+}
+
+.entry-content {
+    margin: 9px 0 10px;
+    color: rgb(108, 119, 128);
+    font-size: 15px;
+    line-height: 1.78;
+}
+
+.entry-footer {
+    color: rgb(118, 129, 137);
+    font-size: 13.5px;
+}
+
+.logo a {
+    font-size: 22px;
+    font-weight: 720;
+}
+
+.menu {
+    column-gap: 20px;
+}
+
+.menu a {
+    font-size: 15px;
+    font-weight: 520;
+}
+
+.main {
+    padding-top: 18px;
+}
+
+.post-title {
+    font-size: 34px;
+    font-weight: 720;
+    line-height: 1.28;
+}
+
+.post-description {
+    color: var(--secondary);
+}
+
+.toc {
+    font-size: 14px;
+}
+
+.post-content h2 {
+    margin-top: 2.1em;
+    margin-bottom: 0.65em;
+}
+
+.post-content h3,
+.post-content h4 {
+    margin-top: 1.7em;
+}
+
+.post-content p,
+.post-content ul,
+.post-content ol {
+    margin-bottom: 1.05em;
+}
+
+.post-content pre code {
+    font-size: 13px;
+    line-height: 1.65;
+    color: #24292f !important;
+    background: #f6f8fa !important;
+}
+
+.post-content div.highlight,
+.post-content pre {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: #f6f8fa;
+}
+
+.post-content .chroma {
+    color: #24292f;
+    background: #f6f8fa !important;
+}
+
+.post-content .chroma .cl {
+    color: inherit;
+}
+
+.post-content .chroma .lnt,
+.post-content .chroma .ln {
+    color: #8c959f;
+}
+
+.post-content .chroma .c,
+.post-content .chroma .c1,
+.post-content .chroma .cm,
+.post-content .chroma .cp,
+.post-content .chroma .cpf,
+.post-content .chroma .ch {
+    color: #6e7781;
+}
+
+@media (max-width: 768px) {
+    :root {
+        --gap: 18px;
+    }
+
+    .post-content {
+        font-size: 17px;
+        line-height: 1.85;
+    }
+
+    .post-title {
+        font-size: 30px;
+    }
+}
