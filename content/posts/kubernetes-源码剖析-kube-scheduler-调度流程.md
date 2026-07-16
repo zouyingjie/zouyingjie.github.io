@@ -49,7 +49,7 @@ func (sched *Scheduler) Run(ctx context.Context) {
 
 完整的调度逻辑是在 [schedule_one.go](https://github.com/kubernetes/kubernetes/blob/v1.32.8/pkg/scheduler/schedule_one.go) 文件中的 `ScheduleOne` 方法中实现的。整体流程如图，我们一步步来看下。
 
-![](https://i-blog.csdnimg.cn/img_convert/a9abf0a110bd7f7fa07a81db6de43242.png)
+![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-fb4e82e9b0ae38075bc053661c2f5745deafa65d4ab377edaf90f461a6f2a8d1.png)
 
 #### 获取待调度 Pod
 

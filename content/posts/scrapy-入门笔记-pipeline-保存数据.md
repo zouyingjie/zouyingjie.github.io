@@ -94,11 +94,11 @@ Json 数据组成的数组：
 
 - 使用 json 模块生成的文件
 
-![使用 json 模块存储](https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTcwNTE4MTU0ODQyNzA5?x-oss-process=image/format,png)
+![使用 json 模块存储](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-c531dc93549ebeea0f59c3a2360ef1f9ff1a580d4f53ceed2afc770eb0a1a6b1.png)
 
 - 使用 scrapy.exporters.JsonItemExporter 生成的文件
 
-![使用 exporter 存储](https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTcwNTE4MTU0OTQyNzU3?x-oss-process=image/format,png)
+![使用 exporter 存储](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-604f744c1beaf0d26ecffb4b4b53dd8accebb793dc60fde76cf719bc4aa59c49.png)
 
 ##### 3. 将数据保存到 MySQL 数据库
 

@@ -26,7 +26,7 @@ source: "https://blog.csdn.net/Ahri_J/article/details/150580355"
  IP
  层的处理流程，接下来我们将深入探讨 L4 层 TCP 协议栈的处理流程，也就是来到了图中第 7 步协议栈 L2、L3、L4 三层处理的最后阶段。
 
-![](https://i-blog.csdnimg.cn/img_convert/704f6c16edd9023ceabba190bc16f9ce.png)
+![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-e7abfdc665c24e5371fb7e0da18c7b01233ca03899b1fe90022656d1c18eb515.png)
 
 图片来自 [Linux Networking Stack tutorial: Receiving Data](https://maxnilz.com/docs/004-network/006-linux-rx/)
 
@@ -108,7 +108,7 @@ process:
 
 `!sock_owned_by_user(sk)` 这个判断的意思是当前 socket 是否被用户空间所拥有，如果我们在使用 socket，比如执行 `recv()`、`send()`、`setsockopt()` 等系统调用时，内核会将 socket 标记为“被用户空间拥有”。如果 socket 被用户空间拥有，内核就不能直接对其进行操作，而是需要将数据包放入 backlog 队列，等待用户空间应用程序来处理。从而避免内核和用户态进程同时修改 socket。
 
-![](https://i-blog.csdnimg.cn/img_convert/7af8a2612851a0f1a640b753e56edf9e.png)
+![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-7a01b518f6dfb2652ac6a7545b1b3876061c919201ac6b7b00bc4b0fb0757256.png)
 
 #### backlog
  缓存
@@ -257,7 +257,7 @@ int tcp_rcv_state_process(struct sock *sk, struct sk_buff *skb)
 
 感兴趣的同学不妨参考着 TCP 状态图来读读这段代码，可以对相关状态的处理有更深入的理解。
 
-![](https://i-blog.csdnimg.cn/img_convert/cbcf737ca0ae229c96e613a3f70c2490.png)
+![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-6d80a8ea4303bfb7a91ab0e9268d218d2c946505c64dde68145b7571f207ef7b.png)
 
 #### tcp_rcv_established() 数据处理
 
@@ -540,7 +540,7 @@ if (TCP_SKB_CB(skb)->seq == tp->rcv_nxt) {
 
 这里判断的意思就是收到包的报文不晚于 RCV.NXT，如图所示也就是位于已经接收并确认的区域内。很明显是重传包，因此这里会再次进行 ACK，但会通过 `tcp_dsack_set()` 标记为 Duplicate ACK。
 
-![](https://i-blog.csdnimg.cn/img_convert/7ed3635dfbf6f663774a05e5fa3fc573.png)
+![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-78d51a29bb8554b31260b86291d0e30576e38abb6fe740b1d69b974f801631a2.png)
 
 ```c
 // https://elixir.bootlin.com/linux/v5.15.139/source/net/ipv4/tcp_input.c#L5088
@@ -563,7 +563,7 @@ drop:
 
 这里的判断条件是 `!before(TCP_SKB_CB(skb)->seq, tp->rcv_nxt + tcp_receive_window(tp))`，也就是收到的包的序列号位于图中的黄色区域，已经超出了接收窗口的可接受范围。
 
-![](https://i-blog.csdnimg.cn/img_convert/fa3a56545d0ae1b1fe492991c7d8c6f6.png)
+![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-78d51a29bb8554b31260b86291d0e30576e38abb6fe740b1d69b974f801631a2.png)
 
 ```c
 // https://elixir.bootlin.com/linux/v5.15.139/source/net/ipv4/tcp_input.c#L5103
@@ -609,7 +609,7 @@ if (before(TCP_SKB_CB(skb)->seq, tp->rcv_nxt)) {
 
 因此这个包就只会是乱序包。
 
-![](https://i-blog.csdnimg.cn/img_convert/27e42f6af42455217c649c8ea316ce1b.png)
+![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-78d51a29bb8554b31260b86291d0e30576e38abb6fe740b1d69b974f801631a2.png)
 
 这种情况下会调用 [tcp_data_queue_ofo(sk, skb);](https://elixir.bootlin.com/linux/v5.15.139/source/net/ipv4/tcp_input.c#L4798) 将数据包写入 out_of_order_queue 乱序队列，等后续包继续到达后再场景一下被取出并写入缓冲区。
 

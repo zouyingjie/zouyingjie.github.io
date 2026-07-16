@@ -26,7 +26,7 @@ source: "https://blog.csdn.net/Ahri_J/article/details/150575842"
 Linux
  收包的整体流程如下:
 
-![](https://i-blog.csdnimg.cn/img_convert/4ad0cd40aa9faeb7f102ab018bf93dd7.png)
+![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-e7abfdc665c24e5371fb7e0da18c7b01233ca03899b1fe90022656d1c18eb515.png)
 
 图片来自 [Linux Networking Stack tutorial: Receiving Data](https://maxnilz.com/docs/004-network/006-linux-rx/)
 
@@ -51,7 +51,7 @@ Linux
 
 这里到第 2 步，数据达到网卡后，网卡使用 DMA（Direct Memory Access）技术将接收到的数据包直接复制到 RingBuffer 内存中，这样可以不消耗 CPU 资源。
 
-![](https://i-blog.csdnimg.cn/img_convert/6a90dd9a822ea4430c22eb0c8b17054a.png)
+![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-107d726028191232e587951cac8f8831f3d4666ec1d4e93ee0f8b16579b50b06.png)
 
 关于 DMA 的细节可以参考内核文档 [DMA API HOWTO: Dynamic DMA mapping Guide](https://www.kernel.org/doc/Documentation/DMA-API-HOWTO.txt)。
 
@@ -710,7 +710,7 @@ static struct sk_buff *i40e_construct_skb(struct i40e_ring *rx_ring,
 - 第一次拷贝：网卡通过 DMA 将数据拷贝进内存
 - 第二次拷贝：内核将数据从内存拷贝到 skb 中
 
-![](https://i-blog.csdnimg.cn/img_convert/60b6d558e5d0239cbad7e54d505bd90b.png)
+![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-f3418d8cee3d2c3b8f810b9bc360070a21c2fcbb8dff5aa99d1a6a1d937d40a3.png)
  图片来自 [Linux 网络栈接收数据（RX）：原理及内核实现（2022）](https://arthurchiao.art/blog/linux-net-stack-implementation-rx-zh)
 
 最终，经过漫长的系统初始化、硬中断、软中断、NAPI 处理后，终于生成了我们内核协议栈中的数据包： `skb`。有了 skb，像邻居子系统、路由、TC、netfilter/iptables、BPF 等模块就有用武之地。

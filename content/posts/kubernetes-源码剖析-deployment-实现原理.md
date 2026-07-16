@@ -126,7 +126,7 @@ DeploymentController 接收 DeploymentInformer、ReplicaSetInformer 和 PodInfor
  类
 型的 Informer，并注册相应的监听函数。对于 Deployment 和 ReplicaSet，Deployment Controller 都监听了新增、更新和删除事件，而对于 Pod 则只监听了删除事件
 
-![](https://i-blog.csdnimg.cn/img_convert/f82eac3b1af4d1dc5cf33e1ccde85a03.png)
+![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-d7ef035f58c3bd2cece4b4280b202471d2daf1fd511d08bf5caaa383671e4efc.png)
 
 #### Deployment Controller 启动
 

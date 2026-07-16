@@ -140,7 +140,7 @@ tcp        0      0 0.0.0.0:8089            0.0.0.0:*               LISTEN      
 
 首先不做任何改动，内网下载 2GB 的文件，耗时 14s，吞吐为 975Mbps。
 
-![](https://i-blog.csdnimg.cn/img_convert/ebcfbad72d1f0d698af1e8c8f607b674.png)
+![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-717af82296967be916e14dcd0f9f3a4e5275b0d5feaf83bf5dbf0c7775a90b88.png)
 
 ###### 2. 默认 mem，100ms 延迟
 
@@ -168,11 +168,11 @@ $ curl 172.19.0.4:8089/testfile > testfile
 100 2048M  100 2048M    0     0  27.4M      0  0:01:14  0:01:14 --:--:-- 27.0M
 ```
 
-![](https://i-blog.csdnimg.cn/img_convert/3ea556e38624e9454cf9eb7afa2cadb6.png)
+![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-a4973df89a86fab076121564f6dda0fa3fb8161a9803c15e330590e53ea94a7a.png)
 
 可以看到整个下载耗时为 1 分 14s，吞吐为 229Mbps，和默认延迟相比，传输速度慢了不少，打开 tcptrace 查看传输过程，可以看到每 100ms 会暂停一次，因为服务端要等到 ack 后才会滑动窗口继续发送数据。
 
-![](https://i-blog.csdnimg.cn/img_convert/e5b8423dea2b82661c2a26a16afdaf49.png)
+![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-b97e0f9f5762c64bef23d474ac27d6c671c9c704dfe66c476a2e4316b48b39d5.png)
 
 ###### 3. 默认 mem，默认延迟，1% 与 20% 丢包
 
@@ -192,7 +192,7 @@ $ curl 172.19.0.4:8089/testfile > testfile
 100 2048M  100 2048M    0     0   185M      0  0:00:11  0:00:11 --:--:--  255M
 ```
 
-![](https://i-blog.csdnimg.cn/img_convert/e0d79eafc7f3ff5375755cdf82af6ef8.png)
+![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-acfa972c0bbdcc1385ea6ea4696a665e53ad224053b843630d150e776df6793d.png)
  可以看到整体耗时 10s，平均吞吐为 185MBps。因为带宽足够并且 RT 非常小， 虽然引发了重传，但并没有导致拥塞窗口的减少，整体的传输速度没有受到明显的影响。
 
 我们将丢包率调大到 20% 再次执行下载并抓包
@@ -224,11 +224,11 @@ ESTAB        0             25344                    172.19.0.4:8089             
 
 分析抓包文件，可以看到吞吐会周期性断崖式下跌然后在缓慢爬升。
 
-![](https://i-blog.csdnimg.cn/img_convert/cb5a1e31cb99c7f18b6ed34caad4b390.png)
+![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-0a840739acb11627da610ce7f6e37ff6a8f1e7a80acf269e39b8840590e68c58.png)
 
 在丢包时，接收端收到的包会乱序，会影响其 ACK 响应的速度，导致某些包在缓冲区中多等待一会，因此接收窗口也会间歇性的下降，并在收到重传包后恢复。
 
-![](https://i-blog.csdnimg.cn/img_convert/a569077ae9259c01405326e8e772eab4.png)
+![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-f06dd8c41ba6932d11a8a3efb14bb86b8900b1a220f600be18411f0065007bb0.png)
 
 ###### 4. 默认 mem 和延迟，BBR 算法，20% 丢包
 
@@ -284,7 +284,7 @@ $ curl 172.19.0.4:8089/testfile > testfile
 
 总体耗时两分多钟，抓包可以看到有大量 Window Full 的情况，但内网 RT 非常小，因此空出来后可以很快的通知给服务端，对整体传输速率的性能不算太大。
 
-![](https://i-blog.csdnimg.cn/img_convert/114b9c5e0fc83e5d3fcf266784de1b59.png)
+![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-819b200a9ead0ff404c06fa51482ded7721358a2a165cd89d2ad65e0b42a4dd7.png)
 
 查看传输过程，可以看到大约每 40ms 接收窗口会上升，
  Linux
@@ -321,9 +321,9 @@ $ curl 172.19.0.4:8089/testfile > testfile
 
 这里可以和实验 5 做对比，在默认延迟下修改 recvbuf 和 sendbuf，可以看到修改 recvbuf 对性能的影响更加明显。都是 RT 很小，但 server 端收到 ACK 后 sendbuf 清理出空间，可以立即发送，是内存级别的延迟；但接收端在有 recvbuf 有空间后返回 ACK 到服务端，是网络通信级别的延迟，两者相差几个数量级。
 
-![](https://i-blog.csdnimg.cn/img_convert/b34168e550772d6b577428e3e6215402.png)
+![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-522c818ed05b081fa9344efd94ccfb3558de5ffce223222c560f05099e04631f.png)
 
-![](https://i-blog.csdnimg.cn/img_convert/2e1bbad2e148405e0b02d393e7d8f818.png)
+![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-7ce872e816e2edbedc99d6fc820340c5a649ea98ca04e8860afb514743fc36e7.png)
 
 图片来自 [## TCP性能和发送接收窗口、Buffer的关系](https://plantegg.github.io/2019/09/28/%E5%B0%B1%E6%98%AF%E8%A6%81%E4%BD%A0%E6%87%82TCP--%E6%80%A7%E8%83%BD%E5%92%8C%E5%8F%91%E9%80%81%E6%8E%A5%E6%94%B6Buffer%E7%9A%84%E5%85%B3%E7%B3%BB/)
 
@@ -338,9 +338,9 @@ $ curl 172.19.0.4:8089/testfile > testfile
   0 2048M    0 17.4M    0     0   357k      0  1:37:50  0:00:49  1:37:01  366k
 ```
 
-![](https://i-blog.csdnimg.cn/img_convert/24e40dccdc416235e47207ceb3710a1b.png)
+![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-859e1d2021c687416d49b54514acb7d81c29723c14f76535ae78741c296a06e2.png)
 
-![](https://i-blog.csdnimg.cn/img_convert/3d8243ad88959b4ed5d52c301c6bab31.png)
+![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-002c3d7947d734c86cdb13c3bc84e8972cde568823de13426ef37edba47ed851.png)
 
 抓包查看传输过程，可以看到整体传输过程是非常丝滑的，放大后看每 100ms 窗口才会增大，性能就是受 RT 的影响一直上不去。
 
@@ -358,7 +358,7 @@ Product of data link’s capacity and its end-to-end delay. The result is the ma
 
 > 《High Performance Browser Networking》
 
-![](https://i-blog.csdnimg.cn/img_convert/bab47f70d2ee147cf7bec496231c9602.png)
+![](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-1809ab54f34c4b08d76920682ad6b2e0f0856897616e09c12c18cb0af8bc72a3.png)
 
 图片来自 [High Performance Browser Networking](https://hpbn.co/building-blocks-of-tcp/#bandwidth-delay-product)
 

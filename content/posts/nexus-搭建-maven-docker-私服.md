@@ -131,13 +131,13 @@ sudo systemctl start  nexus.service
 
 应用启动后访问，提示我们填写用户名密码，初始用户名为 admin，初始密码位于工作目录 `sonatype-work/nexus3/admin.password` 文件，填写登陆后需要修改密码，完成后 Nexus 就跑起来啦。
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/cb77819c79cab83191f2351b52fe2987.png#pic_center)
+![在这里插入图片描述](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-b0e0a54b10d2d63a5f6711fcdb7183613cd224d97a66c9f39d1bfdcc612cde37.png)
 
 #### 二. Nexus Maven 仓库简介
 
 进入 Nexus 后台查看 Maven 仓库，默认的 maven 仓库有下面几个：
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/7d5a202c50decfd6cdd607c880b1e26f.png#pic_center)
+![在这里插入图片描述](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-c0223bbdf526dd803a62c855a4c8862d09d9f6553f480008091cf96216c0e0f4.png)
 
 这里简单介绍下，Nexus 中 Maven 仓库有四种类型：
 
@@ -146,7 +146,7 @@ sudo systemctl start  nexus.service
 - `group（仓库组）`：就是一组仓库的集合，可以包含宿主仓库和代理仓库，图中的 `maven-public` 就是一个用户组，包含了三个仓库，如图。
 -
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/d82b9926f4f2dd2e95b37f8188cccfcd.png#pic_center)
+![在这里插入图片描述](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-0f9d9813227dc6374a864dc72a36604a51ec531f878e9bf15cecf9676345dbe8.png)
 
 - `virtual（虚拟）`：一般用不到，不做赘述。
 
@@ -154,7 +154,7 @@ sudo systemctl start  nexus.service
 
 对于上面几种类型的仓库，关系如图
 
-![图片来源：《Maven 实战》](https://i-blog.csdnimg.cn/blog_migrate/6aa727c55ab5eedceab4f01627d8a709.png#pic_center)
+![图片来源：《Maven 实战》](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-4e7a049b463bee93dce8c57004d99e573b3bfe14adea254f957564d5550bc71b.png)
  Maven 可以直接从宿主仓库下载构件，也可以从代理仓库下载构件，而代理仓库会间接从远程仓库下载构件。仓库组没有实际内容，其会将 maven 的下载请求转到其包含的宿主仓库或者代理仓库中下载。
 
 #### 三. 配置从 Nexus 私服拉取构件
@@ -452,28 +452,28 @@ Uploaded to nexus-snapshots: http://localhost:8081/repository/maven-snapshots/co
 
 部署完成后查看私服的 `maven-snapshots` 仓库，可以看到我们的项目已经部署进来了。
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/9040a35ca811f205e7137d4f8a4ac0dd.png#pic_center)
+![在这里插入图片描述](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-e5e02cbf1f68e32ad67a7cd40db448d15fc847020747f225b50e473a0bb89738.png)
 
 #### 五. Nexus 作为 Docker 仓库
 
 ##### 1. 创建仓库
 
 首先我们创建仓库，如图选择 docker(hosted) 类型创建。
- ![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/369de82a5e2afd7bb41a275bbf7a2e03.png#pic_center)
+ ![在这里插入图片描述](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-a9590982c099bcf8105bda717912b8e621cf0ba2f44eece9a0bd9034e213ecc2.png)
  仓库设置如下，这里我配置了 5001 端口。
- ![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/55acf3e1f0a6719b7569e6120d1ac30d.png#pic_center)
+ ![在这里插入图片描述](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-d50f042a1b68db2e63a9fd8355d2c5e4f4dde2b7b100c77dac4a68f8b2776856.png)
 
 ##### 2. 修改权限配置
 
 创建完成后我们会发现无论登陆还是 pull/push 镜像都会报权限错误。
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/a912bac597d85f0dcf9054d84e5666d4.png#pic_center)
- ![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/fb02274a6b7282ba6406eb9663880c52.png#pic_center)
+![在这里插入图片描述](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-cf8b2c810c5d07960a51cf3a6a6e4558acc41b8b9dfac5920b833e20f74ab0f0.png)
+ ![在这里插入图片描述](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-32541b47df10229448581b7dbe02698d49395e0da5b7ee059b575785ff7b1ecb.png)
 
 这是因为 Nexus 默认没有设置校验 Docker ，可以修改下面配置将 `Docker Bearer Token Realm` 激活。
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/8d899423ddb3ce86a53d4b8cd3c75aa6.png#pic_center)
+![在这里插入图片描述](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-81352cf4cb6b13df5bd56f4865ffc2f018f10ddbe3573d8425048490d88e38ea.png)
  然后后就可以正常登陆并 push 镜像了啦
- ![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/06169959684c3990cd830e00572d1497.png#pic_center)
+ ![在这里插入图片描述](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-5a0d78f1597fcdf00f81eb387ff259f310fb3dddf0bc8665bd044406fd252056.png)
 
 以上就是 Nexus 搭建 Maven、Docker 私服的简要介绍了，希望对需要的同学有用。

@@ -16,7 +16,7 @@ Kubernetes 运行 Pod 的核心逻辑就是基于
  Informer
  机制的控制循环（Control Loop）。每当 etcd 中的数据有更新，会触发相应的事件通知给各个 Controller，Controller 会根据这些事件来决定是否需要对集群状态进行调整，逻辑如下：
 
-![请添加图片描述](https://i-blog.csdnimg.cn/direct/d009175bb1164c98a8954b9953581dd8.png)
+![请添加图片描述](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-f1fcabad302d5e048d0417089cbfd006a0bfaafc5692411b86026584b1ffe931.png)
 
 ```
 for {
