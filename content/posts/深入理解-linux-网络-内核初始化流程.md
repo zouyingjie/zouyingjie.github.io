@@ -1,7 +1,6 @@
 ---
 title: "【深入理解 Linux 网络】内核初始化流程"
 date: 2025-08-12T11:25:57+08:00
-draft: true
 tags:
   - Linux
   - 计算机网络

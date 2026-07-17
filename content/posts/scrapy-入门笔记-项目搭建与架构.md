@@ -1,7 +1,6 @@
 ---
 title: "Scrapy 入门学习笔记（一）Scrapy 项目搭建与架构介绍"
 date: 2017-05-12T08:37:03+08:00
-draft: true
 tags:
   - Scrapy
   - Python
@@ -39,7 +38,7 @@ scrapy genspider stack http://stackoverflow.com/
 
 创建完成后的项目目录结构如下：
 
-![Scrapy 项目结构图](https://img-blog.csdn.net/20170512083446151?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvQWhyaV9K/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+![Scrapy 项目结构图](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-8967c3edf5e35f939bf29b2cb6628b5f92b3cca01f9914697f1ba8e3bb72e62a.png)
 
 可以看到在项目目录下会有一个与项目名同名的 FirstSpider 包，里面是我们 Scrapy 项目的各个模块。下面对项目的每个部分做简要解释：
 
@@ -110,7 +109,7 @@ scrapy crawl stack
 
 Scrapy 架构图如下：
 
-![Scrapy 架构图](https://img-blog.csdn.net/20170512083531884?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvQWhyaV9K/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+![Scrapy 架构图](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-92c45944d9a258d96e656438200e6e44728a84622d803fbd2e2df28ca47f1709.png)
 
 从上面的架构图中可以看到我们熟悉的几个模块，包括 Spiders、Item、middleware、pipeline 模块。另外还多了 ENGIN 引擎、SCHEDULER 和 DOWNLOADER 下载模块。
 

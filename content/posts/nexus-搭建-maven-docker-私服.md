@@ -1,7 +1,6 @@
 ---
 title: "Nexus 搭建 Maven、Docker 私服详解"
 date: 2020-11-11T17:01:08+08:00
-draft: true
 tags:
   - Nexus
   - Maven

@@ -1,7 +1,6 @@
 ---
 title: "Scrapy 入门学习笔记（二）XPath 与 CSS 解析"
 date: 2017-05-15T20:33:24+08:00
-draft: true
 tags:
   - Scrapy
   - Python
@@ -104,14 +103,14 @@ Scrapy 提供了 Selector 类来对网页进行，它可以接收一段 HTML 代
 
 - 问题列表项
 
-![问题列表项](https://img-blog.csdn.net/20170515202930466?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvQWhyaV9K/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+![问题列表项](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-2d23cce682fbc7d38e590c87bb243fdc84061a0351470bf8c6a0fb960a5eb562.png)
 - 列表源代码
 
-![列表源代码](https://img-blog.csdn.net/20170515203020985?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvQWhyaV9K/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+![列表源代码](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-ebf64e753d0c007119fecf4f90d40af0c45daa9285634658b31a29eee747786c.png)
 
 - 某一个问题的源代码
 
-![某一个问题的源代码](https://img-blog.csdn.net/20170515203120845?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvQWhyaV9K/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+![某一个问题的源代码](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-a00e81088f78fb7f9a7bc08f2cf3dfde9575a0e05c9f6e2c9300f73443520128.png)
 
 可以看到，问题列表位于 id 为 question 的 div 元素下，每个问题布局用 class=question-summary 表示，后面的 id 用来标识每一个问题，可以获取之后与域名进行拼接访问到具体的问题详情界面。下面我们就图中标注的标题、投票数，查看人数、回答人数以及标签进行解析。
 
@@ -159,6 +158,6 @@ def parse_by_xpath(self, response):
 
 解析到的结果如下：
 
-![网页解析结果](https://img-blog.csdn.net/20170515203246657?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvQWhyaV9K/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+![网页解析结果](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-7538d17e0b665f73bc9f7fea7f690e9137492cc512b0e6c30c84f1236f82bfbf.png)
 
 可以看到数据都在里面了，具体的解释都在注释里面了，关于 Selector 的更详细语法可以参阅 Scrapy 的官方文档。本篇就简要介绍到这里，数据已经解析出来了，下一步就需要封装为 Item 进行传输与处理了，下一篇将介绍 Item 的相关内容。包括创建与属性，Item Loader 机制以及对数据进行过滤，处理的相关方法等。

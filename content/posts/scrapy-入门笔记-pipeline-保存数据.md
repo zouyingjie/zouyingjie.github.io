@@ -1,7 +1,6 @@
 ---
 title: "Scrapy 入门笔记（四）使用 Pipeline 保存数据"
 date: 2017-05-18T15:57:48+08:00
-draft: true
 tags:
   - Scrapy
   - Python
@@ -251,5 +250,3 @@ item_loader.add_value("image_url", [image_url])
 以上介绍了比较常用的 Pipeline 类的用法，Scrapy 还提供了更多的自带 Pipeline 类，有兴趣的同学可以参阅文档继续深入学习。
 
 现在关于 Scrapy 的所有操作已经基本完成了，从爬虫的创建、爬取解析、Item 封装到 Pipeline 保存都已经讲解完毕。
-
-> 我是 AhriJ邹同学，前后端、小程序、DevOps 都搞的炸栈工程师。博客持续更新，欢迎小伙伴关注或与我私信交流，互相学习，共同进步。

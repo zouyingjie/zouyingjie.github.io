@@ -1,7 +1,6 @@
 ---
 title: "Redis 的数据持久化方法"
 date: 2018-06-02T15:03:11+08:00
-draft: true
 tags:
   - Redis
   - 数据库

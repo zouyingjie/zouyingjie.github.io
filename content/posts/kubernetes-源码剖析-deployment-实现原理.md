@@ -1,7 +1,6 @@
 ---
 title: "【Kubernetes 源码剖析】Deployment 的实现原理"
 date: 2025-08-27T15:38:47+08:00
-draft: true
 tags:
   - Kubernetes
   - 源码剖析

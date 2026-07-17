@@ -1,7 +1,6 @@
 ---
 title: "Scrapy 入门学习笔记（三）Item 与 ItemLoader"
 date: 2017-05-18T14:02:16+08:00
-draft: true
 tags:
   - Scrapy
   - Python
@@ -117,7 +116,7 @@ def parse(self, response):
 
 上面代码解析完成后生成的都是一个 list，其值如下:
 
-![ItemLoader 默认解析结果](https://img-blog.csdn.net/20170518140027092?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvQWhyaV9K/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+![ItemLoader 默认解析结果](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-41bedd8c87fbeefedfd5588edccb3f4590b18fd16b63d3a51cb8811bf2cad3c4.png)
 
 可以看到无论解析出来的值的数量是多少，ItemLoader 默认都会返回一个 list。在之前的方式中我们都是通过 extract_first() 获取第一个值或者通过 extract() 解析到值后进行遍历的。在 ItemLoader 中，为我们提供了 processor 来对数据进行处理。
 
@@ -185,7 +184,7 @@ scrapy 提供 的 MapCompose 方法允许我们指定一系列的处理方法，
  tag
 。关于更多的处理方法可以参阅官方文档，解析后获取到的结果如下：
 
-![ItemLoader 解析结果](https://img-blog.csdn.net/20170518140126717?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvQWhyaV9K/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+![ItemLoader 解析结果](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/csdn-7831268b0d39977b9984ad6ed4c4a028d5656af796f65b68b3387970f4e34689.png)
 
 可以看到 tag 已经使用逗号分隔符连接起来了，title 前面也加上了 ‘Question:’ 前缀。
 

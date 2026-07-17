@@ -26,7 +26,13 @@ PUBLIC_URL_RE = re.compile(r"https?://\S+")
 
 def csdn_image_urls(post: Path) -> list[str]:
     urls = IMAGE_RE.findall(post.read_text())
-    return sorted({url for url in urls if "csdnimg.cn" in url})
+    return sorted(
+        {
+            url
+            for url in urls
+            if (urlparse(url).hostname or "").endswith(("csdnimg.cn", "csdn.net"))
+        }
+    )
 
 
 def download(url: str) -> tuple[bytes, str]:

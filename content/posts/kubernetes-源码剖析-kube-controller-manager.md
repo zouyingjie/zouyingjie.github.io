@@ -1,7 +1,6 @@
 ---
 title: "【Kubernetes 源码剖析】kube-controller-manager 工作原理与实现"
 date: 2025-08-20T17:41:20+08:00
-draft: true
 tags:
   - Kubernetes
   - 源码剖析
