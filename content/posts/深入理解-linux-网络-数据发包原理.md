@@ -11,13 +11,13 @@ source: "https://blog.csdn.net/Ahri_J/article/details/150928387"
 ---
 **本系列文章**
 
-- [【深入理解 Linux 网络】关键术语](https://blog.csdn.net/Ahri_J/article/details/149772425)
-- [【深入理解 Linux 网络】内核初始化流程](https://blog.csdn.net/Ahri_J/article/details/150266097)
-- [【深入理解 Linux 网络】收包原理与内核实现（上） 从网卡到协议层](https://blog.csdn.net/Ahri_J/article/details/150575842)
-- [【深入理解 Linux 网络】收包原理与内核实现（中）TCP 传输层处理](https://blog.csdn.net/Ahri_J/article/details/150580355)
-- [【深入理解 Linux 网络】收包原理与内核实现（下）应用层读取与 epoll 实现](https://blog.csdn.net/Ahri_J/article/details/150651964)
-- [【深入理解 Linux 网络】数据发送处理流程与内核实现](https://blog.csdn.net/Ahri_J/article/details/150928387)
-- [【深入理解 Linux 网络】配置调优与性能优化](https://blog.csdn.net/Ahri_J/article/details/150928557)
+- [【深入理解 Linux 网络】关键术语](/posts/深入理解-linux-网络-关键术语/)
+- [【深入理解 Linux 网络】内核初始化流程](/posts/深入理解-linux-网络-内核初始化流程/)
+- [【深入理解 Linux 网络】收包原理与内核实现（上）从网卡到协议层](/posts/深入理解-linux-网络-收包原理上/)
+- [【深入理解 Linux 网络】收包原理与内核实现（中）TCP 传输层处理](/posts/深入理解-linux-网络-收包原理中/)
+- 【深入理解 Linux 网络】收包原理与内核实现（下）应用层读取与 epoll 实现（待完善）
+- [【深入理解 Linux 网络】数据发送处理流程与内核实现](/posts/深入理解-linux-网络-数据发包原理/)
+- 【深入理解 Linux 网络】配置调优与性能优化（待完善）
 
 ---
 
@@ -41,7 +41,7 @@ source: "https://blog.csdn.net/Ahri_J/article/details/150928387"
 
 ### 系统初始化
 
-在 [【深入理解 Linux 网络】内核初始化流程](https://blog.csdn.net/Ahri_J/article/details/150266097) 中我们提到过内核协议栈的初始化，当时只分析了 [inet_init](https://elixir.bootlin.com/linux/v5.15.139/source/net/ipv4/af_inet.c#L1934) 方法中为收包执行 `inet_add_protocol` 注册协议栈将 ip_rcv、tcp_rcv 等收包函数注册到内核的流程。
+在 [【深入理解 Linux 网络】内核初始化流程](/posts/深入理解-linux-网络-内核初始化流程/) 中我们提到过内核协议栈的初始化，当时只分析了 [inet_init](https://elixir.bootlin.com/linux/v5.15.139/source/net/ipv4/af_inet.c#L1934) 方法中为收包执行 `inet_add_protocol` 注册协议栈将 ip_rcv、tcp_rcv 等收包函数注册到内核的流程。
 
 除此之外该函数还执行了具体协议和 socket 相关初始化，代码如下：
 
@@ -511,7 +511,7 @@ void tcp_init_sock(struct sock *sk)
 }
 ```
 
-如果做过类似 [【动手实验】TCP数据的发送和接收](https://blog.csdn.net/Ahri_J/article/details/149442561?spm=1001.2014.3001.5501) 的抓包实验和源码分析，对上述相关字段一定不会感到陌生。
+如果做过类似 [【动手实验】TCP数据的发送和接收](/posts/tcp数据的发送和接收/) 的抓包实验和源码分析，对上述相关字段一定不会感到陌生。
 
 #### 内核 Socket 类型比较
 
@@ -525,8 +525,8 @@ void tcp_init_sock(struct sock *sk)
  blog
 ，这里就不做深入的探讨了。
 
-- [【动手实验】TCP 连接的建立与关闭抓包分析](https://blog.csdn.net/Ahri_J/article/details/146175620)
-- [【动手实验】TCP半连接队列、全连接队列实战分析](https://blog.csdn.net/Ahri_J/article/details/145948397)
+- [【动手实验】TCP 连接的建立与关闭抓包分析](/posts/实验-tcp连接建立与关闭抓包/)
+- [【动手实验】TCP半连接队列、全连接队列实战分析](/posts/tcp半连接队列全连接队列实验/)
 
 ### 系统调用 send：发送数据
 

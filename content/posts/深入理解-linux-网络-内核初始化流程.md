@@ -10,13 +10,13 @@ source: "https://blog.csdn.net/Ahri_J/article/details/150266097"
 ---
 **本系列文章**
 
-- [【深入理解 Linux 网络】关键术语](https://blog.csdn.net/Ahri_J/article/details/149772425)
-- [【深入理解 Linux 网络】内核初始化流程](https://blog.csdn.net/Ahri_J/article/details/150266097)
-- [【深入理解 Linux 网络】收包原理与内核实现（上） 从网卡到协议层](https://blog.csdn.net/Ahri_J/article/details/150575842)
-- [【深入理解 Linux 网络】收包原理与内核实现（中）TCP 传输层处理](https://blog.csdn.net/Ahri_J/article/details/150580355)
-- [【深入理解 Linux 网络】收包原理与内核实现（下）应用层读取与 epoll 实现](https://blog.csdn.net/Ahri_J/article/details/150651964)
-- [【深入理解 Linux 网络】数据发送处理流程与内核实现](https://blog.csdn.net/Ahri_J/article/details/150928387)
-- [【深入理解 Linux 网络】配置调优与性能优化](https://blog.csdn.net/Ahri_J/article/details/150928557)
+- [【深入理解 Linux 网络】关键术语](/posts/深入理解-linux-网络-关键术语/)
+- [【深入理解 Linux 网络】内核初始化流程](/posts/深入理解-linux-网络-内核初始化流程/)
+- [【深入理解 Linux 网络】收包原理与内核实现（上）从网卡到协议层](/posts/深入理解-linux-网络-收包原理上/)
+- [【深入理解 Linux 网络】收包原理与内核实现（中）TCP 传输层处理](/posts/深入理解-linux-网络-收包原理中/)
+- 【深入理解 Linux 网络】收包原理与内核实现（下）应用层读取与 epoll 实现（待完善）
+- [【深入理解 Linux 网络】数据发送处理流程与内核实现](/posts/深入理解-linux-网络-数据发包原理/)
+- 【深入理解 Linux 网络】配置调优与性能优化（待完善）
 
 ---
 
