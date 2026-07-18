@@ -94,6 +94,7 @@ params:
 taxonomies:
   category: "categories"
   tag: "tags"
+  series: "series"
 
 sitemap:
   changefreq: "weekly"

@@ -8,10 +8,12 @@ tags:
   - 反向传播
 categories:
   - AI
+series:
+  - AI 得学
 description: 从数值微分、链式法则到多层感知机，手写实现反向传播和神经网络训练。
 ---
 
-![AI 好啊，AI 得学](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/ai-notes-hou-cover.jpg)
+<img class="ai-series-cover" src="https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/ai-notes-hou-cover.jpg" alt="AI 好啊，AI 得学">
 
 本文是 Andrej Karpathy [《Neural Networks: Zero to Hero》](https://www.youtube.com/playlist?list=PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ) 课程 building micrograd 章节的笔记，看大佬是如何带我们一步步实现反向传播和神经网络的。
 

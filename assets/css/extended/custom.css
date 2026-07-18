@@ -138,6 +138,14 @@ body {
     margin-bottom: 1.05em;
 }
 
+.post-content .ai-series-cover {
+    display: block;
+    width: min(100%, 440px);
+    height: auto;
+    margin: 0 auto 2rem;
+    border-radius: 6px;
+}
+
 .post-content pre code {
     font-size: 13px;
     line-height: 1.65;
