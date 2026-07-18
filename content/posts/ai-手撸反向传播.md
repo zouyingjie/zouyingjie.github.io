@@ -10,7 +10,6 @@ categories:
   - AI
 series:
   - AI 得学啊
-subtitle: So you have to trust that the dots will somehow connect in your future.
 description: 从数值微分、链式法则到多层感知机，手写实现反向传播和神经网络训练。
 ---
 

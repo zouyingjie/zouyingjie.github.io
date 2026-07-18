@@ -65,7 +65,7 @@ params:
 
   homeInfoParams:
     Title: "👋 你好，我是寻雾"
-    Content: "记录软件工程、分布式系统、云原生与 AI 的学习、实践与思考。"
+    Content: "So you have to trust that the dots will somehow connect in your future."
 
   socialIcons:
     - name: "github"
