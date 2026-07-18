@@ -1,5 +1,5 @@
 ---
-title: 【AI 得学】从零实现反向传播：Micrograd 与神经网络
+title: 【AI 得学啊】从零实现反向传播和神经网络
 date: 2026-07-18 17:09:01 +08:00
 tags:
   - AI
@@ -9,7 +9,8 @@ tags:
 categories:
   - AI
 series:
-  - AI 得学
+  - AI 得学啊
+subtitle: So you have to trust that the dots will somehow connect in your future.
 description: 从数值微分、链式法则到多层感知机，手写实现反向传播和神经网络训练。
 ---
 
