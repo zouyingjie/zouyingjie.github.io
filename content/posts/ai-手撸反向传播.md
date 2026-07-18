@@ -11,8 +11,6 @@ categories:
 description: 从数值微分、链式法则到多层感知机，手写实现反向传播和神经网络训练。
 ---
 
-# 从零实现反向传播：Micrograd 与神经网络
-
 ![AI 好啊，AI 得学](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/ai-notes-hou-cover.jpg)
 
 本文是 Andrej Karpathy [《Neural Networks: Zero to Hero》](https://www.youtube.com/playlist?list=PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ) 课程 building micrograd 章节的笔记，看大佬是如何带我们一步步实现反向传播和神经网络的。
