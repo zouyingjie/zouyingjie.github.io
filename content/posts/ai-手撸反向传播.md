@@ -1,5 +1,5 @@
 ---
-title: 从零实现反向传播：Micrograd 与神经网络
+title: 【AI 得学】从零实现反向传播：Micrograd 与神经网络
 date: 2026-07-18 17:09:01 +08:00
 tags:
   - AI
