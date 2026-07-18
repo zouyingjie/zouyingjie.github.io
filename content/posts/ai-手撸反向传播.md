@@ -1,5 +1,5 @@
 ---
-title: 【AI 笔记】手撸反向传播
+title: 从零实现反向传播：Micrograd 与神经网络
 date: 2026-07-18 17:09:01 +08:00
 tags:
   - AI
@@ -11,7 +11,7 @@ categories:
 description: 从数值微分、链式法则到多层感知机，手写实现反向传播和神经网络训练。
 ---
 
-# 【AI 笔记】手撸反向传播
+# 从零实现反向传播：Micrograd 与神经网络
 
 ![AI 好啊，AI 得学](https://pub-08b57ed9c8ce4fadab4077a9d577e857.r2.dev/ai-notes-hou-cover.jpg)
 
