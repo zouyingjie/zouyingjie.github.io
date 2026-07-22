@@ -1,5 +1,5 @@
 ---
-title: "【AI 得学啊】makemore 01：从统计学习到神经网络"
+title: "【AI 得学啊】makemore 01：从统计语言模型到神经网络 Bigram"
 date: 2026-07-22T20:00:00+08:00
 math: true
 tags:
