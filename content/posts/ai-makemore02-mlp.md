@@ -1,5 +1,5 @@
 ---
-title: "【AI 得学啊】makemore 02：从 N-gram 到 MLP"
+title: "【AI 得学啊】makemore 02：用 MLP 构建字符级语言模型"
 date: 2026-07-22T20:01:00+08:00
 math: true
 tags:
